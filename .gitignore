@@ -1,0 +1,17 @@
+# Large directories (models and data)
+models/
+algorithms/rlampso/
+outputs/
+*.mat
+
+# Sync and temporary directories
+.tmp.driveupload/
+.tmp.drivedownload/
+.claude/
+.gemini/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
