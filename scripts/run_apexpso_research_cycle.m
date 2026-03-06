@@ -219,49 +219,17 @@ function variants = buildVariants(maxIterations)
     baseOverrides.useHuberCriticLoss = true;
     baseOverrides.useOverestimationPenalty = true;
 
-    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 7, 1);
+    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 2, 1);
 
     variants(1).name = 'APEX-V7-LOOReduced-Base';
     variants(1).id = 'v7_loo_reduced_base';
     variants(1).paramMode = 'rank-residual';
     variants(1).overrides = baseOverrides;
 
-    variants(2).name = 'APEX-V7-NoCrossScale';
-    variants(2).id = 'v7_no_cross_scale';
+    variants(2).name = 'APEX-V7-WithEntropyUncertainty';
+    variants(2).id = 'v7_with_entropy_uncertainty';
     variants(2).paramMode = 'rank-residual';
-    variants(2).overrides = mergeStruct(baseOverrides, struct( ...
-        'useCrossScaleState', false, ...
-        'stateSize', 15));
-
-    variants(3).name = 'APEX-V7-NoCuriosity';
-    variants(3).id = 'v7_no_curiosity';
-    variants(3).paramMode = 'rank-residual';
-    variants(3).overrides = mergeStruct(baseOverrides, struct('useCuriosityBonus', false));
-
-    variants(4).name = 'APEX-V7-NoHuber';
-    variants(4).id = 'v7_no_huber';
-    variants(4).paramMode = 'rank-residual';
-    variants(4).overrides = mergeStruct(baseOverrides, struct('useHuberCriticLoss', false));
-
-    variants(5).name = 'APEX-V7-NoUncertaintyPenalty';
-    variants(5).id = 'v7_no_uncertainty_penalty';
-    variants(5).paramMode = 'rank-residual';
-    variants(5).overrides = mergeStruct(baseOverrides, struct( ...
-        'useActorUncertaintyPenalty', false, ...
-        'uncertaintyPenaltyWeight', 0.0));
-
-    variants(6).name = 'APEX-V7-WithEntropyUncertainty';
-    variants(6).id = 'v7_with_entropy_uncertainty';
-    variants(6).paramMode = 'rank-residual';
-    variants(6).overrides = mergeStruct(baseOverrides, struct('useEntropyUncertaintyCoupling', true));
-
-    variants(7).name = 'APEX-V7-NoCrossScale-WithEntropyUncertainty';
-    variants(7).id = 'v7_no_cross_scale_with_entropy_uncertainty';
-    variants(7).paramMode = 'rank-residual';
-    variants(7).overrides = mergeStruct(baseOverrides, struct( ...
-        'useCrossScaleState', false, ...
-        'stateSize', 15, ...
-        'useEntropyUncertaintyCoupling', true));
+    variants(2).overrides = mergeStruct(baseOverrides, struct('useEntropyUncertaintyCoupling', true));
 end
 
 function variants = buildLOOVariants(maxIterations)
@@ -278,47 +246,22 @@ function variants = buildLOOVariants(maxIterations)
     base.useHuberCriticLoss = true;
     base.useOverestimationPenalty = true;
 
-    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 8, 1);
+    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 3, 1);
 
     variants(1).name = 'APEX-LOO-Full';
     variants(1).id = 'loo_full';
     variants(1).paramMode = 'rank-residual';
     variants(1).overrides = base;
 
-    variants(2).name = 'APEX-LOO-NoCrossScaleState';
-    variants(2).id = 'loo_no_cross_scale';
-    variants(2).paramMode = 'rank-residual';
-    variants(2).overrides = mergeStruct(base, struct('useCrossScaleState', false, 'stateSize', 15));
+    variants(2).name = 'APEX-LOO-NoRankResidual';
+    variants(2).id = 'loo_no_rank_residual';
+    variants(2).paramMode = 'global';
+    variants(2).overrides = mergeStruct(base, struct('useRankResidualControl', false));
 
-    variants(3).name = 'APEX-LOO-NoRankResidual';
-    variants(3).id = 'loo_no_rank_residual';
-    variants(3).paramMode = 'global';
-    variants(3).overrides = mergeStruct(base, struct('useRankResidualControl', false));
-
-    variants(4).name = 'APEX-LOO-NoCuriosity';
-    variants(4).id = 'loo_no_curiosity';
-    variants(4).paramMode = 'rank-residual';
-    variants(4).overrides = mergeStruct(base, struct('useCuriosityBonus', false));
-
-    variants(5).name = 'APEX-LOO-NoHuber';
-    variants(5).id = 'loo_no_huber';
-    variants(5).paramMode = 'rank-residual';
-    variants(5).overrides = mergeStruct(base, struct('useHuberCriticLoss', false));
-
-    variants(6).name = 'APEX-LOO-NoOverestPenalty';
-    variants(6).id = 'loo_no_overest_penalty';
-    variants(6).paramMode = 'rank-residual';
-    variants(6).overrides = mergeStruct(base, struct('useOverestimationPenalty', false));
-
-    variants(7).name = 'APEX-LOO-NoUncertaintyPenalty';
-    variants(7).id = 'loo_no_uncertainty_penalty';
-    variants(7).paramMode = 'rank-residual';
-    variants(7).overrides = mergeStruct(base, struct('useActorUncertaintyPenalty', false, 'uncertaintyPenaltyWeight', 0.0));
-
-    variants(8).name = 'APEX-LOO-WithEntropyUncertainty';
-    variants(8).id = 'loo_with_entropy_uncertainty';
-    variants(8).paramMode = 'rank-residual';
-    variants(8).overrides = mergeStruct(base, struct('useEntropyUncertaintyCoupling', true));
+    variants(3).name = 'APEX-LOO-WithEntropyUncertainty';
+    variants(3).id = 'loo_with_entropy_uncertainty';
+    variants(3).paramMode = 'rank-residual';
+    variants(3).overrides = mergeStruct(base, struct('useEntropyUncertaintyCoupling', true));
 end
 
 function baseline = loadBaselineBestForScenario(repoRoot, scenarioIdx)

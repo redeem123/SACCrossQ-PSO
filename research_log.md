@@ -48,10 +48,10 @@ Infrastructure outcome:
 - Added resume support via `APEXPSO_RESEARCH_RESUME_DIR`
 - MATLAB `parfor` workers still hit native crashes on macOS ARM, but completed runs were preserved and the study finished after resume
 
-50-run LOO winners by scenario:
-- Scenario1: `APEX-LOO-NoCrossScaleState` = `1586.2502 ± 56.5062`
-- Scenario2: `APEX-LOO-NoCrossScaleState` = `1650.0302 ± 93.2574`
-- Scenario3: `APEX-LOO-WithEntropyUncertainty` was the strongest surviving optional SAC toggle family after cleanup, but no edited variant achieved `#1` mean fitness against stored baselines
+50-run LOO outcome retained in the repo:
+- `APEX-LOO-NoRankResidual` was the only clearly harmful removal
+- `APEX-LOO-WithEntropyUncertainty` remained the only optional add-back worth preserving for retest
+- no edited variant achieved `#1` mean fitness against stored baselines
 
 Baseline comparison:
 - Stored baseline best means remain:
@@ -63,8 +63,8 @@ Component decisions from LOO:
 - Keep: `RankResidualControl`
 - Keep as base defaults: `CrossScaleState`, `Curiosity`, `HuberCriticLoss`, `OverestimationPenalty`, `ActorUncertaintyPenalty`
 - Retest as focused candidate: `EntropyUncertaintyCoupling`
-- Removed from the repository after this study: experimental replay/backup/prior/normalization branches that did not justify their complexity
+- Removed from the repository after this study: experimental replay/backup/prior/normalization branches and weak ablation branches that did not justify their complexity
 
 Code decision:
 - Reduced the shipped `APEXPSO_Config` stack to the surviving components only
-- Replaced the old research family with a focused `V7` family centered on the reduced base and remaining ablations
+- Replaced the old research family with a minimal `V7` family centered on the reduced base and the entropy-coupling probe
