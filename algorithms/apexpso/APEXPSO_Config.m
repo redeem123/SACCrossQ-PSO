@@ -40,7 +40,6 @@ function config = APEXPSO_Config(mode)
     config.numCritics = 2;                  % Small ensemble (2 critics)
 
     % Advanced features
-    config.useTransformerState = false;     % Legacy random-projection encoder
     config.useCrossScaleState = true;       % Deterministic cross-scale encoder
     config.usePerParticleActions = false;   % Use low-dim latent control by default
     config.useRankResidualControl = true;   % Expand latent action to per-particle params
@@ -215,8 +214,7 @@ function config = APEXPSO_Config(mode)
             config.warmupPeriod = 0;
 
         case 'ablation_no_attention'
-            % Ablation: No attention/transformer
-            config.useTransformerState = false;
+            % Ablation: Remove structured cross-scale encoding
             config.useCrossScaleState = false;
             config.stateSize = 15;
 
@@ -314,7 +312,6 @@ function displayConfiguration(config)
     fprintf('  CrossQ BatchNorm:     %s\n', bool2str(config.useBatchNorm));
     fprintf('  Target Networks:      %s (CrossQ approach)\n', bool2str(config.useTargetNetworks));
     fprintf('  Critic Ensemble:      %d critics\n', config.numCritics);
-    fprintf('  Transformer State:    %s\n', bool2str(config.useTransformerState));
     fprintf('  Cross-Scale State:    %s (%dD, window=%d)\n', ...
         bool2str(config.useCrossScaleState), config.stateSize, config.temporalWindow);
     fprintf('  Rank-Residual Ctrl:   %s (%dD latent)\n', ...

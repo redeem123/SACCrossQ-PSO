@@ -67,4 +67,5 @@ Component decisions from LOO:
 
 Code decision:
 - Reduced the shipped `APEXPSO_Config` stack to the surviving components only
-- Replaced the old research family with a minimal `V7` family centered on the reduced base and the entropy-coupling probe
+- Replaced the old research family with a minimal `V7` family centered on the reduced base, the cross-scale ablation, and the entropy-coupling probe
+- Current retained LOO family: `APEX-LOO-Full`, `APEX-LOO-NoRankResidual`, `APEX-LOO-WithEntropyUncertainty`, `APEX-LOO-NoCrossScaleState`

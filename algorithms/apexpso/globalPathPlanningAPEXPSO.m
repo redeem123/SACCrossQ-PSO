@@ -1,12 +1,12 @@
-function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory] = globalPathPlanningAPEXPSO(...
+function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory, learningStats] = globalPathPlanningAPEXPSO(...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config)
-    % APEX-PSO: Advanced Parameter Exploration CrossQ-SAC for PSO
+    % CQSAC-PSO: Advanced Parameter Exploration CrossQ-SAC for PSO
     %
     % State-of-the-art RL-based PSO parameter adaptation using:
     %   - SAC with automatic entropy tuning
     %   - CrossQ optimizations (BatchNorm, UTD=1)
-    %   - Transformer state encoding with attention
-    %   - Per-particle parameter adaptation (120D actions)
+    %   - Deterministic cross-scale state encoding
+    %   - Rank-residual parameter adaptation
     %   - Multi-objective reward function
     %
     % Inputs:
@@ -16,29 +16,24 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     %   trees: Tree data structure
     %   terrainGrid: Terrain height map
     %   terrainX, terrainY: Terrain coordinate grids
-    %   config: APEX-PSO configuration
+    %   config: CQSAC-PSO configuration
     %
     % Outputs:
     %   bestPath: Best path found
     %   bestFitness: Best fitness value
     %   fitnessHistory: Fitness over training
     %   agent: Trained SAC agent
-    %   stateEncoder: Transformer state encoder
+    %   stateEncoder: State encoder
 
     fprintf('\n╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║              APEX-PSO Global Path Planning              ║\n');
+    fprintf('║              CQSAC-PSO Global Path Planning              ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
-    % Initialize or load agent and state encoder
-    if ~isempty(config.pretrainedModelPath) && exist(config.pretrainedModelPath, 'file')
-        fprintf('📦 Using pretrained model...\n');
-        [agent, stateEncoder] = loadModel(config.pretrainedModelPath);
+    % Online-only initialization: always start from scratch in-memory.
+    agent = APEXPSO_Agent(config);
+    if config.useCrossScaleState
+        stateEncoder = CrossScaleStateEncoder(config);
     else
-        if ~isempty(config.pretrainedModelPath)
-            fprintf('⚠️  Pretrained model not found: %s\n', config.pretrainedModelPath);
-            fprintf('   Training from scratch...\n');
-        end
-        agent = APEXPSO_Agent(config);
         stateEncoder = SimpleStateEncoder(config);
     end
     
@@ -52,20 +47,30 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     [particles, mapSize, numWaypoints] = initializePSOParticles(config, startPoint, goalPoint, ...
         terrainGrid, terrainX, terrainY);
 
-    % Training history
-    % For online mode (1 episode), track per-iteration convergence
-    % For pretrained mode (multiple episodes), track per-episode convergence
+    % Training history:
+    % - single-episode mode tracks per-iteration convergence
+    % - multi-episode mode tracks per-episode convergence
     if config.numEpisodes == 1
         fitnessHistory = zeros(1, config.maxIterations);  % Track every iteration
         % Track population-average PSO parameters for visualization
         parameterHistory_w = zeros(1, config.maxIterations);
         parameterHistory_c1 = zeros(1, config.maxIterations);
         parameterHistory_c2 = zeros(1, config.maxIterations);
+        parameterHistory_w_samples = zeros(config.maxIterations, config.popSize);
+        parameterHistory_c1_samples = zeros(config.maxIterations, config.popSize);
+        parameterHistory_c2_samples = zeros(config.maxIterations, config.popSize);
+        rewardHistory = zeros(1, config.maxIterations);
+        criticLossHistory = nan(1, config.maxIterations);
     else
         fitnessHistory = zeros(1, config.numEpisodes);    % Track every episode
         parameterHistory_w = [];
         parameterHistory_c1 = [];
         parameterHistory_c2 = [];
+        parameterHistory_w_samples = [];
+        parameterHistory_c1_samples = [];
+        parameterHistory_c2_samples = [];
+        rewardHistory = [];
+        criticLossHistory = [];
     end
     diversityHistory = zeros(config.diversityHistorySize, 1);
     stateHistory = [];
@@ -87,7 +92,7 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
         end
 
         % Reset for new episode
-        particles = resetParticles(particles, startPoint, goalPoint, terrainGrid, terrainX, terrainY);
+        particles = resetParticles(particles, startPoint, goalPoint, terrainGrid, terrainX, terrainY, mapSize);
         stateEncoder.reset();
         episodeBestFitness = 1e9;
         lastImprovementIteration = 0;
@@ -98,13 +103,13 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
             basicFeatures = extractRichFeatures(particles, iter, config.maxIterations, ...
                 lastImprovementIteration, episodeBestFitness);
 
-            % Add to transformer encoder
+            % Add latest swarm features to state encoder
             stateEncoder.addIteration(basicFeatures);
 
             % Get state from encoder
             state = stateEncoder.encode();
 
-            % Get action from agent
+            % Get action from agent in online training mode.
             action = agent.getAction(state, true);
 
             % Log action statistics (every 50 iterations)
@@ -117,14 +122,18 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
                     iter, action_mean, action_std, action_min, action_max);
             end
 
-            % Convert action to per-particle parameters
-            particleParams = convertActionToPerParticleParams(action, config);
+            % Convert latent action to per-particle parameters.
+            particleParams = convertActionToPerParticleParams( ...
+                action, config, particles, iter, config.maxIterations);
 
             % Store population-average parameters for visualization (online mode only)
             if config.numEpisodes == 1
                 parameterHistory_w(iter) = mean(particleParams(:, 1));
                 parameterHistory_c1(iter) = mean(particleParams(:, 2));
                 parameterHistory_c2(iter) = mean(particleParams(:, 3));
+                parameterHistory_w_samples(iter, :) = particleParams(:, 1)';
+                parameterHistory_c1_samples(iter, :) = particleParams(:, 2)';
+                parameterHistory_c2_samples(iter, :) = particleParams(:, 3)';
             end
 
             % Update PSO particles with individual parameters
@@ -157,8 +166,13 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
 
             % Calculate reward
             if config.useMultiObjectiveReward
+                rewardContext = struct();
+                rewardContext.iter = iter;
+                rewardContext.maxIterations = config.maxIterations;
+                rewardContext.lastImprovementIteration = lastImprovementIteration;
                 [reward, ~] = calculateMultiObjectiveReward(episodeBestFitness, ...
-                    previousBestFitness, currentDiversity, diversityHistory, stateHistory, config);
+                    previousBestFitness, currentDiversity, diversityHistory, ...
+                    stateHistory, config, rewardContext, nextState);
             else
                 % Simple binary reward
                 if episodeBestFitness < previousBestFitness
@@ -166,6 +180,10 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
                 else
                     reward = -1.0;
                 end
+            end
+
+            if config.numEpisodes == 1
+                rewardHistory(iter) = reward;
             end
 
             % Log reward (every 100 iterations)
@@ -178,17 +196,25 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
             agent.storeTransition(state, action, reward, nextState, done);
 
             % Store state for curiosity
-            stateHistory = [stateHistory; state'];
+            stateHistory = [stateHistory; nextState'];
             if size(stateHistory, 1) > 20
                 stateHistory = stateHistory(end-19:end, :);
             end
 
             % Train agent
             losses = [];
+            criticLoss = NaN;
             if iter > config.warmupPeriod && mod(iter, config.trainEveryNIterations) == 0
+                criticLosses = zeros(1, config.gradientStepsPerTraining);
                 for g = 1:config.gradientStepsPerTraining
                     losses = agent.train();
+                    criticLosses(g) = losses.critic;
                 end
+                criticLoss = mean(criticLosses);
+            end
+
+            if config.numEpisodes == 1
+                criticLossHistory(iter) = criticLoss;
             end
             
             % Log training metrics
@@ -196,27 +222,17 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
                 logger.logIteration(reward, episodeBestFitness, losses);
             end
 
-            % Online/Pretrained mode: Store per-iteration fitness and print progress
+            % Single-episode mode: store per-iteration fitness and print progress.
             if config.numEpisodes == 1
                 fitnessHistory(iter) = episodeBestFitness;
-                % Print progress (less frequent for pretrained mode to reduce output)
-                if strcmp(config.mode, 'pretrained')
-                    % Pretrained: Print every 100 iterations
-                    if mod(iter, 100) == 0 || iter == config.maxIterations
-                        fprintf('  [Iter %3d/%d] Best: %.4f\n', ...
-                            iter, config.maxIterations, episodeBestFitness);
-                    end
-                else
-                    % Online: Print every 50 iterations with alpha
-                    if mod(iter, 50) == 0
-                        fprintf('  [Iter %3d/%d] Best: %.4f | Alpha: %.4f\n', ...
-                            iter, config.maxIterations, episodeBestFitness, exp(agent.logAlpha));
-                    end
+                if mod(iter, 50) == 0
+                    fprintf('  [Iter %3d/%d] Best: %.4f | Alpha: %.4f\n', ...
+                        iter, config.maxIterations, episodeBestFitness, exp(agent.logAlpha));
                 end
             end
         end
 
-        % Episode complete - for pretrained mode, store per-episode fitness
+        % Multi-episode mode: store per-episode fitness.
         if config.numEpisodes > 1
             fitnessHistory(episode) = episodeBestFitness;
             
@@ -230,7 +246,6 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
 
         % Log episode summary
         if config.numEpisodes > 1
-            % Pretrained mode: show episode results
             fprintf('\n  ✓ Episode %d COMPLETE: Best=%.4f, Global=%.4f, LastImprove=%d/%d\n', ...
                 episode, episodeBestFitness, globalBestFitness, lastImprovementIteration, config.maxIterations);
             fprintf('    Agent Alpha: %.4f | Replay Buffer: %d/%d\n', exp(agent.logAlpha), agent.replayBuffer.size, agent.config.bufferSize);
@@ -250,10 +265,6 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
                 exp(agent.logAlpha));
         end
 
-        % Save checkpoint (pretrained mode only)
-        if config.numEpisodes > 1 && mod(episode, config.saveInterval) == 0
-            saveModel(agent, stateEncoder, config, episode, globalBestFitness);
-        end
     end
 
     % Return best solution
@@ -267,7 +278,11 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     % --- Visualization Injection ---
     % Only visualize if running serially (main thread) to avoid parfor errors
     task = getCurrentTask();
-    if isempty(task)
+    shouldVisualize = true;
+    if isfield(config, 'disableVisualization') && config.disableVisualization
+        shouldVisualize = false;
+    end
+    if isempty(task) && shouldVisualize
         try
             visualizeSingleRun(bestPath, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config.mapSize);
         catch e
@@ -282,27 +297,33 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
         parameterHistory.w = parameterHistory_w;
         parameterHistory.c1 = parameterHistory_c1;
         parameterHistory.c2 = parameterHistory_c2;
+        parameterHistory.w_samples = parameterHistory_w_samples;
+        parameterHistory.c1_samples = parameterHistory_c1_samples;
+        parameterHistory.c2_samples = parameterHistory_c2_samples;
     else
         parameterHistory.w = [];
         parameterHistory.c1 = [];
         parameterHistory.c2 = [];
+        parameterHistory.w_samples = [];
+        parameterHistory.c1_samples = [];
+        parameterHistory.c2_samples = [];
     end
 
-    % Save final model (pretrained mode only)
-    if config.numEpisodes > 1
-        saveModel(agent, stateEncoder, config, config.numEpisodes, bestFitness, true);
-        
-        if ~isempty(logger)
-            [p, n, ~] = fileparts(config.savePath);
-            logPath = fullfile(p, [n '_log.mat']);
-            logger.save(logPath);
-        end
+    learningStats = struct();
+    learningStats.rewardHistory = rewardHistory;
+    learningStats.criticLossHistory = criticLossHistory;
+
+    % Persist logger metrics only when running multi-episode experiments.
+    if config.numEpisodes > 1 && ~isempty(logger)
+        [p, n, ~] = fileparts(config.savePath);
+        logPath = fullfile(p, [n '_log.mat']);
+        logger.save(logPath);
     end
 
     % Final training summary
     fprintf('\n');
     fprintf('╔════════════════════════════════════════════════════════════╗\n');
-    fprintf('║              APEX-PSO TRAINING COMPLETE                   ║\n');
+    fprintf('║              CQSAC-PSO TRAINING COMPLETE                   ║\n');
     fprintf('╚════════════════════════════════════════════════════════════╝\n');
     fprintf('  Mode:              %s\n', config.mode);
     fprintf('  Episodes:          %d\n', config.numEpisodes);
@@ -332,6 +353,7 @@ function [particles, mapSize, numWaypoints] = initializePSOParticles(config, sta
     particles.fitness = ones(popSize, 1) * 1e9;
     particles.bestPositions = zeros(popSize, dims);
     particles.bestFitness = ones(popSize, 1) * 1e9;
+    particles.stagnationCounter = zeros(popSize, 1);
 
     % Initialize random positions
     for i = 1:popSize
@@ -350,11 +372,14 @@ function [particles, mapSize, numWaypoints] = initializePSOParticles(config, sta
     end
 end
 
-function particles = resetParticles(particles, startPoint, goalPoint, terrainGrid, terrainX, terrainY)
+function particles = resetParticles(particles, startPoint, goalPoint, terrainGrid, terrainX, terrainY, mapSize)
     % Reset particles for new episode (keep learned behavior, reset positions)
     [popSize, dims] = size(particles.cartesianPositions);
     numWaypoints = dims / 3;
-    mapSize = [size(terrainGrid, 2), size(terrainGrid, 1), 100];
+    if nargin < 7 || isempty(mapSize)
+        % Backward-compatible fallback when map size is not explicitly provided.
+        mapSize = [max(terrainX(:)), max(terrainY(:)), 100];
+    end
 
     for i = 1:popSize
         for j = 1:numWaypoints
@@ -372,6 +397,7 @@ function particles = resetParticles(particles, startPoint, goalPoint, terrainGri
         particles.fitness(i) = 1e9;
         particles.bestPositions(i, :) = particles.cartesianPositions(i, :);
         particles.bestFitness(i) = 1e9;
+        particles.stagnationCounter(i) = 0;
     end
 end
 
@@ -449,10 +475,13 @@ function [particles, bestFitness] = updatePSOParticles(particles, particleParams
         if particles.fitness(i) < particles.bestFitness(i)
             particles.bestFitness(i) = particles.fitness(i);
             particles.bestPositions(i,:) = particles.cartesianPositions(i,:);
+            particles.stagnationCounter(i) = 0;
 
             if particles.fitness(i) < bestFitness
                 bestFitness = particles.fitness(i);
             end
+        else
+            particles.stagnationCounter(i) = particles.stagnationCounter(i) + 1;
         end
     end
 end
@@ -464,61 +493,3 @@ function diversity = calculateDiversity(particles)
     diversity = mean(diversityPerDim);
 end
 
-function saveModel(agent, stateEncoder, config, episode, fitness, isFinal)
-    % Save trained APEX-PSO model
-    if nargin < 6
-        isFinal = false;
-    end
-
-    % Create models directory if it doesn't exist
-    modelsDir = fileparts(config.savePath);
-    if ~isempty(modelsDir) && ~exist(modelsDir, 'dir')
-        mkdir(modelsDir);
-    end
-
-    % Prepare save data
-    saveData = struct();
-    saveData.agent = agent;
-    saveData.stateEncoder = stateEncoder;
-    saveData.config = config;
-    saveData.episode = episode;
-    saveData.fitness = fitness;
-    saveData.timestamp = datetime('now');
-
-    if isFinal
-        % Final model - use standard path
-        filepath = config.savePath;
-        fprintf('\n✓ Saving final trained model: %s\n', filepath);
-    else
-        % Checkpoint - add episode number
-        [path, name, ext] = fileparts(config.savePath);
-        filepath = fullfile(path, sprintf('%s_ep%d%s', name, episode, ext));
-        fprintf('\n✓ Saving checkpoint (Episode %d): %s\n', episode, filepath);
-    end
-
-    save(filepath, '-struct', 'saveData');
-    fprintf('  Model saved successfully! Fitness: %.4f\n', fitness);
-end
-
-function [agent, stateEncoder] = loadModel(modelPath)
-    % Load pretrained APEX-PSO model
-    if ~exist(modelPath, 'file')
-        error('Model file not found: %s', modelPath);
-    end
-
-    fprintf('\n✓ Loading pretrained model: %s\n', modelPath);
-    loadedData = load(modelPath);
-
-    agent = loadedData.agent;
-    stateEncoder = loadedData.stateEncoder;
-    
-    % Force agent to CPU (for macOS compatibility)
-    if ismethod(agent, 'toCPU')
-        agent.toCPU();
-    end
-
-    fprintf('  Model loaded successfully!\n');
-    fprintf('  Training episode: %d\n', loadedData.episode);
-    fprintf('  Training fitness: %.4f\n', loadedData.fitness);
-    fprintf('  Trained on: %s\n\n', datestr(loadedData.timestamp));
-end

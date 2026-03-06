@@ -208,7 +208,6 @@ function variants = buildVariants(maxIterations)
     baseOverrides.disableVisualization = true;
     baseOverrides.maxIterations = maxIterations;
     baseOverrides.useCrossScaleState = true;
-    baseOverrides.useTransformerState = false;
     baseOverrides.useRankResidualControl = true;
     % Post-LOO default stack: keep only the components that remained defensible
     % after the 50-run leave-one-out study.
@@ -219,7 +218,7 @@ function variants = buildVariants(maxIterations)
     baseOverrides.useHuberCriticLoss = true;
     baseOverrides.useOverestimationPenalty = true;
 
-    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 2, 1);
+    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 4, 1);
 
     variants(1).name = 'APEX-V7-LOOReduced-Base';
     variants(1).id = 'v7_loo_reduced_base';
@@ -230,6 +229,21 @@ function variants = buildVariants(maxIterations)
     variants(2).id = 'v7_with_entropy_uncertainty';
     variants(2).paramMode = 'rank-residual';
     variants(2).overrides = mergeStruct(baseOverrides, struct('useEntropyUncertaintyCoupling', true));
+
+    variants(3).name = 'APEX-V7-NoCrossScale';
+    variants(3).id = 'v7_no_cross_scale';
+    variants(3).paramMode = 'rank-residual';
+    variants(3).overrides = mergeStruct(baseOverrides, struct( ...
+        'useCrossScaleState', false, ...
+        'stateSize', 15));
+
+    variants(4).name = 'APEX-V7-NoCrossScale-WithEntropyUncertainty';
+    variants(4).id = 'v7_no_cross_scale_with_entropy_uncertainty';
+    variants(4).paramMode = 'rank-residual';
+    variants(4).overrides = mergeStruct(baseOverrides, struct( ...
+        'useCrossScaleState', false, ...
+        'stateSize', 15, ...
+        'useEntropyUncertaintyCoupling', true));
 end
 
 function variants = buildLOOVariants(maxIterations)
@@ -237,7 +251,6 @@ function variants = buildLOOVariants(maxIterations)
     base.disableVisualization = true;
     base.maxIterations = maxIterations;
     base.useCrossScaleState = true;
-    base.useTransformerState = false;
     base.useRankResidualControl = true;
     base.useActorUncertaintyPenalty = true;
     base.uncertaintyPenaltyWeight = 0.08;
@@ -246,7 +259,7 @@ function variants = buildLOOVariants(maxIterations)
     base.useHuberCriticLoss = true;
     base.useOverestimationPenalty = true;
 
-    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 3, 1);
+    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 4, 1);
 
     variants(1).name = 'APEX-LOO-Full';
     variants(1).id = 'loo_full';
@@ -262,6 +275,11 @@ function variants = buildLOOVariants(maxIterations)
     variants(3).id = 'loo_with_entropy_uncertainty';
     variants(3).paramMode = 'rank-residual';
     variants(3).overrides = mergeStruct(base, struct('useEntropyUncertaintyCoupling', true));
+
+    variants(4).name = 'APEX-LOO-NoCrossScaleState';
+    variants(4).id = 'loo_no_cross_scale';
+    variants(4).paramMode = 'rank-residual';
+    variants(4).overrides = mergeStruct(base, struct('useCrossScaleState', false, 'stateSize', 15));
 end
 
 function baseline = loadBaselineBestForScenario(repoRoot, scenarioIdx)

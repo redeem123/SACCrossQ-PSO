@@ -1,8 +1,8 @@
 classdef SimpleStateEncoder < handle
-    % Simplified State Encoder for APEX-PSO
+    % Simplified fallback state encoder for CQSAC-PSO.
     %
-    % Instead of complex transformer, uses temporal aggregation with learned weights
-    % This is more practical for MATLAB and still captures temporal context.
+    % Uses temporal aggregation with learned weights when the structured
+    % cross-scale encoder is disabled.
     %
     % Architecture:
     %   - Maintains circular buffer of last N iterations' features
@@ -11,7 +11,7 @@ classdef SimpleStateEncoder < handle
     %   - Outputs fixed 45D state vector
 
     properties
-        config              % APEX-PSO configuration
+        config              % CQSAC-PSO configuration
         temporalWindow      % Number of past iterations to track
         basicFeatureDim     % Dimension of basic features per iteration (9D)
         outputDim           % Final state dimension (45D)
