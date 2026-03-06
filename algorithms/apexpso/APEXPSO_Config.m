@@ -46,7 +46,6 @@ function config = APEXPSO_Config(mode)
     config.useRankResidualControl = true;   % Expand latent action to per-particle params
     config.useMultiObjectiveReward = true;  % Fitness + diversity + curiosity
     config.useCuriosityBonus = true;        % Exploration bonus
-    config.useAdaptivePotentialReward = true;
     config.useActorUncertaintyPenalty = true;
 
     % ===== NETWORK ARCHITECTURE =====
@@ -127,7 +126,6 @@ function config = APEXPSO_Config(mode)
     config.rewardWeightDiversity = 0.2;     % Maintain diversity
     config.rewardWeightConvergence = 0.1;   % Convergence speed bonus
     config.rewardWeightCuriosity = 0.05;    % Curiosity exploration bonus
-    config.rewardWeightPotential = 0.7;     % Potential-based shaping
     config.rewardWeightStagnation = 0.25;   % Escape pressure
 
     % Diversity tracking
@@ -232,9 +230,6 @@ function config = APEXPSO_Config(mode)
             config.paramMode = 'global';
             config.actionSize = 3;
 
-        case 'ablation_no_adaptive_reward'
-            config.useAdaptivePotentialReward = false;
-
         case 'ablation_no_uncertainty_penalty'
             config.useActorUncertaintyPenalty = false;
             config.uncertaintyPenaltyWeight = 0.0;
@@ -327,7 +322,6 @@ function displayConfiguration(config)
     fprintf('  Per-Particle Actions: %s\n', bool2str(config.usePerParticleActions));
     fprintf('  Multi-Obj Reward:     %s (fitness+diversity+curiosity)\n', ...
         bool2str(config.useMultiObjectiveReward));
-    fprintf('  Adaptive Reward:      %s\n', bool2str(config.useAdaptivePotentialReward));
     fprintf('  Uncertainty Penalty:  %s (%.3f)\n', ...
         bool2str(config.useActorUncertaintyPenalty), config.uncertaintyPenaltyWeight);
     fprintf('  Huber Critic Loss:    %s (delta=%.2f)\n', ...

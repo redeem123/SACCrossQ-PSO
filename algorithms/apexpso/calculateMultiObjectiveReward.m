@@ -1,143 +1,124 @@
 function [reward, components] = calculateMultiObjectiveReward(currentFitness, previousFitness, ...
-    currentDiversity, diversityHistory, stateHistory, config)
-    % Calculate multi-objective reward for APEX-PSO
+    currentDiversity, diversityHistory, stateHistory, config, rewardContext, currentState)
+    % Adaptive multi-objective reward for APEXPSO.
     %
-    % Combines multiple objectives for better learning:
-    %   1. Fitness improvement (primary goal)
-    %   2. Diversity maintenance (avoid premature convergence)
-    %   3. Convergence speed (reward fast improvements)
-    %   4. Curiosity bonus (encourage exploration of new states)
-    %
-    % Based on research:
-    %   - Multi-objective RL for better exploration-exploitation balance
-    %   - Curiosity-driven exploration (intrinsic motivation)
-    %
-    % Inputs:
-    %   currentFitness: Current global best fitness
-    %   previousFitness: Previous global best fitness
-    %   currentDiversity: Current population diversity metric
-    %   diversityHistory: Array of recent diversity values
-    %   stateHistory: Array of recent states (for curiosity)
-    %   config: APEX-PSO configuration
-    %
-    % Outputs:
-    %   reward: Total reward (scalar)
-    %   components: Struct with individual reward components
+    % Reward terms:
+    %   1) Relative fitness improvement (scale-aware)
+    %   2) Diversity tracking to a scheduled target
+    %   3) Stagnation pressure / escape bonus
+    %   4) Curiosity novelty from recent state history
 
-    epsilon = 1e-6;
+    if nargin < 7 || isempty(rewardContext)
+        rewardContext = struct();
+    end
+    if nargin < 8
+        currentState = [];
+    end
 
-    % ===== 1. FITNESS IMPROVEMENT REWARD (Primary) =====
-    % Positive if fitness improves (minimization), negative if no improvement
-    
-    % Define threshold for "invalid" fitness (since we now clamp Inf to 1e9)
+    epsilon = 1e-8;
     INVALID_FITNESS_THRESHOLD = 1e8;
 
-    % Handle invalid/valid transitions
-    isPreviousInvalid = (previousFitness >= INVALID_FITNESS_THRESHOLD);
-    isCurrentInvalid = (currentFitness >= INVALID_FITNESS_THRESHOLD);
+    progress = 0;
+    if isfield(rewardContext, 'iter') && isfield(rewardContext, 'maxIterations') ...
+            && rewardContext.maxIterations > 0
+        progress = min(1, max(0, rewardContext.iter / rewardContext.maxIterations));
+    end
+
+    % ===== 1. FITNESS IMPROVEMENT =====
+    isPreviousInvalid = (previousFitness >= INVALID_FITNESS_THRESHOLD) || ~isfinite(previousFitness);
+    isCurrentInvalid = (currentFitness >= INVALID_FITNESS_THRESHOLD) || ~isfinite(currentFitness);
 
     if isPreviousInvalid && isCurrentInvalid
-        fitnessImprovement = 0;
-        fitnessReward = -0.5; % Treat as stagnation
+        relImprovement = 0;
+        fitnessReward = -0.4;
     elseif isPreviousInvalid && ~isCurrentInvalid
-        % First valid solution found! Huge reward.
-        fitnessImprovement = 10000; 
-        fitnessReward = 5.0; % High reward
+        relImprovement = 1;
+        fitnessReward = 2.5;
     elseif ~isPreviousInvalid && isCurrentInvalid
-        % Lost valid solution (should rarely happen with elitism). Huge penalty.
-        fitnessImprovement = -10000;
-        fitnessReward = -5.0;
+        relImprovement = -1;
+        fitnessReward = -2.5;
     else
-        % Normal case
-        fitnessImprovement = previousFitness - currentFitness;
-
-        if fitnessImprovement > epsilon
-            % Improvement: Use log-scale for large improvements
-            fitnessReward = sign(fitnessImprovement) * log10(1.0 + abs(fitnessImprovement));
-        elseif abs(fitnessImprovement) <= epsilon
-            % Stagnation: Small penalty
-            fitnessReward = -0.5;
-        else
-            % Worsening: Penalty proportional to degradation
-            fitnessReward = -abs(fitnessImprovement) / (abs(previousFitness) + epsilon);
+        relImprovement = (previousFitness - currentFitness) / (abs(previousFitness) + epsilon);
+        improvementScale = 0.02;
+        if isfield(config, 'rewardImprovementScale')
+            improvementScale = max(config.rewardImprovementScale, 1e-6);
+        end
+        fitnessReward = tanh(relImprovement / improvementScale);
+        if relImprovement <= 0
+            fitnessReward = fitnessReward - 0.15;
         end
     end
 
-    % ===== 2. DIVERSITY REWARD =====
-    % Maintain healthy diversity to avoid premature convergence
-    % Diversity typically decreases over time, but too low is bad
+    % ===== 2. DIVERSITY TRACKING =====
+    diversityTargetMax = 0.30;
+    diversityTargetMin = 0.03;
+    diversityTargetPower = 1.2;
+    if isfield(config, 'diversityTarget')
+        dt = config.diversityTarget;
+        if isfield(dt, 'max'), diversityTargetMax = dt.max; end
+        if isfield(dt, 'min'), diversityTargetMin = dt.min; end
+        if isfield(dt, 'power'), diversityTargetPower = dt.power; end
+    end
+    targetDiversity = diversityTargetMin + ...
+        (diversityTargetMax - diversityTargetMin) * ((1 - progress) ^ diversityTargetPower);
+    diversityError = (currentDiversity - targetDiversity) / (targetDiversity + epsilon);
+    diversityReward = tanh(diversityError);
 
-    if length(diversityHistory) >= 2
-        % Calculate diversity trend
-        diversityTrend = diversityHistory(end) - diversityHistory(end-1);
-
-        % Penalty if diversity drops too low
-        if currentDiversity < config.minDiversityThreshold
-            diversityReward = -1.0;  % Strong penalty for loss of diversity
-        elseif diversityTrend < -epsilon
-            % Diversity decreasing: small penalty (natural, but watch it)
-            diversityReward = -0.2 * abs(diversityTrend);
-        else
-            % Diversity maintained or increasing: small bonus
-            diversityReward = 0.1;
+    % Penalize sharp diversity collapse.
+    if numel(diversityHistory) >= 2
+        trend = diversityHistory(end) - diversityHistory(end-1);
+        if trend < -1e-6
+            diversityReward = diversityReward - 0.25 * min(1, abs(trend) / (targetDiversity + epsilon));
         end
-    else
-        diversityReward = 0.0;  % Not enough history
     end
 
-    % ===== 3. CONVERGENCE SPEED REWARD =====
-    % Bonus for making improvements quickly (early in the search)
-    % Helps reward efficient exploration
-
-    if fitnessImprovement > epsilon
-        % Calculate improvement rate (improvement per iteration)
-        % Larger improvements get higher rewards
-        improvementMagnitude = abs(fitnessImprovement) / (previousFitness + epsilon);
-        convergenceReward = improvementMagnitude * 2.0;  % Amplify for large jumps
-    else
-        convergenceReward = 0.0;
+    % ===== 3. STAGNATION PRESSURE =====
+    stagnationIters = 0;
+    if isfield(rewardContext, 'iter') && isfield(rewardContext, 'lastImprovementIteration')
+        stagnationIters = max(0, rewardContext.iter - rewardContext.lastImprovementIteration);
+    end
+    stagnationTau = 35;
+    if isfield(config, 'stagnationTimeConstant')
+        stagnationTau = max(1, config.stagnationTimeConstant);
     end
 
-    % ===== 4. CURIOSITY BONUS (Intrinsic Motivation) =====
-    % Reward exploring novel states to encourage exploration
-    % Based on state novelty detection
-
-    if config.useCuriosityBonus && ~isempty(stateHistory) && size(stateHistory, 1) >= 2
-        % Calculate novelty: distance to most recent states
-        currentState = stateHistory(end, :);
-        recentStates = stateHistory(max(1, end-10):end-1, :);  % Last 10 states
-
-        % Compute minimum distance to recent states (novelty measure)
-        distances = sqrt(sum((recentStates - currentState).^2, 2));
-        minDistance = min(distances);
-
-        % Normalize novelty (0 to 1)
-        novelty = tanh(minDistance);  % Squash to [0, 1]
-
-        % Curiosity bonus: reward novel states
-        curiosityReward = novelty * 0.5;
+    stagnationRatio = 1 - exp(-stagnationIters / stagnationTau);
+    if relImprovement > 0
+        stagnationReward = (1 - stagnationRatio);       % improvement after stall is rewarded
     else
-        curiosityReward = 0.0;
+        stagnationReward = -0.30 * stagnationRatio;     % prolonged stall is penalized
     end
 
-    % ===== COMBINE REWARDS =====
-    % Weighted sum of all components
+    % ===== 4. CURIOSITY / NOVELTY =====
+    curiosityReward = 0;
+    if config.useCuriosityBonus && ~isempty(stateHistory) && ~isempty(currentState)
+        recentStates = stateHistory(max(1, end-12):end, :);
+        diffs = recentStates - repmat(currentState(:)', size(recentStates, 1), 1);
+        distances = sqrt(sum(diffs.^2, 2));
+        novelty = tanh(min(distances));
+        curiosityReward = novelty;
+    end
 
+    % ===== COMBINE =====
     reward = config.rewardWeightFitness * fitnessReward + ...
              config.rewardWeightDiversity * diversityReward + ...
-             config.rewardWeightConvergence * convergenceReward + ...
+             config.rewardWeightStagnation * stagnationReward + ...
              config.rewardWeightCuriosity * curiosityReward;
 
-    % Store components for logging/analysis
+    rewardClip = 10;
+    if isfield(config, 'rewardClip')
+        rewardClip = max(1, config.rewardClip);
+    end
+    reward = max(-rewardClip, min(rewardClip, reward));
+
     components = struct();
     components.fitness = fitnessReward;
     components.diversity = diversityReward;
-    components.convergence = convergenceReward;
+    components.stagnation = stagnationReward;
     components.curiosity = curiosityReward;
     components.total = reward;
-    components.fitnessImprovement = fitnessImprovement;
+    components.relativeImprovement = relImprovement;
+    components.targetDiversity = targetDiversity;
     components.currentDiversity = currentDiversity;
-
-    % Optional: Clip reward to prevent extreme values
-    reward = max(-10, min(10, reward));
+    components.stagnationIters = stagnationIters;
 end

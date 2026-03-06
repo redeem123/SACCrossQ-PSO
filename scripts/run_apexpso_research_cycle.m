@@ -212,7 +212,6 @@ function variants = buildVariants(maxIterations)
     baseOverrides.useRankResidualControl = true;
     % Post-LOO default stack: keep only the components that remained defensible
     % after the 50-run leave-one-out study.
-    baseOverrides.useAdaptivePotentialReward = false;
     baseOverrides.useActorUncertaintyPenalty = true;
     baseOverrides.uncertaintyPenaltyWeight = 0.08;
     baseOverrides.useCuriosityBonus = true;
@@ -272,7 +271,6 @@ function variants = buildLOOVariants(maxIterations)
     base.useCrossScaleState = true;
     base.useTransformerState = false;
     base.useRankResidualControl = true;
-    base.useAdaptivePotentialReward = false;
     base.useActorUncertaintyPenalty = true;
     base.uncertaintyPenaltyWeight = 0.08;
     base.useCuriosityBonus = true;
@@ -280,7 +278,7 @@ function variants = buildLOOVariants(maxIterations)
     base.useHuberCriticLoss = true;
     base.useOverestimationPenalty = true;
 
-    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 9, 1);
+    variants = repmat(struct('name', '', 'id', '', 'paramMode', '', 'overrides', struct()), 8, 1);
 
     variants(1).name = 'APEX-LOO-Full';
     variants(1).id = 'loo_full';
@@ -317,15 +315,10 @@ function variants = buildLOOVariants(maxIterations)
     variants(7).paramMode = 'rank-residual';
     variants(7).overrides = mergeStruct(base, struct('useActorUncertaintyPenalty', false, 'uncertaintyPenaltyWeight', 0.0));
 
-    variants(8).name = 'APEX-LOO-NoAdaptiveReward';
-    variants(8).id = 'loo_no_adaptive_reward';
+    variants(8).name = 'APEX-LOO-WithEntropyUncertainty';
+    variants(8).id = 'loo_with_entropy_uncertainty';
     variants(8).paramMode = 'rank-residual';
-    variants(8).overrides = mergeStruct(base, struct('useAdaptivePotentialReward', false));
-
-    variants(9).name = 'APEX-LOO-WithEntropyUncertainty';
-    variants(9).id = 'loo_with_entropy_uncertainty';
-    variants(9).paramMode = 'rank-residual';
-    variants(9).overrides = mergeStruct(base, struct('useEntropyUncertaintyCoupling', true));
+    variants(8).overrides = mergeStruct(base, struct('useEntropyUncertaintyCoupling', true));
 end
 
 function baseline = loadBaselineBestForScenario(repoRoot, scenarioIdx)
