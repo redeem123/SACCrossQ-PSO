@@ -27,7 +27,7 @@ classdef ReplayBuffer < handle
     end
 
     methods
-        function obj = ReplayBuffer(capacity, stateSize, actionSize, useGPU)
+        function obj = ReplayBuffer(capacity, stateSize, actionSize, useGPU, ~)
             % Constructor
             %
             % Inputs:
@@ -62,6 +62,7 @@ classdef ReplayBuffer < handle
                 obj.nextStates = zeros(capacity, stateSize);
                 obj.dones = zeros(capacity, 1);
             end
+
         end
 
         function add(obj, state, action, reward, nextState, done)
@@ -81,7 +82,6 @@ classdef ReplayBuffer < handle
             obj.rewards(obj.position) = reward;
             obj.nextStates(obj.position, :) = nextState';
             obj.dones(obj.position) = done;
-
             obj.size = min(obj.size + 1, obj.capacity);
         end
 
@@ -98,7 +98,6 @@ classdef ReplayBuffer < handle
             %   nextStates: [batchSize × stateSize]
             %   dones: [batchSize × 1]
 
-            % Random indices
             indices = randi(obj.size, batchSize, 1);
 
             % Extract batch

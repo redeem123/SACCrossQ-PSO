@@ -1,5 +1,5 @@
 function config = APEXPSO_Config(mode)
-    % APEX-PSO Configuration: Advanced Parameter Exploration CrossQ-SAC for PSO
+    % CQSAC-PSO Configuration: Advanced Parameter Exploration CrossQ-SAC for PSO
     %
     % State-of-the-art RL algorithm combining:
     %   - SAC (Soft Actor-Critic) for automatic entropy tuning
@@ -18,16 +18,17 @@ function config = APEXPSO_Config(mode)
     %   config = APEXPSO_Config('fast')     % Quick testing
 
     if nargin < 1
-        mode = 'default';
+        mode = 'online';
     end
 
     % ========== CORE CONFIGURATION ==========
 
     config = struct();
     config.mode = mode;
-    config.algorithm = 'APEX-PSO';
-    config.version = '1.0';
+    config.algorithm = 'CQSAC-PSO';
+    config.version = '2.1-research';
     config.createdAt = datetime('now');
+    config.researchVariant = 'v2_loo_reduced';
 
     % ===== ALGORITHM FEATURES =====
 
@@ -39,21 +40,25 @@ function config = APEXPSO_Config(mode)
     config.numCritics = 2;                  % Small ensemble (2 critics)
 
     % Advanced features
-    config.useTransformerState = true;      % Attention-based state encoding
-    config.usePerParticleActions = true;    % 120D: Individual particle params
+    config.useTransformerState = false;     % Legacy random-projection encoder
+    config.useCrossScaleState = true;       % Deterministic cross-scale encoder
+    config.usePerParticleActions = false;   % Use low-dim latent control by default
+    config.useRankResidualControl = true;   % Expand latent action to per-particle params
     config.useMultiObjectiveReward = true;  % Fitness + diversity + curiosity
     config.useCuriosityBonus = true;        % Exploration bonus
+    config.useAdaptivePotentialReward = true;
+    config.useActorUncertaintyPenalty = true;
 
     % ===== NETWORK ARCHITECTURE =====
 
     % State representation
-    config.useAttention = true;
+    config.useAttention = false;
     config.attentionHeads = 4;              % Multi-head attention
-    config.temporalWindow = 5;              % Track last 5 iterations
+    config.temporalWindow = 8;              % Track longer temporal context
     config.stateSize = 45;                  % Rich state features
 
-    % Action space: Per-particle parameters (40 particles × 3 params)
-    config.actionSize = 120;                % 40 × [w, c1, c2]
+    % Action space: low-dimensional latent residual control
+    config.actionSize = 9;                  % [w,c1,c2] residual coefficients
     config.popSize = 40;                    % PSO population size
     config.paramsPerParticle = 3;           % [w, c1, c2]
 
@@ -77,6 +82,16 @@ function config = APEXPSO_Config(mode)
     config.tau = 0.005;                     % Soft update (only for optional targets)
     config.targetEntropy = -config.actionSize;  % Automatic: -dim(action)
     config.initAlpha = 0.2;                 % Initial entropy coefficient
+    config.entropyAnnealStrength = 0.40;    % Reduce exploration late in run
+    config.entropyAnnealSteps = 1200;       % Anneal horizon (train steps)
+    config.useEntropyUncertaintyCoupling = false;
+    config.entropyUncertaintyGain = 0.25;
+
+    % Robust critic fitting
+    config.useHuberCriticLoss = true;
+    config.criticHuberDelta = 2.50;
+    config.useOverestimationPenalty = true;
+    config.overestimationPenaltyTau = 0.75;
 
     % CrossQ optimizations
     config.batchNormMomentum = 0.99;        % BatchNorm momentum
@@ -98,7 +113,7 @@ function config = APEXPSO_Config(mode)
     % Experience replay (SAC uses large replay buffer)
     config.batchSize = 256;                 % Batch size (REDUCED for stability)
     config.bufferSize = 150000;             % 150k experiences (OPTIMIZED: 80% utilization @ 200 eps)
-    config.warmupPeriod = 50;               % Random actions for first 50 iters
+    config.warmupPeriod = 0;                % No warmup (train immediately)
 
     % Exploration (SAC uses entropy, but add small action noise initially)
     config.explorationNoiseStart = 0.05;    % Small initial noise
@@ -112,10 +127,36 @@ function config = APEXPSO_Config(mode)
     config.rewardWeightDiversity = 0.2;     % Maintain diversity
     config.rewardWeightConvergence = 0.1;   % Convergence speed bonus
     config.rewardWeightCuriosity = 0.05;    % Curiosity exploration bonus
+    config.rewardWeightPotential = 0.7;     % Potential-based shaping
+    config.rewardWeightStagnation = 0.25;   % Escape pressure
 
     % Diversity tracking
     config.minDiversityThreshold = 0.01;    % Penalty if diversity too low
     config.diversityHistorySize = 10;       % Track diversity over 10 iters
+    config.rewardImprovementScale = 0.02;
+    config.stagnationTimeConstant = 35;
+    config.rewardClip = 10;
+
+    config.diversityTarget = struct();
+    config.diversityTarget.max = 0.30;
+    config.diversityTarget.min = 0.03;
+    config.diversityTarget.power = 1.20;
+
+    config.uncertaintyPenaltyWeight = 0.08;
+
+    config.baseParamSchedule = struct();
+    config.baseParamSchedule.wMax = 0.90;
+    config.baseParamSchedule.wMin = 0.25;
+    config.baseParamSchedule.c1Max = 2.60;
+    config.baseParamSchedule.c1Min = 0.70;
+    config.baseParamSchedule.c2Max = 2.60;
+    config.baseParamSchedule.c2Min = 0.70;
+    config.baseParamSchedule.inertiaPower = 1.35;
+
+    config.residualActionScale = struct();
+    config.residualActionScale.w = 0.18;
+    config.residualActionScale.c1 = 0.55;
+    config.residualActionScale.c2 = 0.55;
 
     % ===== GPU CONFIGURATION =====
 
@@ -150,6 +191,11 @@ function config = APEXPSO_Config(mode)
 
     config.numWaypoints = 5;
     config.mapSize = [400, 400, 100];
+    % Disabled by default: keep improvements in the SAC layer.
+    config.useTrajectoryPolish = false;
+    config.polishIterations = 400;
+    config.polishInitialStepRatio = 0.06;
+    config.polishMinStepRatio = 0.004;
 
     % ===== LOGGING =====
 
@@ -157,10 +203,7 @@ function config = APEXPSO_Config(mode)
     config.saveInterval = 50;               % Save every 50 episodes
     config.savePath = 'models/apexpso.mat';
     config.verbose = false;                 % Detailed logs
-
-    % ===== PRETRAINED MODEL =====
-
-    config.pretrainedModelPath = '';        % Path to pretrained model (empty = train from scratch)
+    config.disableVisualization = false;    % Disable plotting in batch research runs
 
     % ===== MODE-SPECIFIC PRESETS =====
 
@@ -171,17 +214,30 @@ function config = APEXPSO_Config(mode)
             config.maxIterations = 300;
             config.batchSize = 128;
             config.bufferSize = 20000;          % Right-sized: 50*300 = 15k @ 75% full
-            config.warmupPeriod = 20;
+            config.warmupPeriod = 0;
 
         case 'ablation_no_attention'
             % Ablation: No attention/transformer
             config.useTransformerState = false;
+            config.useCrossScaleState = false;
             config.stateSize = 15;
 
         case 'ablation_subgroup'
             % Ablation: Use 5-subgroup instead of per-particle
             config.usePerParticleActions = false;
             config.actionSize = 20;  % 5 × 4 params
+
+        case 'ablation_no_rank_residual'
+            config.useRankResidualControl = false;
+            config.paramMode = 'global';
+            config.actionSize = 3;
+
+        case 'ablation_no_adaptive_reward'
+            config.useAdaptivePotentialReward = false;
+
+        case 'ablation_no_uncertainty_penalty'
+            config.useActorUncertaintyPenalty = false;
+            config.uncertaintyPenaltyWeight = 0.0;
 
         case 'ablation_simple_reward'
             % Ablation: Binary reward only
@@ -194,27 +250,18 @@ function config = APEXPSO_Config(mode)
             config.useTargetNetworks = true;    % Use target networks (standard SAC)
 
         case 'online'
-            % Online learning mode: No pretraining, learn during actual PSO run
+            % Online learning mode: learn during actual PSO run
             config.numEpisodes = 1;              % Single episode = actual problem
             % maxIterations will be set by caller (from defaults.maxIterations)
             % If not set externally, default to 600
             if ~isfield(config, 'maxIterations')
                 config.maxIterations = 600;      % Default for production runs
             end
-            config.warmupPeriod = min(50, floor(config.maxIterations * 0.1));  % 10% of iterations or 50
+            config.warmupPeriod = 0;
             config.trainEveryNIterations = 1;    % Train every iteration
             config.batchSize = 256;              % Smaller batch for online
             config.bufferSize = 10000;           % Smaller buffer (only 600 samples)
-
-        case 'pretrained'
-            % Use pretrained model for optimization (no additional training)
-            config.numEpisodes = 1;              % Single optimization run
-            config.maxIterations = 600;          % Same as other algorithms
-            config.pretrainedModelPath = 'models/apexpso.mat';  % Load trained model
-            config.warmupPeriod = 0;             % No warmup needed
-            config.trainEveryNIterations = 999999;  % Disable training (just use policy)
-            config.batchSize = 256;
-            config.bufferSize = 10000;
+            config.paramMode = 'rank-residual';
 
         otherwise
             % Default mode: All features enabled
@@ -232,7 +279,15 @@ function config = APEXPSO_Config(mode)
             case 'per-particle'
                 config.usePerParticleActions = true;
                 config.actionSize = config.popSize * config.paramsPerParticle;
+            case 'rank-residual'
+                config.usePerParticleActions = false;
+                config.useRankResidualControl = true;
+                config.actionSize = 9;
+            otherwise
+                error('Unsupported paramMode: %s', config.paramMode);
         end
+        % Keep target entropy aligned with the current action size
+        config.targetEntropy = -config.actionSize;
     end
 
     % ===== VALIDATION =====
@@ -244,14 +299,16 @@ function config = APEXPSO_Config(mode)
     end
 
     % ===== DISPLAY CONFIGURATION =====
-
-    displayConfiguration(config);
+    quietFlag = strcmpi(strtrim(getenv('APEXPSO_CONFIG_QUIET')), '1');
+    if ~quietFlag && ~(isfield(config, 'suppressConfigDisplay') && config.suppressConfigDisplay)
+        displayConfiguration(config);
+    end
 end
 
 function displayConfiguration(config)
     % Display configuration summary
     fprintf('\n╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║     APEX-PSO Configuration (SAC-CrossQ)                 ║\n');
+    fprintf('║     CQSAC-PSO Configuration (SAC-CrossQ)                 ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
     fprintf('Mode: %s\n', config.mode);
@@ -262,13 +319,19 @@ function displayConfiguration(config)
     fprintf('  CrossQ BatchNorm:     %s\n', bool2str(config.useBatchNorm));
     fprintf('  Target Networks:      %s (CrossQ approach)\n', bool2str(config.useTargetNetworks));
     fprintf('  Critic Ensemble:      %d critics\n', config.numCritics);
-    fprintf('  Transformer State:    %s (%dD, %d heads, window=%d)\n', ...
-        bool2str(config.useTransformerState), config.stateSize, ...
-        config.attentionHeads, config.temporalWindow);
-    fprintf('  Per-Particle Actions: %s (%dD)\n', ...
-        bool2str(config.usePerParticleActions), config.actionSize);
+    fprintf('  Transformer State:    %s\n', bool2str(config.useTransformerState));
+    fprintf('  Cross-Scale State:    %s (%dD, window=%d)\n', ...
+        bool2str(config.useCrossScaleState), config.stateSize, config.temporalWindow);
+    fprintf('  Rank-Residual Ctrl:   %s (%dD latent)\n', ...
+        bool2str(config.useRankResidualControl), config.actionSize);
+    fprintf('  Per-Particle Actions: %s\n', bool2str(config.usePerParticleActions));
     fprintf('  Multi-Obj Reward:     %s (fitness+diversity+curiosity)\n', ...
         bool2str(config.useMultiObjectiveReward));
+    fprintf('  Adaptive Reward:      %s\n', bool2str(config.useAdaptivePotentialReward));
+    fprintf('  Uncertainty Penalty:  %s (%.3f)\n', ...
+        bool2str(config.useActorUncertaintyPenalty), config.uncertaintyPenaltyWeight);
+    fprintf('  Huber Critic Loss:    %s (delta=%.2f)\n', ...
+        bool2str(config.useHuberCriticLoss), config.criticHuberDelta);
 
     fprintf('\n--- Training Parameters ---\n');
     fprintf('  Episodes:             %d\n', config.numEpisodes);

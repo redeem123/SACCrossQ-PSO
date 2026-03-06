@@ -1,5 +1,5 @@
 classdef APEXPSO_Agent < handle
-    % APEX-PSO SAC Agent with Automatic Entropy Tuning
+    % CQSAC-PSO SAC Agent with Automatic Entropy Tuning
     %
     % Implements Soft Actor-Critic (SAC) with CrossQ optimizations:
     %   - Automatic entropy tuning (temperature parameter α)
@@ -12,12 +12,14 @@ classdef APEXPSO_Agent < handle
     %   - CrossQ: Bhat et al. (ICLR 2024)
 
     properties
-        config          % APEX-PSO configuration
+        config          % CQSAC-PSO configuration
 
         % Networks
         actor           % Actor network (Gaussian policy)
         critic1         % First critic network
         critic2         % Second critic network
+        targetCritic1   % Target critic network (optional)
+        targetCritic2   % Target critic network (optional)
 
         % Optimizers (using ADAM)
         actorOptimizer
@@ -35,6 +37,8 @@ classdef APEXPSO_Agent < handle
         % Training state
         trainingStep
         explorationNoise
+        useTargetNetworks
+        disagreementEMA
     end
 
     methods
@@ -47,24 +51,32 @@ classdef APEXPSO_Agent < handle
             obj.critic1 = createCriticNetwork(config);
             obj.critic2 = createCriticNetwork(config);
 
+            % Optional target networks (standard SAC)
+            obj.useTargetNetworks = isfield(config, 'useTargetNetworks') && config.useTargetNetworks;
+            if obj.useTargetNetworks
+                obj.targetCritic1 = obj.cloneNetwork(obj.critic1);
+                obj.targetCritic2 = obj.cloneNetwork(obj.critic2);
+            end
+
             % Initialize entropy temperature
             obj.logAlpha = log(config.initAlpha);
             obj.targetEntropy = config.targetEntropy;
 
-            % Create optimizers (ADAM)
-            % Initialize optimizer states for sgdmupdate (empty array, auto-initialized)
-            obj.actorOptimizer = [];
-            obj.critic1Optimizer = [];
-            obj.critic2Optimizer = [];
+            % Create optimizers (Adam for networks, custom Adam for alpha scalar)
+            % avg = first moment, avgSq = second moment (auto-initialized by adamupdate)
+            obj.actorOptimizer   = struct('avg', [], 'avgSq', []);
+            obj.critic1Optimizer = struct('avg', [], 'avgSq', []);
+            obj.critic2Optimizer = struct('avg', [], 'avgSq', []);
             obj.alphaOptimizer = struct('m', 0, 'v', 0, 'beta1', 0.9, 'beta2', 0.999, 'eps', 1e-8);
 
             % Create replay buffer
             obj.replayBuffer = ReplayBuffer(config.bufferSize, ...
-                config.stateSize, config.actionSize, config.useGPU);
+                config.stateSize, config.actionSize, config.useGPU, config);
 
             % Initialize training state
             obj.trainingStep = 0;
             obj.explorationNoise = config.explorationNoiseStart;
+            obj.disagreementEMA = 0;
         end
 
         function action = getAction(obj, state, training)
@@ -85,7 +97,12 @@ classdef APEXPSO_Agent < handle
             stateDL = dlarray(state, 'CB');
 
             % Forward pass through actor (outputs mean and log_std concatenated)
-            output = forward(obj.actor, stateDL);
+            % Use predict in evaluation to avoid batch-norm collapse with batch size 1.
+            if training
+                output = forward(obj.actor, stateDL);
+            else
+                output = predict(obj.actor, stateDL);
+            end
             output = extractdata(output);
 
             % Check for NaN/Inf in network output
@@ -145,9 +162,9 @@ classdef APEXPSO_Agent < handle
             % Convert to dlarray
             statesDL = dlarray(states', 'CB');
             actionsDL = dlarray(actions', 'CB');
-            rewardsDL = dlarray(rewards', 'CB');
             nextStatesDL = dlarray(nextStates', 'CB');
             donesDL = dlarray(dones', 'CB');
+            rewardsDL = dlarray(rewards', 'CB');
 
             % Get current alpha
             alpha = exp(obj.logAlpha);
@@ -160,9 +177,16 @@ classdef APEXPSO_Agent < handle
             nextStatAction = cat(1, nextStatesDL, nextActions);
 
             % Q-values from both critics (take minimum for stability)
-            q1Next = forward(obj.critic1, nextStatAction);
-            q2Next = forward(obj.critic2, nextStatAction);
+            if obj.useTargetNetworks
+                q1Next = forward(obj.targetCritic1, nextStatAction);
+                q2Next = forward(obj.targetCritic2, nextStatAction);
+            else
+                q1Next = forward(obj.critic1, nextStatAction);
+                q2Next = forward(obj.critic2, nextStatAction);
+            end
             qNext = min(q1Next, q2Next);
+            disagreementNext = abs(q1Next - q2Next);
+            obj.updateDisagreementEMA(extractdata(mean(disagreementNext)));
 
             % SAC target: r + γ * (Q(s',a') - α * log π(a'|s'))
             targetQ = rewardsDL + obj.config.gamma .* (1 - donesDL) .* ...
@@ -173,35 +197,74 @@ classdef APEXPSO_Agent < handle
             % Critic loss: MSE between Q and target
             stateAction = cat(1, statesDL, actionsDL);
 
+            % Track TD error magnitude for diagnostics.
+            q1Pred = forward(obj.critic1, stateAction);
+            q2Pred = forward(obj.critic2, stateAction);
+            tdErr = 0.5 .* (abs(extractdata(q1Pred - targetQ)) + abs(extractdata(q2Pred - targetQ)));
+            meanTdErr = mean(tdErr(:));
+
             % Train critic 1 using dlfeval
-            [loss1, critic1Grads] = dlfeval(@criticModelLoss, obj.critic1, stateAction, targetQ);
+            useHuber = isfield(obj.config, 'useHuberCriticLoss') && obj.config.useHuberCriticLoss;
+            huberDelta = obj.getConfigValue('criticHuberDelta', 2.0);
+            useOverestPenalty = isfield(obj.config, 'useOverestimationPenalty') && obj.config.useOverestimationPenalty;
+            overestTau = obj.getConfigValue('overestimationPenaltyTau', 0.75);
+            [loss1, critic1Grads] = dlfeval(@criticModelLoss, obj.critic1, stateAction, targetQ, ...
+                useHuber, huberDelta, useOverestPenalty, overestTau);
             % Gradient clipping for critic 1
             critic1Grads = obj.clipGradients(critic1Grads, 1.0);
-            [obj.critic1.Learnables, obj.critic1Optimizer] = sgdmupdate(obj.critic1.Learnables, ...
-                critic1Grads, obj.critic1Optimizer, obj.config.criticLR);
+            [obj.critic1.Learnables, obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq] = ...
+                adamupdate(obj.critic1.Learnables, critic1Grads, ...
+                obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq, ...
+                obj.trainingStep + 1, obj.config.criticLR);
 
             % Train critic 2 using dlfeval
-            [loss2, critic2Grads] = dlfeval(@criticModelLoss, obj.critic2, stateAction, targetQ);
+            [loss2, critic2Grads] = dlfeval(@criticModelLoss, obj.critic2, stateAction, targetQ, ...
+                useHuber, huberDelta, useOverestPenalty, overestTau);
             % Gradient clipping for critic 2
             critic2Grads = obj.clipGradients(critic2Grads, 1.0);
-            [obj.critic2.Learnables, obj.critic2Optimizer] = sgdmupdate(obj.critic2.Learnables, ...
-                critic2Grads, obj.critic2Optimizer, obj.config.criticLR);
+            [obj.critic2.Learnables, obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq] = ...
+                adamupdate(obj.critic2.Learnables, critic2Grads, ...
+                obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq, ...
+                obj.trainingStep + 1, obj.config.criticLR);
 
             criticLoss = extractdata(loss1) + extractdata(loss2);
+            if obj.useTargetNetworks
+                obj.softUpdateTargetNetworks();
+            end
 
             % ===== UPDATE ACTOR =====
-            [actorLoss, actorGrads] = dlfeval(@actorModelLoss, obj.actor, statesDL, obj.critic1, obj.critic2, alpha);
+            uncertaintyPenaltyWeight = 0.0;
+            if isfield(obj.config, 'useActorUncertaintyPenalty') && obj.config.useActorUncertaintyPenalty && ...
+                    isfield(obj.config, 'uncertaintyPenaltyWeight')
+                uncertaintyPenaltyWeight = obj.config.uncertaintyPenaltyWeight;
+            end
+            [actorLoss, actorGrads] = dlfeval(@actorModelLoss, obj.actor, statesDL, ...
+                obj.critic1, obj.critic2, alpha, uncertaintyPenaltyWeight);
             % Gradient clipping for actor
             actorGrads = obj.clipGradients(actorGrads, 1.0);
-            [obj.actor.Learnables, obj.actorOptimizer] = sgdmupdate(obj.actor.Learnables, ...
-                actorGrads, obj.actorOptimizer, obj.config.actorLR);
+            [obj.actor.Learnables, obj.actorOptimizer.avg, obj.actorOptimizer.avgSq] = ...
+                adamupdate(obj.actor.Learnables, actorGrads, ...
+                obj.actorOptimizer.avg, obj.actorOptimizer.avgSq, ...
+                obj.trainingStep + 1, obj.config.actorLR);
 
             % ===== UPDATE ALPHA (Automatic Entropy Tuning) =====
-            [alphaLoss, avgLogProb] = obj.alphaLossFunc(statesDL);
+            targetEntropyNow = obj.targetEntropy;
+            if isfield(obj.config, 'entropyAnnealStrength') && isfield(obj.config, 'entropyAnnealSteps')
+                annealProgress = min(1, obj.trainingStep / max(1, obj.config.entropyAnnealSteps));
+                annealScale = 1 - obj.config.entropyAnnealStrength * annealProgress;
+                targetEntropyNow = obj.targetEntropy * annealScale;
+            end
+            if isfield(obj.config, 'useEntropyUncertaintyCoupling') && obj.config.useEntropyUncertaintyCoupling
+                uncertaintySignal = 1 - exp(-obj.disagreementEMA);
+                targetEntropyNow = targetEntropyNow * (1 + obj.getConfigValue('entropyUncertaintyGain', 0.25) * uncertaintySignal);
+            end
+
+            [alphaLoss, avgLogProb] = obj.alphaLossFunc(statesDL, targetEntropyNow);
 
             % Manual gradient for log_alpha: d/d(log_alpha) [alpha * (-log_prob - target)]
             % = exp(log_alpha) * (-log_prob - target) = -log_prob - target
-            alphaGrad = -avgLogProb - obj.targetEntropy;
+            avgLogProb = extractdata(avgLogProb);
+            alphaGrad = -avgLogProb - targetEntropyNow;
 
             % Safety: Check for NaN/Inf and clip gradient
             if isnan(alphaGrad) || isinf(alphaGrad)
@@ -233,6 +296,12 @@ classdef APEXPSO_Agent < handle
             losses.critic = criticLoss;  % Already extracted
             losses.alpha = extractdata(alphaLoss);
             losses.alphaValue = exp(obj.logAlpha);
+            losses.targetEntropy = targetEntropyNow;
+            losses.disagreementEMA = obj.disagreementEMA;
+            losses.meanTdError = meanTdErr;
+            losses.actorLoss = losses.actor;
+            losses.critic1Loss = extractdata(loss1);
+            losses.critic2Loss = extractdata(loss2);
         end
 
         function [actions, logProbs] = sampleAction(obj, states)
@@ -285,6 +354,31 @@ classdef APEXPSO_Agent < handle
             logProbs = max(min(logProbs, 100), -100);
         end
 
+        function netCopy = cloneNetwork(~, net)
+            % Clone a dlnetwork with identical learnables and state.
+            netCopy = dlnetwork(layerGraph(net.Layers));
+            netCopy.Learnables = net.Learnables;
+            netCopy.State = net.State;
+        end
+
+        function softUpdateTargetNetworks(obj)
+            % Soft update target critics (standard SAC).
+            tau = obj.config.tau;
+            obj.targetCritic1 = obj.softUpdateNetwork(obj.targetCritic1, obj.critic1, tau);
+            obj.targetCritic2 = obj.softUpdateNetwork(obj.targetCritic2, obj.critic2, tau);
+        end
+
+        function targetNet = softUpdateNetwork(~, targetNet, sourceNet, tau)
+            targetLearnables = targetNet.Learnables;
+            sourceLearnables = sourceNet.Learnables;
+            for i = 1:height(targetLearnables)
+                targetLearnables.Value{i} = tau * sourceLearnables.Value{i} + ...
+                    (1 - tau) * targetLearnables.Value{i};
+            end
+            targetNet.Learnables = targetLearnables;
+            targetNet.State = sourceNet.State;
+        end
+
         function [loss, loss1, loss2] = criticLossFunc(obj, states, actions, targetQ)
             % Critic loss function - returns losses only
             stateAction = cat(1, states, actions);
@@ -325,19 +419,38 @@ classdef APEXPSO_Agent < handle
             loss = mean(alpha .* logProbs - q);
         end
 
-        function [loss, avgLogProb] = alphaLossFunc(obj, states)
+        function [loss, avgLogProb] = alphaLossFunc(obj, states, targetEntropyNow)
             % Alpha loss function (automatic entropy tuning)
+            if nargin < 3
+                targetEntropyNow = obj.targetEntropy;
+            end
             [~, logProbs] = obj.sampleAction(states);
 
             % Alpha objective: α * (H_target + log_prob)
             alpha = exp(obj.logAlpha);
-            loss = mean(alpha .* (-logProbs - obj.targetEntropy));
+            loss = mean(alpha .* (-logProbs - targetEntropyNow));
 
             % Return average log prob for manual gradient computation
             avgLogProb = mean(logProbs);
         end
 
-        function [net, opt] = adamUpdate(obj, net, grads, opt, lr, step)
+        function value = getConfigValue(obj, fieldName, defaultValue)
+            if isfield(obj.config, fieldName)
+                value = obj.config.(fieldName);
+            else
+                value = defaultValue;
+            end
+        end
+
+        function updateDisagreementEMA(obj, batchDisagreement)
+            if isnan(batchDisagreement) || isinf(batchDisagreement)
+                return;
+            end
+            ema = 0.95;
+            obj.disagreementEMA = ema * obj.disagreementEMA + (1 - ema) * batchDisagreement;
+        end
+
+        function [net, opt] = adamUpdate(~, net, grads, opt, lr, step)
             % ADAM optimizer update for network
             if isempty(opt.m)
                 opt.m = grads;
@@ -361,7 +474,7 @@ classdef APEXPSO_Agent < handle
             end
         end
 
-        function [param, opt] = adamUpdateScalar(obj, param, grad, opt, lr, step)
+        function [param, opt] = adamUpdateScalar(~, param, grad, opt, lr, step)
             % ADAM update for scalar parameter (alpha)
             opt.m = opt.beta1 * opt.m + (1 - opt.beta1) * grad;
             opt.v = opt.beta2 * opt.v + (1 - opt.beta2) * grad^2;
@@ -385,6 +498,10 @@ classdef APEXPSO_Agent < handle
             obj.actor.Learnables = gather(obj.actor.Learnables);
             obj.critic1.Learnables = gather(obj.critic1.Learnables);
             obj.critic2.Learnables = gather(obj.critic2.Learnables);
+            if obj.useTargetNetworks
+                obj.targetCritic1.Learnables = gather(obj.targetCritic1.Learnables);
+                obj.targetCritic2.Learnables = gather(obj.targetCritic2.Learnables);
+            end
             
             % 3. Optimizers (gather states)
             obj.actorOptimizer = obj.gatherOptimizer(obj.actorOptimizer);
@@ -399,28 +516,35 @@ classdef APEXPSO_Agent < handle
             obj.config.useGPU = false;
         end
 
-        function opt = gatherOptimizer(obj, opt)
+        function opt = gatherOptimizer(~, opt)
             if isempty(opt)
                 return;
             end
-            
-            % Handle scalar optimizer (alpha)
+
+            % Handle scalar optimizer (alpha) - has 'm' and 'v' fields
             if isfield(opt, 'm') && isnumeric(opt.m)
                 opt.m = gather(opt.m);
                 opt.v = gather(opt.v);
                 return;
             end
-            
-            % Handle network optimizer (table-based)
-            if isfield(opt, 'm') && istable(opt.m)
-                for i = 1:height(opt.m)
-                    opt.m.Value{i} = gather(opt.m.Value{i});
-                    opt.v.Value{i} = gather(opt.v.Value{i});
+
+            % Handle network Adam optimizer - struct with 'avg' and 'avgSq' fields
+            if isfield(opt, 'avg')
+                if ~isempty(opt.avg) && istable(opt.avg)
+                    for i = 1:height(opt.avg)
+                        opt.avg.Value{i} = gather(opt.avg.Value{i});
+                    end
                 end
+                if ~isempty(opt.avgSq) && istable(opt.avgSq)
+                    for i = 1:height(opt.avgSq)
+                        opt.avgSq.Value{i} = gather(opt.avgSq.Value{i});
+                    end
+                end
+                return;
             end
         end
 
-        function clippedGrads = clipGradients(obj, gradients, maxNorm)
+        function clippedGrads = clipGradients(~, gradients, maxNorm)
             % Clip gradients by global norm to prevent explosion
             %
             % Inputs:
@@ -458,8 +582,21 @@ classdef APEXPSO_Agent < handle
 end
 
 % Local functions for dlfeval (must be outside classdef)
-function [loss, gradients] = criticModelLoss(net, input, target)
+function [loss, gradients] = criticModelLoss(net, input, target, useHuber, huberDelta, useOverestPenalty, overestTau)
     % Critic loss: MSE between prediction and target
+    if nargin < 4
+        useHuber = false;
+    end
+    if nargin < 5
+        huberDelta = 2.0;
+    end
+    if nargin < 6
+        useOverestPenalty = false;
+    end
+    if nargin < 7
+        overestTau = 0.75;
+    end
+
     pred = forward(net, input);
 
     % Check for NaN/Inf in critic output
@@ -467,7 +604,24 @@ function [loss, gradients] = criticModelLoss(net, input, target)
         pred = zeros(size(pred), 'like', pred);
     end
 
-    loss = mean((pred - target).^2);
+    residual = pred - target;
+    if useHuber
+        absResidual = abs(residual);
+        quadratic = min(absResidual, huberDelta);
+        linear = absResidual - quadratic;
+        perSampleLoss = 0.5 * quadratic.^2 + huberDelta .* linear;
+    else
+        perSampleLoss = residual.^2;
+    end
+
+    if useOverestPenalty
+        overestTau = max(min(overestTau, 0.99), 0.5);
+        residualData = extractdata(residual);
+        weightData = overestTau * (residualData >= 0) + (1 - overestTau) * (residualData < 0);
+        perSampleLoss = perSampleLoss .* dlarray(weightData, 'CB');
+    end
+
+    loss = mean(perSampleLoss);
 
     % Check for NaN/Inf in loss
     if isnan(loss) || isinf(loss)
@@ -477,8 +631,12 @@ function [loss, gradients] = criticModelLoss(net, input, target)
     gradients = dlgradient(loss, net.Learnables);
 end
 
-function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic2Net, alphaVal)
+function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic2Net, alphaVal, ...
+    uncertaintyPenaltyWeight)
     % Actor loss for SAC
+    if nargin < 6
+        uncertaintyPenaltyWeight = 0.0;
+    end
     % Sample actions from actor
     output = forward(actorNet, states);
 
@@ -524,8 +682,9 @@ function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic
 
     q = min(q1, q2);
 
-    % SAC actor loss: minimize -(Q - α*log_prob)
-    loss = mean(alphaVal .* logProbs - q);
+    % SAC actor loss with critic-disagreement uncertainty penalty.
+    disagreement = abs(q1 - q2);
+    loss = mean(alphaVal .* logProbs - q + uncertaintyPenaltyWeight .* disagreement);
 
     % Check for NaN/Inf in loss
     if isnan(loss) || isinf(loss)
