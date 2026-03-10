@@ -48,6 +48,11 @@ run_comparison
 run('algorithms/rrsacpso/test_rrsacpso_components.m')
 ```
 
+## Benchmark Entry Point
+
+- Use only `run_comparison.m` for benchmark execution.
+- There is no second benchmark launcher anymore; scenario and group selection should be driven through `run_comparison.m` configuration and environment overrides.
+
 ## Artifact Policy
 
 These directories are local working data, not source of truth:
