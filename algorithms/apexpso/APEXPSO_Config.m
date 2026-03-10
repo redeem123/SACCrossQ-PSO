@@ -25,7 +25,7 @@ function config = APEXPSO_Config(mode)
 
     config = struct();
     config.mode = mode;
-    config.algorithm = 'CQSAC-PSO';
+    config.algorithm = 'RRSACPSO';
     config.version = '2.1-research';
     config.createdAt = datetime('now');
     config.researchVariant = 'v2_loo_reduced';
@@ -301,7 +301,7 @@ end
 function displayConfiguration(config)
     % Display configuration summary
     fprintf('\n╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║     CQSAC-PSO Configuration (SAC-CrossQ)                 ║\n');
+    fprintf('║      RRSACPSO Configuration (SAC Critic Research)        ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
     fprintf('Mode: %s\n', config.mode);
