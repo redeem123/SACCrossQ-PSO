@@ -1,11 +1,11 @@
 function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory, learningStats] = globalPathPlanningRRSACPSO(...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config)
-    % RRSACPSO: Advanced Parameter Exploration CrossQ-SAC for PSO
+    % RRSACPSO: SAC-based rank-residual PSO parameter adaptation
     %
-    % State-of-the-art RL-based PSO parameter adaptation using:
+    % RL-based PSO parameter adaptation using:
     %   - SAC with automatic entropy tuning
-    %   - CrossQ optimizations (BatchNorm, UTD=1)
-    %   - Deterministic cross-scale state encoding
+    %   - Twin critics with target networks
+    %   - Compact temporal swarm-state encoding
     %   - Rank-residual parameter adaptation
     %   - Simple fitness-improvement reward
     %

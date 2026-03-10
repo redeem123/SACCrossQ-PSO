@@ -184,10 +184,19 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             commonStartIdx = 1;
 
         case 'RRSACPSO_Online'
-            % RRSACPSO online learning: maxIterations, [paramMode], [configOverrides], [common params]
-            algorithmParams.maxIterations = remainingParams{1};
+            % RRSACPSO online learning:
+            %   [popSize], maxIterations, [paramMode], [configOverrides], [common params]
+            paramIdx = 1;
+            if length(remainingParams) >= 2 && isnumeric(remainingParams{1}) && isscalar(remainingParams{1}) && ...
+                    isnumeric(remainingParams{2}) && isscalar(remainingParams{2})
+                algorithmParams.popSize = remainingParams{1};
+                algorithmParams.maxIterations = remainingParams{2};
+                paramIdx = 3;
+            else
+                algorithmParams.maxIterations = remainingParams{1};
+                paramIdx = 2;
+            end
 
-            paramIdx = 2;
             algorithmParams.paramMode = 'rank-residual';
             if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx}) && ...
                     any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle', 'rank-residual'}))

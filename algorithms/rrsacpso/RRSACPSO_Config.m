@@ -20,7 +20,7 @@ function config = RRSACPSO_Config(mode)
     config = struct();
     config.mode = mode;
     config.algorithm = 'RRSACPSO';
-    config.version = '4.7-sac-rank2';
+    config.version = '4.8-sac-rankresidual';
     config.createdAt = datetime('now');
 
     % ===== ALGORITHM FEATURES =====
@@ -95,7 +95,7 @@ function config = RRSACPSO_Config(mode)
 
     % Action space: low-dimensional latent residual control
     config.actionSize = 9;                  % [w,c1,c2] residual coefficients
-    config.popSize = 40;                    % PSO population size
+    config.popSize = 100;                   % Benchmark-aligned default population size
     config.paramsPerParticle = 3;           % [w, c1, c2]
 
     % Flat MLP actor remains the non-component baseline policy network.
@@ -143,13 +143,10 @@ function config = RRSACPSO_Config(mode)
 
     % ===== TRAINING CONFIGURATION =====
     %
-    % OPTIMIZED FOR PUBLICATION-QUALITY RESULTS:
-    % - 250 episodes ensures full convergence
-    % - Buffer sized for 80% utilization (250*600 = 150k @ 150k capacity)
-    % - Batch size balanced for GPU memory and learning stability
+    % Benchmark-aligned defaults for the retained controller.
 
     config.numEpisodes = 250;               % Training episodes (matches run_comparison.m default)
-    config.maxIterations = 600;             % PSO iterations per episode
+    config.maxIterations = 1000;            % PSO iterations per episode
     config.trainEveryNIterations = 1;       % Train every iteration
     config.gradientStepsPerTraining = config.utdRatio;  % Keep UTD explicit in training loop
 
@@ -239,14 +236,14 @@ function config = RRSACPSO_Config(mode)
             % Online learning mode: learn during actual PSO run
             config.numEpisodes = 1;              % Single episode = actual problem
             % maxIterations will be set by caller (from defaults.maxIterations)
-            % If not set externally, default to 600
+            % If not set externally, default to the benchmark-aligned budget
             if ~isfield(config, 'maxIterations')
-                config.maxIterations = 600;      % Default for production runs
+                config.maxIterations = 1000;     % Default for production runs
             end
             config.warmupPeriod = 0;
             config.trainEveryNIterations = 1;    % Train every iteration
             config.batchSize = 128;              % Earlier online learning onset
-            config.bufferSize = 10000;           % Smaller buffer (only 600 samples)
+            config.bufferSize = 10000;           % Smaller buffer (online episode length <= 1000)
             config.paramMode = 'rank-residual';
 
         otherwise
@@ -363,7 +360,7 @@ end
 function displayConfiguration(config)
     % Display configuration summary
     fprintf('\n╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║      RRSACPSO Configuration (SAC Critic Research)        ║\n');
+    fprintf('║   RRSACPSO Configuration (Retained SAC + RankResidual)  ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
     fprintf('Mode: %s\n', config.mode);

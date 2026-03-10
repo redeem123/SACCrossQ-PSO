@@ -22,6 +22,13 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
                 config.paramMode = '5subgroup';
             end
 
+            if isfield(params, 'popSize')
+                config.popSize = params.popSize;
+            end
+            if isfield(params, 'maxIterations')
+                config.maxIterations = params.maxIterations;
+            end
+
             % Update config based on paramMode (CRITICAL!)
             switch config.paramMode
                 case 'global'
@@ -96,6 +103,10 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             % RRSACPSO online-only operation.
             config = RRSACPSO_Config('online');
             config.mapSize = mapSize;
+
+            if isfield(params, 'popSize')
+                config.popSize = params.popSize;
+            end
 
             if isfield(params, 'maxIterations')
                 config.maxIterations = params.maxIterations;
