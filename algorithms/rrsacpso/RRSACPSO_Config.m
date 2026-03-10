@@ -1,15 +1,11 @@
 function config = RRSACPSO_Config(mode)
-    % RRSACPSO SAC configuration: retained 2-component SAC-side stack.
+    % RRSACPSO configuration with plain SAC critics plus rank-residual control.
     %
     % RL-PSO algorithm combining:
-    %   - SAC (Soft Actor-Critic) for automatic entropy tuning
-    %   - TQC-style truncated quantile critics with target networks
+    %   - SAC (Soft Actor-Critic) with twin critics
+    %   - Target networks and automatic entropy tuning
     %   - Rank-residual parameter adaptation (9D latent action)
     %   - Simple fitness-improvement reward
-    %
-    % Based on 2024-2026 research:
-    %   - SAC: Maximum entropy RL framework
-    %   - TQC: distributional twin critics with truncated target quantiles
     %
     % Usage:
     %   config = RRSACPSO_Config()           % Default mode
@@ -24,7 +20,7 @@ function config = RRSACPSO_Config(mode)
     config = struct();
     config.mode = mode;
     config.algorithm = 'RRSACPSO';
-    config.version = '4.6-tqc-rank2';
+    config.version = '4.7-sac-rank2';
     config.createdAt = datetime('now');
 
     % ===== ALGORITHM FEATURES =====
@@ -40,9 +36,9 @@ function config = RRSACPSO_Config(mode)
     config.useObservationNormalization = false;
     config.observationNormClip = 5.0;
     config.useBatchNorm = false;            % Legacy alias kept for ablations only
-    config.useCriticBatchNorm = true;
+    config.useCriticBatchNorm = false;
     config.useActorBatchNorm = false;
-    config.useJointCriticBatchForBN = true;
+    config.useJointCriticBatchForBN = false;
     config.useWeightNormCritic = false;
     config.criticWeightNormRadius = 1.0;
     config.useTargetNetworks = true;
@@ -64,7 +60,7 @@ function config = RRSACPSO_Config(mode)
     config.pilarEffectiveNStep = 3;
     config.pilarLongHorizon = 6;
     config.pilarMixCoefficient = 0.406;
-    config.useTQCCritic = true;
+    config.useTQCCritic = false;
     config.useD2RLBackbone = false;
     config.useEmphasizingRecentExperience = false;
     config.ereEtaStart = 0.996;

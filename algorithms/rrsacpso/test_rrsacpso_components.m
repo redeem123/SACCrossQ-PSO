@@ -24,17 +24,17 @@ try
     assert(~config.useREDQCritic, 'REDQ critic should be disabled by default');
     assert(~config.useAQECritic, 'AQE critic should be disabled');
     assert(~config.useDroQCritic, 'DroQ critic should be disabled');
-    assert(config.useTQCCritic, 'TQC critic should be enabled by default');
-    assert(~config.useCriticBatchNorm, 'Critic BatchNorm should be disabled for TQC');
-    assert(~config.useJointCriticBatchForBN, 'TQC should disable joint critic batches');
-    assert(config.useTargetNetworks, 'TQC should enable target networks');
+    assert(~config.useTQCCritic, 'TQC critic should be disabled by default');
+    assert(~config.useCriticBatchNorm, 'Critic BatchNorm should be disabled by default');
+    assert(~config.useJointCriticBatchForBN, 'Joint critic batches should be disabled by default');
+    assert(config.useTargetNetworks, 'Default SAC stack should enable target networks');
     assert(~config.useD2RLBackbone, 'D2RL backbone should be disabled in retained 2-component stack');
     assert(~config.useEmphasizingRecentExperience, 'ERE replay should be disabled');
     assert(~config.useDelayedPolicyUpdates, 'Delayed actor updates should be disabled');
     assert(~config.useSimBaBackbone, 'SimBa backbone should be disabled');
     assert(~config.useResidualCriticDecomposition, 'Residual critic should be disabled');
     assert(config.gradientStepsPerTraining == config.utdRatio, 'UTD/training-step mismatch');
-    assert(config.numCritics == 2, 'TQC should use twin critics');
+    assert(config.numCritics == 2, 'Default SAC stack should use twin critics');
     fprintf('  ✓ Config created: %dD state, %dD action\n', config.stateSize, config.actionSize);
     testsPassed = testsPassed + 1;
 
@@ -56,7 +56,7 @@ try
     if config.useTQCCritic
         assert(size(criticOutput, 1) == config.tqcNumQuantiles, 'Critic quantile count mismatch');
     else
-        assert(size(criticOutput, 1) == 1, 'CrossQ critic should emit a scalar value');
+        assert(size(criticOutput, 1) == 1, 'Default critic should emit a scalar value');
     end
     testsPassed = testsPassed + 1;
 
