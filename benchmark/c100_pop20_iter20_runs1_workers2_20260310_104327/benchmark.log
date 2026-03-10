@@ -1,0 +1,500 @@
+========================================
+  c100 Combined Benchmark Runner
+========================================
+Start time: 10-Mar-2026 10:43:27
+Output dir: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327
+Results dir: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results
+Runs: 1 | Population: 20 | Iterations: 20 | Workers: 2
+
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 2 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 2 workers.
+Parallel pool initialized successfully with 2 workers.
+Parallel pool ready with 2 workers.
+Scheduling 1 runs across 13 algorithms on c100.
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Planning Complete ==========
+Algorithm: RLAMPSO
+Execution time: 1.9518 seconds
+Path length: 371.0580 units
+Waypoints: 7
+Best fitness: 14152.3709
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: DQN_PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Warning: DQN-PSO (paper) is homogeneous; forcing paramMode to global.
+> In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('globalPathPlanningDQNPSO', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m', 15)" style="font-weight:bold">globalPathPlanningDQNPSO</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m',15,0)">line 15</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('callGlobalPlanningAlgorithm', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m', 212)" style="font-weight:bold">callGlobalPlanningAlgorithm</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m',212,0)">line 212</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('directGlobalPlanning', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m', 59)" style="font-weight:bold">directGlobalPlanning</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m',59,0)">line 59</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_c100_benchmark>@(varargin)directGlobalPlanning(varargin{:})', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/run_c100_benchmark.m', 205)" style="font-weight:bold">run_c100_benchmark>@(varargin)directGlobalPlanning(varargin{:})</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/run_c100_benchmark.m',205,0)">line 205</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_c100_benchmark>runAlgorithmBatch', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/run_c100_benchmark.m', 187)" style="font-weight:bold">run_c100_benchmark>runAlgorithmBatch</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/run_c100_benchmark.m',187,0)">line 187</a>)
+Starting DQN-PSO (HMM + DQN) - Mode: global
+DQN-PSO iter 20/20 | Fitness: 13900.16 | w=0.900 c1=2.340 c2=0.500
+DQN-PSO completed with final fitness: 13900.1572
+
+========== Planning Complete ==========
+Algorithm: DQN_PSO
+Execution time: 0.8279 seconds
+Path length: 527.2700 units
+Waypoints: 7
+Best fitness: 13900.1572
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO_Online
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=20, popSize=40
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     20
+  Population Size:   40
+  Best Fitness:      14383.0498
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO_Online
+Execution time: 1.5813 seconds
+Path length: 432.1974 units
+Waypoints: 7
+Best fitness: 14383.0498
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: MPSORL
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting MPSORL (Multi-Strategy Self-Learning PSO) path planning...
+MPSORL completed with final fitness: 14275.972
+
+========== Planning Complete ==========
+Algorithm: MPSORL
+Execution time: 0.2799 seconds
+Path length: 521.4271 units
+Waypoints: 7
+Best fitness: 14275.9720
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAC-SAPSO (Paper)
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+============================================
+SAC-SAPSO (Paper) Global Path Planning
+============================================
+
+  [Iter  20/20] Best: 13045.4188
+
+========== Planning Complete ==========
+Algorithm: SAC-SAPSO (Paper)
+Execution time: 0.9449 seconds
+Path length: 354.8687 units
+Waypoints: 7
+Best fitness: 13045.4188
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PPO-PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+============================================
+PPO-PSO Global Path Planning
+============================================
+
+  [Iter  20/20] Best: 13727.1265
+
+========== Planning Complete ==========
+Algorithm: PPO-PSO
+Execution time: 2.3389 seconds
+Path length: 666.5198 units
+Waypoints: 7
+Best fitness: 13727.1265
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/20
+Traditional PSO completed with final fitness: 13974.0041
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 1.9438 seconds
+Path length: 426.8271 units
+Waypoints: 7
+Best fitness: 13974.0041
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_TVAC
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-TVAC (time-variant acceleration coefficients)...
+Number of Initial feasible particles: 0/20
+PSO-TVAC iteration: 1/20 - Best fitness: 48361.9616 - w=0.86, c1=2.4, c2=0.6
+PSO-TVAC iteration: 20/20 - Best fitness: 13474.6373 - w=0.1, c1=0.5, c2=2.5
+
+========== Planning Complete ==========
+Algorithm: PSO_TVAC
+Execution time: 1.6354 seconds
+Path length: 390.6800 units
+Waypoints: 7
+Best fitness: 13474.6373
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/20
+FIPS completed with final fitness: 14828.5731
+
+========== Planning Complete ==========
+Algorithm: FIPS
+Execution time: 1.8256 seconds
+Path length: 546.7585 units
+Waypoints: 7
+Best fitness: 14828.5731
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: CLPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting CLPSO (Comprehensive Learning PSO) path planning...
+Number of Initial feasible particles: 0/20
+CLPSO completed with final fitness: 14613.7498
+
+========== Planning Complete ==========
+Algorithm: CLPSO
+Execution time: 1.5116 seconds
+Path length: 607.5284 units
+Waypoints: 7
+Best fitness: 14613.7498
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAEPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting SAEPSO-FULL (All improvements enabled)...
+  Stage 1: Tent map initialization in spherical coordinates...
+  Stage 2: Opposition-based learning...
+  Stage 3: Main optimization loop...
+SAEPSO-FULL completed with final fitness: 12179.6231
+
+========== Planning Complete ==========
+Algorithm: SAEPSO
+Execution time: 0.6666 seconds
+Path length: 398.0000 units
+Waypoints: 7
+Best fitness: 12179.6231
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAEPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting SAEPSO-ParamsOnly (Parameter control strategy only)...
+  Initialization: Random Cartesian coordinates...
+  Stage 3: Main optimization loop...
+SAEPSO-ParamsOnly completed with final fitness: 13615.9983
+
+========== Planning Complete ==========
+Algorithm: SAEPSO
+Execution time: 0.2197 seconds
+Path length: 493.4747 units
+Waypoints: 7
+Best fitness: 13615.9983
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: UAPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting UAPSO global path planning...
+Initial feasible particles: 0/20
+UAPSO completed with final fitness: 14817.4471
+
+========== Planning Complete ==========
+Algorithm: UAPSO
+Execution time: 3.4240 seconds
+Path length: 576.0147 units
+Waypoints: 7
+Best fitness: 14817.4471
+========================================
+
+
+=== STATISTICAL ANALYSIS FOR SCENARIO 1 ===
+Metric tested: global_fitness_total
+Runs available: 1
+
+=== DESCRIPTIVE STATISTICS (global_fitness_total) ===
+Algorithm                 | N       | Mean       | Std        | Median    
+------------------------------------------------------------------------
+RLAMPSO (Global)          |       1 | 14152.3709 |        NaN | 14152.3709
+DQN-PSO (Global)          |       1 | 13900.1572 |        NaN | 13900.1572
+RRSACPSO                 |       1 | 14383.0498 |        NaN | 14383.0498
+MPSORL (Multi-Strategy RL-PSO) |       1 | 14275.9720 |        NaN | 14275.9720
+SAC-SAPSO                 |       1 | 13045.4188 |        NaN | 13045.4188
+PPO-PSO (Global)          |       1 | 13727.1265 |        NaN | 13727.1265
+PSO-Standard              |       1 | 13974.0041 |        NaN | 13974.0041
+PSO-LDIW                  |       1 | 13474.6373 |        NaN | 13474.6373
+FIPS                      |       1 | 14828.5731 |        NaN | 14828.5731
+CLPSO                     |       1 | 14613.7498 |        NaN | 14613.7498
+SAEPSO [11]               |       1 | 12179.6231 |        NaN | 12179.6231
+SAEPSO* [11]              |       1 | 13615.9983 |        NaN | 13615.9983
+UAPSO [25]                |       1 | 14817.4471 |        NaN | 14817.4471
+
+=== PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
+Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
+-------------------------------------------------------------------------------------------
+RLAMPSO (Global)          vs DQN-PSO (Global)          |  1 | 252.2137 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs RRSACPSO                 |  1 | -230.6788 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) |  1 | -123.6011 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs SAC-SAPSO                 |  1 | 1106.9522 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs PPO-PSO (Global)          |  1 | 425.2444 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs PSO-Standard              |  1 | 178.3668 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs PSO-LDIW                  |  1 | 677.7336 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs FIPS                      |  1 | -676.2022 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs CLPSO                     |  1 | -461.3788 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs SAEPSO [11]               |  1 | 1972.7479 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs SAEPSO* [11]              |  1 | 536.3726 | 1.000000 | 1.000000
+RLAMPSO (Global)          vs UAPSO [25]                |  1 | -665.0761 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs RRSACPSO                 |  1 | -482.8925 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) |  1 | -375.8148 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs SAC-SAPSO                 |  1 | 854.7385 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs PPO-PSO (Global)          |  1 | 173.0307 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs PSO-Standard              |  1 | -73.8469 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs PSO-LDIW                  |  1 | 425.5199 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs FIPS                      |  1 | -928.4158 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs CLPSO                     |  1 | -713.5925 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs SAEPSO [11]               |  1 | 1720.5342 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs SAEPSO* [11]              |  1 | 284.1589 | 1.000000 | 1.000000
+DQN-PSO (Global)          vs UAPSO [25]                |  1 | -917.2898 | 1.000000 | 1.000000
+RRSACPSO                 vs MPSORL (Multi-Strategy RL-PSO) |  1 | 107.0778 | 1.000000 | 1.000000
+RRSACPSO                 vs SAC-SAPSO                 |  1 | 1337.6310 | 1.000000 | 1.000000
+RRSACPSO                 vs PPO-PSO (Global)          |  1 | 655.9233 | 1.000000 | 1.000000
+RRSACPSO                 vs PSO-Standard              |  1 | 409.0456 | 1.000000 | 1.000000
+RRSACPSO                 vs PSO-LDIW                  |  1 | 908.4124 | 1.000000 | 1.000000
+RRSACPSO                 vs FIPS                      |  1 | -445.5233 | 1.000000 | 1.000000
+RRSACPSO                 vs CLPSO                     |  1 | -230.7000 | 1.000000 | 1.000000
+RRSACPSO                 vs SAEPSO [11]               |  1 | 2203.4267 | 1.000000 | 1.000000
+RRSACPSO                 vs SAEPSO* [11]              |  1 | 767.0514 | 1.000000 | 1.000000
+RRSACPSO                 vs UAPSO [25]                |  1 | -434.3973 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs SAC-SAPSO                 |  1 | 1230.5532 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs PPO-PSO (Global)          |  1 | 548.8455 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs PSO-Standard              |  1 | 301.9679 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs PSO-LDIW                  |  1 | 801.3347 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs FIPS                      |  1 | -552.6011 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs CLPSO                     |  1 | -337.7778 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs SAEPSO [11]               |  1 | 2096.3489 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs SAEPSO* [11]              |  1 | 659.9737 | 1.000000 | 1.000000
+MPSORL (Multi-Strategy RL-PSO) vs UAPSO [25]                |  1 | -541.4751 | 1.000000 | 1.000000
+SAC-SAPSO                 vs PPO-PSO (Global)          |  1 | -681.7077 | 1.000000 | 1.000000
+SAC-SAPSO                 vs PSO-Standard              |  1 | -928.5854 | 1.000000 | 1.000000
+SAC-SAPSO                 vs PSO-LDIW                  |  1 | -429.2186 | 1.000000 | 1.000000
+SAC-SAPSO                 vs FIPS                      |  1 | -1783.1543 | 1.000000 | 1.000000
+SAC-SAPSO                 vs CLPSO                     |  1 | -1568.3310 | 1.000000 | 1.000000
+SAC-SAPSO                 vs SAEPSO [11]               |  1 | 865.7957 | 1.000000 | 1.000000
+SAC-SAPSO                 vs SAEPSO* [11]              |  1 | -570.5796 | 1.000000 | 1.000000
+SAC-SAPSO                 vs UAPSO [25]                |  1 | -1772.0283 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs PSO-Standard              |  1 | -246.8776 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs PSO-LDIW                  |  1 | 252.4892 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs FIPS                      |  1 | -1101.4466 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs CLPSO                     |  1 | -886.6233 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs SAEPSO [11]               |  1 | 1547.5034 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs SAEPSO* [11]              |  1 | 111.1282 | 1.000000 | 1.000000
+PPO-PSO (Global)          vs UAPSO [25]                |  1 | -1090.3206 | 1.000000 | 1.000000
+PSO-Standard              vs PSO-LDIW                  |  1 | 499.3668 | 1.000000 | 1.000000
+PSO-Standard              vs FIPS                      |  1 | -854.5689 | 1.000000 | 1.000000
+PSO-Standard              vs CLPSO                     |  1 | -639.7456 | 1.000000 | 1.000000
+PSO-Standard              vs SAEPSO [11]               |  1 | 1794.3811 | 1.000000 | 1.000000
+PSO-Standard              vs SAEPSO* [11]              |  1 | 358.0058 | 1.000000 | 1.000000
+PSO-Standard              vs UAPSO [25]                |  1 | -843.4429 | 1.000000 | 1.000000
+PSO-LDIW                  vs FIPS                      |  1 | -1353.9357 | 1.000000 | 1.000000
+PSO-LDIW                  vs CLPSO                     |  1 | -1139.1124 | 1.000000 | 1.000000
+PSO-LDIW                  vs SAEPSO [11]               |  1 | 1295.0143 | 1.000000 | 1.000000
+PSO-LDIW                  vs SAEPSO* [11]              |  1 | -141.3610 | 1.000000 | 1.000000
+PSO-LDIW                  vs UAPSO [25]                |  1 | -1342.8097 | 1.000000 | 1.000000
+FIPS                      vs CLPSO                     |  1 | 214.8233 | 1.000000 | 1.000000
+FIPS                      vs SAEPSO [11]               |  1 | 2648.9500 | 1.000000 | 1.000000
+FIPS                      vs SAEPSO* [11]              |  1 | 1212.5748 | 1.000000 | 1.000000
+FIPS                      vs UAPSO [25]                |  1 |  11.1260 | 1.000000 | 1.000000
+CLPSO                     vs SAEPSO [11]               |  1 | 2434.1267 | 1.000000 | 1.000000
+CLPSO                     vs SAEPSO* [11]              |  1 | 997.7514 | 1.000000 | 1.000000
+CLPSO                     vs UAPSO [25]                |  1 | -203.6973 | 1.000000 | 1.000000
+SAEPSO [11]               vs SAEPSO* [11]              |  1 | -1436.3752 | 1.000000 | 1.000000
+SAEPSO [11]               vs UAPSO [25]                |  1 | -2637.8240 | 1.000000 | 1.000000
+SAEPSO* [11]              vs UAPSO [25]                |  1 | -1201.4488 | 1.000000 | 1.000000
+
+=== HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
+Significant pairs (Holm-corrected, paired t-test): 0/78
+Significant pairs (Holm-corrected, Wilcoxon):      0/78
+
+=== OVERALL RANKING (MEAN METRIC + HOLM T-TEST WINS) ===
+Rank | Algorithm                 | Mean | Holm Wins
+---------------------------------------------------------------
+1    | SAEPSO [11]               | 12179.6231 |         0
+2    | SAC-SAPSO                 | 13045.4188 |         0
+3    | PSO-LDIW                  | 13474.6373 |         0
+4    | SAEPSO* [11]              | 13615.9983 |         0
+5    | PPO-PSO (Global)          | 13727.1265 |         0
+6    | DQN-PSO (Global)          | 13900.1572 |         0
+7    | PSO-Standard              | 13974.0041 |         0
+8    | RLAMPSO (Global)          | 14152.3709 |         0
+9    | MPSORL (Multi-Strategy RL-PSO) | 14275.9720 |         0
+10   | RRSACPSO                 | 14383.0498 |         0
+11   | CLPSO                     | 14613.7498 |         0
+12   | UAPSO [25]                | 14817.4471 |         0
+13   | FIPS                      | 14828.5731 |         0
+
+Friedman omnibus skipped: insufficient complete run blocks.
+
+Statistical artifacts saved for Scenario 1:
+  Pairwise CSV: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_Pairwise_Scenario1.csv
+  Summary CSV:  /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_Summary_Scenario1.csv
+  MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_Results_Scenario1.mat
+All runs data written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_AllRuns_Scenario1_2026-03-10_10-43-55.csv
+Summary statistics written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_AlgorithmSummary_Scenario1_2026-03-10_10-43-55.csv
+Reports generated:
+  All runs data: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_AllRuns_Scenario1_2026-03-10_10-43-55.csv
+  Algorithm summary: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/results/TTest_AlgorithmSummary_Scenario1_2026-03-10_10-43-55.csv
+
+Benchmark complete.
+Raw results: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/all_run_results.mat
+Manifest: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/manifest.mat
+Log: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop20_iter20_runs1_workers2_20260310_104327/benchmark.log

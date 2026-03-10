@@ -1,5 +1,5 @@
 classdef TrainingLogger < handle
-    % TrainingLogger - Tracks and saves training metrics for APEXPSO
+    % TrainingLogger - Tracks and saves training metrics for RRSACPSO
     %
     % This logger captures detailed training metrics to compare:
     %   - Standard SAC (with target networks, no BatchNorm)
@@ -127,27 +127,41 @@ classdef TrainingLogger < handle
             % Store losses for averaging at episode end
             if ~isempty(losses)
                 if isfield(losses, 'actorLoss')
-                    obj.episodeLossBuffer.actor(end+1) = losses.actorLoss;
+                    actorValue = losses.actorLoss;
+                elseif isfield(losses, 'actor')
+                    actorValue = losses.actor;
+                else
+                    actorValue = [];
                 end
-                if isfield(losses, 'critic1Loss')
+                if ~isempty(actorValue) && isfinite(actorValue)
+                    obj.episodeLossBuffer.actor(end+1) = actorValue;
+                end
+                if isfield(losses, 'critic1Loss') && isfinite(losses.critic1Loss)
                     obj.episodeLossBuffer.critic1(end+1) = losses.critic1Loss;
                 end
-                if isfield(losses, 'critic2Loss')
+                if isfield(losses, 'critic2Loss') && isfinite(losses.critic2Loss)
                     obj.episodeLossBuffer.critic2(end+1) = losses.critic2Loss;
                 end
-                if isfield(losses, 'alpha')
-                    obj.episodeLossBuffer.alpha(end+1) = losses.alpha;
+                if isfield(losses, 'alphaValue')
+                    alphaValue = losses.alphaValue;
+                elseif isfield(losses, 'alpha')
+                    alphaValue = losses.alpha;
+                else
+                    alphaValue = [];
                 end
-                if isfield(losses, 'qValue')
+                if ~isempty(alphaValue) && isfinite(alphaValue)
+                    obj.episodeLossBuffer.alpha(end+1) = alphaValue;
+                end
+                if isfield(losses, 'qValue') && isfinite(losses.qValue)
                     obj.episodeLossBuffer.qValues(end+1) = losses.qValue;
                 end
-                if isfield(losses, 'entropy')
+                if isfield(losses, 'entropy') && isfinite(losses.entropy)
                     obj.episodeLossBuffer.entropy(end+1) = losses.entropy;
                 end
-                if isfield(losses, 'actorGradNorm')
+                if isfield(losses, 'actorGradNorm') && isfinite(losses.actorGradNorm)
                     obj.episodeLossBuffer.actorGrad(end+1) = losses.actorGradNorm;
                 end
-                if isfield(losses, 'criticGradNorm')
+                if isfield(losses, 'criticGradNorm') && isfinite(losses.criticGradNorm)
                     obj.episodeLossBuffer.criticGrad(end+1) = losses.criticGradNorm;
                 end
             end

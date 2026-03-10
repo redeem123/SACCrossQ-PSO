@@ -1,0 +1,157 @@
+========================================
+  c100 Combined Benchmark Runner
+========================================
+Start time: 10-Mar-2026 10:46:58
+Output dir: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658
+Results dir: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results
+Runs: 30 | Population: 100 | Iterations: 1000 | Workers: 14
+
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+Parallel pool ready with 14 workers.
+Scheduling 30 runs across 13 algorithms on c100.
+
+=== STATISTICAL ANALYSIS FOR SCENARIO 1 ===
+Metric tested: global_fitness_total
+Runs available: 30
+
+=== DESCRIPTIVE STATISTICS (global_fitness_total) ===
+Algorithm                 | N       | Mean       | Std        | Median    
+------------------------------------------------------------------------
+RLAMPSO (Global)          |      30 | 12508.8075 |   155.8197 | 12565.5683
+DQN-PSO (Global)          |      30 | 12678.1963 |   321.3196 | 12584.9850
+RRSACPSO                 |      30 | 12420.4609 |   197.9903 | 12361.0422
+MPSORL (Multi-Strategy RL-PSO) |      30 | 12273.1567 |   160.1144 | 12281.3254
+SAC-SAPSO                 |      30 | 12554.2112 |   200.3456 | 12543.3354
+PPO-PSO (Global)          |      30 | 12305.0088 |   168.3209 | 12269.2466
+PSO-Standard              |      30 | 12435.4122 |   213.2641 | 12426.2512
+PSO-LDIW                  |      30 | 12317.2891 |   178.6012 | 12296.2796
+FIPS                      |      30 | 12719.3472 |   223.2573 | 12666.6052
+CLPSO                     |      30 | 13003.5443 |    92.9479 | 12998.8011
+SAEPSO [11]               |      30 | 12106.0327 |    12.4035 | 12107.9371
+SAEPSO* [11]              |      30 | 12217.4553 |    95.9713 | 12198.7620
+UAPSO [25]                |      30 | 12831.7525 |   156.8878 | 12828.8673
+
+=== PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
+Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
+-------------------------------------------------------------------------------------------
+RLAMPSO (Global)          vs DQN-PSO (Global)          | 30 | -169.3888 | 0.016309 | 0.034129
+RLAMPSO (Global)          vs RRSACPSO                 | 30 |  88.3466 | 0.097095 | 0.067163
+RLAMPSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) | 30 | 235.6508 | 0.000029 | 0.000251
+RLAMPSO (Global)          vs SAC-SAPSO                 | 30 | -45.4037 | 0.252752 | 0.376459
+RLAMPSO (Global)          vs PPO-PSO (Global)          | 30 | 203.7987 | 0.000054 | 0.000436
+RLAMPSO (Global)          vs PSO-Standard              | 30 |  73.3953 | 0.162199 | 0.181242
+RLAMPSO (Global)          vs PSO-LDIW                  | 30 | 191.5184 | 0.000004 | 0.000055
+RLAMPSO (Global)          vs FIPS                      | 30 | -210.5397 | 0.000273 | 0.000345
+RLAMPSO (Global)          vs CLPSO                     | 30 | -494.7368 | 0.000000 | 0.000002
+RLAMPSO (Global)          vs SAEPSO [11]               | 30 | 402.7748 | 0.000000 | 0.000002
+RLAMPSO (Global)          vs SAEPSO* [11]              | 30 | 291.3522 | 0.000000 | 0.000007
+RLAMPSO (Global)          vs UAPSO [25]                | 30 | -322.9450 | 0.000000 | 0.000005
+DQN-PSO (Global)          vs RRSACPSO                 | 30 | 257.7354 | 0.000674 | 0.000862
+DQN-PSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) | 30 | 405.0396 | 0.000001 | 0.000008
+DQN-PSO (Global)          vs SAC-SAPSO                 | 30 | 123.9851 | 0.101349 | 0.195043
+DQN-PSO (Global)          vs PPO-PSO (Global)          | 30 | 373.1876 | 0.000001 | 0.000017
+DQN-PSO (Global)          vs PSO-Standard              | 30 | 242.7842 | 0.000710 | 0.001155
+DQN-PSO (Global)          vs PSO-LDIW                  | 30 | 360.9072 | 0.000005 | 0.000033
+DQN-PSO (Global)          vs FIPS                      | 30 | -41.1509 | 0.556710 | 0.564674
+DQN-PSO (Global)          vs CLPSO                     | 30 | -325.3480 | 0.000012 | 0.000182
+DQN-PSO (Global)          vs SAEPSO [11]               | 30 | 572.1636 | 0.000000 | 0.000002
+DQN-PSO (Global)          vs SAEPSO* [11]              | 30 | 460.7410 | 0.000000 | 0.000003
+DQN-PSO (Global)          vs UAPSO [25]                | 30 | -153.5562 | 0.014103 | 0.014380
+RRSACPSO                 vs MPSORL (Multi-Strategy RL-PSO) | 30 | 147.3042 | 0.005655 | 0.017036
+RRSACPSO                 vs SAC-SAPSO                 | 30 | -133.7503 | 0.016965 | 0.030798
+RRSACPSO                 vs PPO-PSO (Global)          | 30 | 115.4521 | 0.030021 | 0.034129
+RRSACPSO                 vs PSO-Standard              | 30 | -14.9513 | 0.795373 | 0.773380
+RRSACPSO                 vs PSO-LDIW                  | 30 | 103.1718 | 0.047106 | 0.014380
+RRSACPSO                 vs FIPS                      | 30 | -298.8863 | 0.000002 | 0.000033
+RRSACPSO                 vs CLPSO                     | 30 | -583.0834 | 0.000000 | 0.000002
+RRSACPSO                 vs SAEPSO [11]               | 30 | 314.4282 | 0.000000 | 0.000002
+RRSACPSO                 vs SAEPSO* [11]              | 30 | 203.0056 | 0.000037 | 0.000154
+RRSACPSO                 vs UAPSO [25]                | 30 | -411.2916 | 0.000000 | 0.000002
+MPSORL (Multi-Strategy RL-PSO) vs SAC-SAPSO                 | 30 | -281.0545 | 0.000012 | 0.000047
+MPSORL (Multi-Strategy RL-PSO) vs PPO-PSO (Global)          | 30 | -31.8520 | 0.369282 | 0.410660
+MPSORL (Multi-Strategy RL-PSO) vs PSO-Standard              | 30 | -162.2555 | 0.003325 | 0.008470
+MPSORL (Multi-Strategy RL-PSO) vs PSO-LDIW                  | 30 | -44.1324 | 0.321308 | 0.313527
+MPSORL (Multi-Strategy RL-PSO) vs FIPS                      | 30 | -446.1905 | 0.000000 | 0.000003
+MPSORL (Multi-Strategy RL-PSO) vs CLPSO                     | 30 | -730.3876 | 0.000000 | 0.000002
+MPSORL (Multi-Strategy RL-PSO) vs SAEPSO [11]               | 30 | 167.1240 | 0.000003 | 0.000036
+MPSORL (Multi-Strategy RL-PSO) vs SAEPSO* [11]              | 30 |  55.7014 | 0.117460 | 0.133229
+MPSORL (Multi-Strategy RL-PSO) vs UAPSO [25]                | 30 | -558.5958 | 0.000000 | 0.000002
+SAC-SAPSO                 vs PPO-PSO (Global)          | 30 | 249.2025 | 0.000020 | 0.000272
+SAC-SAPSO                 vs PSO-Standard              | 30 | 118.7990 | 0.021842 | 0.024965
+SAC-SAPSO                 vs PSO-LDIW                  | 30 | 236.9221 | 0.000030 | 0.000101
+SAC-SAPSO                 vs FIPS                      | 30 | -165.1360 | 0.009155 | 0.015222
+SAC-SAPSO                 vs CLPSO                     | 30 | -449.3331 | 0.000000 | 0.000002
+SAC-SAPSO                 vs SAEPSO [11]               | 30 | 448.1785 | 0.000000 | 0.000002
+SAC-SAPSO                 vs SAEPSO* [11]              | 30 | 336.7559 | 0.000000 | 0.000005
+SAC-SAPSO                 vs UAPSO [25]                | 30 | -277.5413 | 0.000005 | 0.000085
+PPO-PSO (Global)          vs PSO-Standard              | 30 | -130.4034 | 0.013002 | 0.005848
+PPO-PSO (Global)          vs PSO-LDIW                  | 30 | -12.2803 | 0.782394 | 0.821006
+PPO-PSO (Global)          vs FIPS                      | 30 | -414.3385 | 0.000000 | 0.000005
+PPO-PSO (Global)          vs CLPSO                     | 30 | -698.5356 | 0.000000 | 0.000002
+PPO-PSO (Global)          vs SAEPSO [11]               | 30 | 198.9760 | 0.000000 | 0.000002
+PPO-PSO (Global)          vs SAEPSO* [11]              | 30 |  87.5534 | 0.017469 | 0.017036
+PPO-PSO (Global)          vs UAPSO [25]                | 30 | -526.7437 | 0.000000 | 0.000002
+PSO-Standard              vs PSO-LDIW                  | 30 | 118.1231 | 0.019624 | 0.034129
+PSO-Standard              vs FIPS                      | 30 | -283.9351 | 0.000043 | 0.000251
+PSO-Standard              vs CLPSO                     | 30 | -568.1322 | 0.000000 | 0.000002
+PSO-Standard              vs SAEPSO [11]               | 30 | 329.3794 | 0.000000 | 0.000002
+PSO-Standard              vs SAEPSO* [11]              | 30 | 217.9568 | 0.000023 | 0.000120
+PSO-Standard              vs UAPSO [25]                | 30 | -396.3403 | 0.000000 | 0.000002
+PSO-LDIW                  vs FIPS                      | 30 | -402.0581 | 0.000000 | 0.000023
+PSO-LDIW                  vs CLPSO                     | 30 | -686.2552 | 0.000000 | 0.000002
+PSO-LDIW                  vs SAEPSO [11]               | 30 | 211.2564 | 0.000000 | 0.000003
+PSO-LDIW                  vs SAEPSO* [11]              | 30 |  99.8338 | 0.012378 | 0.012096
+PSO-LDIW                  vs UAPSO [25]                | 30 | -514.4634 | 0.000000 | 0.000002
+FIPS                      vs CLPSO                     | 30 | -284.1971 | 0.000001 | 0.000039
+FIPS                      vs SAEPSO [11]               | 30 | 613.3145 | 0.000000 | 0.000002
+FIPS                      vs SAEPSO* [11]              | 30 | 501.8919 | 0.000000 | 0.000002
+FIPS                      vs UAPSO [25]                | 30 | -112.4053 | 0.037281 | 0.043832
+CLPSO                     vs SAEPSO [11]               | 30 | 897.5116 | 0.000000 | 0.000002
+CLPSO                     vs SAEPSO* [11]              | 30 | 786.0890 | 0.000000 | 0.000002
+CLPSO                     vs UAPSO [25]                | 30 | 171.7918 | 0.000007 | 0.000030
+SAEPSO [11]               vs SAEPSO* [11]              | 30 | -111.4226 | 0.000001 | 0.000011
+SAEPSO [11]               vs UAPSO [25]                | 30 | -725.7198 | 0.000000 | 0.000002
+SAEPSO* [11]              vs UAPSO [25]                | 30 | -614.2972 | 0.000000 | 0.000002
+
+=== HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
+Significant pairs (Holm-corrected, paired t-test): 54/78
+Significant pairs (Holm-corrected, Wilcoxon):      54/78
+
+=== OVERALL RANKING (MEAN METRIC + HOLM T-TEST WINS) ===
+Rank | Algorithm                 | Mean | Holm Wins
+---------------------------------------------------------------
+1    | SAEPSO [11]               | 12106.0327 |        12
+2    | SAEPSO* [11]              | 12217.4553 |         8
+3    | MPSORL (Multi-Strategy RL-PSO) | 12273.1567 |         6
+4    | PPO-PSO (Global)          | 12305.0088 |         6
+5    | PSO-LDIW                  | 12317.2891 |         6
+6    | RRSACPSO                 | 12420.4609 |         4
+7    | PSO-Standard              | 12435.4122 |         4
+8    | RLAMPSO (Global)          | 12508.8075 |         3
+9    | SAC-SAPSO                 | 12554.2112 |         2
+10   | DQN-PSO (Global)          | 12678.1963 |         1
+11   | FIPS                      | 12719.3472 |         1
+12   | UAPSO [25]                | 12831.7525 |         1
+13   | CLPSO                     | 13003.5443 |         0
+
+Friedman omnibus (run-level blocks): chi2(12)=240.3077, p=0.000000 (N=30 runs)
+
+Statistical artifacts saved for Scenario 1:
+  Pairwise CSV: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_Pairwise_Scenario1.csv
+  Summary CSV:  /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_Summary_Scenario1.csv
+  MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_Results_Scenario1.mat
+All runs data written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_AllRuns_Scenario1_2026-03-10_13-53-22.csv
+Summary statistics written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_AlgorithmSummary_Scenario1_2026-03-10_13-53-22.csv
+Reports generated:
+  All runs data: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_AllRuns_Scenario1_2026-03-10_13-53-22.csv
+  Algorithm summary: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/results/TTest_AlgorithmSummary_Scenario1_2026-03-10_13-53-22.csv
+
+Benchmark complete.
+Raw results: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/all_run_results.mat
+Manifest: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/manifest.mat
+Log: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/benchmark/c100_pop100_iter1000_runs30_workers14_20260310_104658/benchmark.log

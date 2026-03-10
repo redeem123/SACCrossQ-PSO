@@ -7,22 +7,19 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
         'PGPSO', 'PG-PSO (Policy Gradient)';
         'PSO_TVAC', 'PSO-TVAC';
         'SAEPSO', 'SAEPSO (Full Implementation)';
-        'APEXPSO_Online', 'APEX-PSO-Online (Online Learning)';
-        'APEXPSO', 'APEX-PSO (SAC-CrossQ with Transformer)';
-        'APEXPSO_Pretrained', 'APEX-PSO (Pretrained)';
-        'APEXPSO_Run_Full', 'APEX-PSO Full (Baseline)';
-        'APEXPSO_Abl_NoAtt', 'APEX-PSO No Attention';
-        'APEXPSO_Abl_SimpleRwd', 'APEX-PSO Simple Reward';
-        'APEXPSO_Abl_NoCrossQ', 'APEX-PSO No CrossQ';
+        'RLAMPSO_Online_5Sub', 'RLAMPSO (5 Subgroup)';
+        'DQN_PSO_Online_Global', 'DQN-PSO (Global)';
+        'RRSACPSO_Online', 'RRSACPSO (Online Learning)';
+        'RRSACPSO', 'RRSACPSO';
+        'SACSAPSO_Paper', 'SAC-SAPSO (Paper)';
+        'PPO_PSO_Online_Global', 'PPO-PSO';
     };
     
     % Count how many adaptive algorithms we have data for
     validAlgorithms = {};
     for i = 1:size(adaptiveAlgorithms, 1)
         algFieldName = adaptiveAlgorithms{i, 1};
-        if isfield(results, algFieldName) && ...
-           (isfield(results.(algFieldName), 'w_history') || ...
-            isfield(results.(algFieldName), 'parameterHistory'))
+        if isfield(results, algFieldName) && hasParameterSeries(results.(algFieldName))
             validAlgorithms{end+1, 1} = algFieldName;
             validAlgorithms{end, 2} = adaptiveAlgorithms{i, 2};
         end
@@ -57,16 +54,15 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
         algFieldName = validAlgorithms{i, 1};
         algDisplayName = validAlgorithms{i, 2};
         
-        w_data = [];
-        if isfield(results.(algFieldName), 'w_history')
-            w_data = results.(algFieldName).w_history;
-        elseif isfield(results.(algFieldName), 'parameterHistory') && isfield(results.(algFieldName).parameterHistory, 'w')
-            w_data = results.(algFieldName).parameterHistory.w;
-        end
-        
+        [w_data, w_lower, w_upper, hasSamples] = extractSeries(results.(algFieldName), 'w');
         if ~isempty(w_data)
             iterations = 1:length(w_data);
             color = colors(mod(i-1, size(colors, 1)) + 1, :);
+            if hasSamples
+                fill([iterations, fliplr(iterations)], ...
+                    [w_lower(:)', fliplr(w_upper(:)')], ...
+                    color, 'FaceAlpha', 0.15, 'EdgeColor', 'none', 'HandleVisibility', 'off');
+            end
             h = plot(iterations, w_data, '-', 'Color', color, 'LineWidth', 2);
             plotHandles = [plotHandles, h];
             legendLabels{end+1} = algDisplayName;
@@ -91,16 +87,15 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     for i = 1:size(validAlgorithms, 1)
         algFieldName = validAlgorithms{i, 1};
         
-        c1_data = [];
-        if isfield(results.(algFieldName), 'c1_history')
-            c1_data = results.(algFieldName).c1_history;
-        elseif isfield(results.(algFieldName), 'parameterHistory') && isfield(results.(algFieldName).parameterHistory, 'c1')
-            c1_data = results.(algFieldName).parameterHistory.c1;
-        end
-        
+        [c1_data, c1_lower, c1_upper, hasSamples] = extractSeries(results.(algFieldName), 'c1');
         if ~isempty(c1_data)
             iterations = 1:length(c1_data);
             color = colors(mod(i-1, size(colors, 1)) + 1, :);
+            if hasSamples
+                fill([iterations, fliplr(iterations)], ...
+                    [c1_lower(:)', fliplr(c1_upper(:)')], ...
+                    color, 'FaceAlpha', 0.15, 'EdgeColor', 'none', 'HandleVisibility', 'off');
+            end
             h = plot(iterations, c1_data, '-', 'Color', color, 'LineWidth', 2);
             plotHandles = [plotHandles, h];
         end
@@ -121,16 +116,15 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     for i = 1:size(validAlgorithms, 1)
         algFieldName = validAlgorithms{i, 1};
         
-        c2_data = [];
-        if isfield(results.(algFieldName), 'c2_history')
-            c2_data = results.(algFieldName).c2_history;
-        elseif isfield(results.(algFieldName), 'parameterHistory') && isfield(results.(algFieldName).parameterHistory, 'c2')
-            c2_data = results.(algFieldName).parameterHistory.c2;
-        end
-        
+        [c2_data, c2_lower, c2_upper, hasSamples] = extractSeries(results.(algFieldName), 'c2');
         if ~isempty(c2_data)
             iterations = 1:length(c2_data);
             color = colors(mod(i-1, size(colors, 1)) + 1, :);
+            if hasSamples
+                fill([iterations, fliplr(iterations)], ...
+                    [c2_lower(:)', fliplr(c2_upper(:)')], ...
+                    color, 'FaceAlpha', 0.15, 'EdgeColor', 'none', 'HandleVisibility', 'off');
+            end
             h = plot(iterations, c2_data, '-', 'Color', color, 'LineWidth', 2);
             plotHandles = [plotHandles, h];
         end
@@ -159,5 +153,54 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     print(gcf, filename, '-dpdf', '-r300');
 
     fprintf('Parameter tracking plot saved as: %s.pdf\n', filename);
+end
+
+function hasData = hasParameterSeries(algResults)
+    hasData = false;
+    if isfield(algResults, 'w_history') || isfield(algResults, 'w_samples')
+        hasData = true;
+        return;
+    end
+    if isfield(algResults, 'parameterHistory')
+        if isfield(algResults.parameterHistory, 'w') || isfield(algResults.parameterHistory, 'w_samples')
+            hasData = true;
+        end
+    end
+end
+
+function [meanSeries, lowerBand, upperBand, hasSamples] = extractSeries(algResults, baseName)
+    meanSeries = [];
+    lowerBand = [];
+    upperBand = [];
+    hasSamples = false;
+
+    sampleField = [baseName '_samples'];
+    historyField = [baseName '_history'];
+    samples = [];
+
+    if isfield(algResults, sampleField)
+        samples = algResults.(sampleField);
+    elseif isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, sampleField)
+        samples = algResults.parameterHistory.(sampleField);
+    end
+
+    if ~isempty(samples)
+        meanSeries = mean(samples, 2);
+        spread = std(samples, 0, 2);
+        lowerBand = meanSeries - spread;
+        upperBand = meanSeries + spread;
+        meanSeries = meanSeries(:)';
+        lowerBand = lowerBand(:);
+        upperBand = upperBand(:);
+        hasSamples = true;
+        return;
+    end
+
+    if isfield(algResults, historyField)
+        meanSeries = algResults.(historyField);
+    elseif isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, baseName)
+        meanSeries = algResults.parameterHistory.(baseName);
+    end
+    meanSeries = meanSeries(:)';
 end
 

@@ -1,13 +1,13 @@
 function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory, learningStats] = globalPathPlanningAPEXPSO(...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config)
-    % CQSAC-PSO: Advanced Parameter Exploration CrossQ-SAC for PSO
+    % RRSACPSO: Advanced Parameter Exploration CrossQ-SAC for PSO
     %
     % State-of-the-art RL-based PSO parameter adaptation using:
     %   - SAC with automatic entropy tuning
     %   - CrossQ optimizations (BatchNorm, UTD=1)
     %   - Deterministic cross-scale state encoding
     %   - Rank-residual parameter adaptation
-    %   - Multi-objective reward function
+    %   - Simple fitness-improvement reward
     %
     % Inputs:
     %   startPoint: Start position [x, y, z]
@@ -16,7 +16,7 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     %   trees: Tree data structure
     %   terrainGrid: Terrain height map
     %   terrainX, terrainY: Terrain coordinate grids
-    %   config: CQSAC-PSO configuration
+    %   config: RRSACPSO configuration
     %
     % Outputs:
     %   bestPath: Best path found
@@ -26,12 +26,12 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     %   stateEncoder: State encoder
 
     fprintf('\n╔══════════════════════════════════════════════════════════╗\n');
-    fprintf('║              CQSAC-PSO Global Path Planning              ║\n');
+    fprintf('║              RRSACPSO Global Path Planning              ║\n');
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
     % Online-only initialization: always start from scratch in-memory.
     agent = APEXPSO_Agent(config);
-    if config.useCrossScaleState
+    if isfield(config, 'useCrossScaleState') && config.useCrossScaleState
         stateEncoder = CrossScaleStateEncoder(config);
     else
         stateEncoder = SimpleStateEncoder(config);
@@ -72,11 +72,8 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
         rewardHistory = [];
         criticLossHistory = [];
     end
-    diversityHistory = zeros(config.diversityHistorySize, 1);
-    stateHistory = [];
-
     % Best solution tracking
-    globalBestFitness = 1e9;
+    globalBestFitness = Inf;
     globalBestPath = [];
 
     % Main training loop (episodes)
@@ -93,22 +90,19 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
 
         % Reset for new episode
         particles = resetParticles(particles, startPoint, goalPoint, terrainGrid, terrainX, terrainY, mapSize);
+        particles = evaluateParticlePopulation(particles, startPoint, goalPoint, dangerZones, ...
+            terrainGrid, terrainX, terrainY, numWaypoints);
         stateEncoder.reset();
-        episodeBestFitness = 1e9;
+        episodeBestFitness = min(particles.bestFitness);
         lastImprovementIteration = 0;
+
+        initialFeatures = extractRichFeatures(particles, 1, config.maxIterations, ...
+            lastImprovementIteration, episodeBestFitness);
+        stateEncoder.addIteration(initialFeatures);
+        state = stateEncoder.encode();
 
         % PSO iterations within episode
         for iter = 1:config.maxIterations
-            % Extract rich features
-            basicFeatures = extractRichFeatures(particles, iter, config.maxIterations, ...
-                lastImprovementIteration, episodeBestFitness);
-
-            % Add latest swarm features to state encoder
-            stateEncoder.addIteration(basicFeatures);
-
-            % Get state from encoder
-            state = stateEncoder.encode();
-
             % Get action from agent in online training mode.
             action = agent.getAction(state, true);
 
@@ -150,7 +144,6 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
 
             % Calculate diversity
             currentDiversity = calculateDiversity(particles);
-            diversityHistory = [diversityHistory(2:end); currentDiversity];
 
             % Log fitness improvement (every 100 iterations)
             if mod(iter, 100) == 0
@@ -159,28 +152,13 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
             end
 
             % Get next state
-            nextBasicFeatures = extractRichFeatures(particles, iter+1, config.maxIterations, ...
+            nextIter = min(iter + 1, config.maxIterations);
+            nextBasicFeatures = extractRichFeatures(particles, nextIter, config.maxIterations, ...
                 lastImprovementIteration, episodeBestFitness);
             stateEncoder.addIteration(nextBasicFeatures);
             nextState = stateEncoder.encode();
 
-            % Calculate reward
-            if config.useMultiObjectiveReward
-                rewardContext = struct();
-                rewardContext.iter = iter;
-                rewardContext.maxIterations = config.maxIterations;
-                rewardContext.lastImprovementIteration = lastImprovementIteration;
-                [reward, ~] = calculateMultiObjectiveReward(episodeBestFitness, ...
-                    previousBestFitness, currentDiversity, diversityHistory, ...
-                    stateHistory, config, rewardContext, nextState);
-            else
-                % Simple binary reward
-                if episodeBestFitness < previousBestFitness
-                    reward = 1.0;
-                else
-                    reward = -1.0;
-                end
-            end
+            reward = calculateImprovementReward(previousBestFitness, episodeBestFitness);
 
             if config.numEpisodes == 1
                 rewardHistory(iter) = reward;
@@ -194,12 +172,6 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
             % Store transition
             done = (iter == config.maxIterations);
             agent.storeTransition(state, action, reward, nextState, done);
-
-            % Store state for curiosity
-            stateHistory = [stateHistory; nextState'];
-            if size(stateHistory, 1) > 20
-                stateHistory = stateHistory(end-19:end, :);
-            end
 
             % Train agent
             losses = [];
@@ -216,6 +188,8 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
             if config.numEpisodes == 1
                 criticLossHistory(iter) = criticLoss;
             end
+
+            state = nextState;
             
             % Log training metrics
             if ~isempty(logger)
@@ -268,6 +242,10 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     end
 
     % Return best solution
+    if isempty(globalBestPath)
+        [globalBestFitness, bestIdx] = min(particles.bestFitness);
+        globalBestPath = particles.bestPositions(bestIdx, :);
+    end
     bestFitness = globalBestFitness;
 
     % Convert particle position to proper path format (N×3 matrix with start and goal)
@@ -323,7 +301,7 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     % Final training summary
     fprintf('\n');
     fprintf('╔════════════════════════════════════════════════════════════╗\n');
-    fprintf('║              CQSAC-PSO TRAINING COMPLETE                   ║\n');
+    fprintf('║              RRSACPSO TRAINING COMPLETE                   ║\n');
     fprintf('╚════════════════════════════════════════════════════════════╝\n');
     fprintf('  Mode:              %s\n', config.mode);
     fprintf('  Episodes:          %d\n', config.numEpisodes);
@@ -354,6 +332,12 @@ function [particles, mapSize, numWaypoints] = initializePSOParticles(config, sta
     particles.bestPositions = zeros(popSize, dims);
     particles.bestFitness = ones(popSize, 1) * 1e9;
     particles.stagnationCounter = zeros(popSize, 1);
+    particles.collisionPenalty = zeros(popSize, 1);
+    particles.terrainPenalty = zeros(popSize, 1);
+    particles.dangerZonePenalty = zeros(popSize, 1);
+    particles.duplicatePenalty = zeros(popSize, 1);
+    particles.balancedFitness = zeros(popSize, 1);
+    particles.isFeasible = false(popSize, 1);
 
     % Initialize random positions
     for i = 1:popSize
@@ -369,6 +353,14 @@ function [particles, mapSize, numWaypoints] = initializePSOParticles(config, sta
             particles.cartesianPositions(i, idx:idx+2) = [x, y, z];
         end
         particles.bestPositions(i, :) = particles.cartesianPositions(i, :);
+    end
+end
+
+function reward = calculateImprovementReward(previousBestFitness, currentBestFitness)
+    if currentBestFitness < previousBestFitness
+        reward = 1.0;
+    else
+        reward = -1.0;
     end
 end
 
@@ -398,6 +390,12 @@ function particles = resetParticles(particles, startPoint, goalPoint, terrainGri
         particles.bestPositions(i, :) = particles.cartesianPositions(i, :);
         particles.bestFitness(i) = 1e9;
         particles.stagnationCounter(i) = 0;
+        particles.collisionPenalty(i) = 0;
+        particles.terrainPenalty(i) = 0;
+        particles.dangerZonePenalty(i) = 0;
+        particles.duplicatePenalty(i) = 0;
+        particles.balancedFitness(i) = 0;
+        particles.isFeasible(i) = false;
     end
 end
 
@@ -463,13 +461,15 @@ function [particles, bestFitness] = updatePSOParticles(particles, particleParams
         end
 
         % Evaluate fitness
-        particles.fitness(i) = evaluatePathFitness(particles.cartesianPositions(i,:), ...
+        [particles.fitness(i), components] = evaluatePathFitness(particles.cartesianPositions(i,:), ...
             startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
         
         % Clamp infinite fitness to large number for numerical stability
         if isinf(particles.fitness(i))
             particles.fitness(i) = 1e9;
         end
+
+        particles = assignParticleComponents(particles, i, components);
 
         % Update personal best
         if particles.fitness(i) < particles.bestFitness(i)
@@ -483,6 +483,42 @@ function [particles, bestFitness] = updatePSOParticles(particles, particleParams
         else
             particles.stagnationCounter(i) = particles.stagnationCounter(i) + 1;
         end
+    end
+end
+
+function particles = evaluateParticlePopulation(particles, startPoint, goalPoint, dangerZones, ...
+    terrainGrid, terrainX, terrainY, numWaypoints)
+    popSize = size(particles.cartesianPositions, 1);
+    for i = 1:popSize
+        [fitness, components] = evaluatePathFitness(particles.cartesianPositions(i,:), ...
+            startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
+        if isinf(fitness)
+            fitness = 1e9;
+        end
+        particles.fitness(i) = fitness;
+        particles.bestFitness(i) = fitness;
+        particles.bestPositions(i,:) = particles.cartesianPositions(i,:);
+        particles = assignParticleComponents(particles, i, components);
+    end
+end
+
+function particles = assignParticleComponents(particles, idx, components)
+    particles.collisionPenalty(idx) = getFieldOrDefault(components, 'collisionPenalty', 0);
+    particles.terrainPenalty(idx) = getFieldOrDefault(components, 'terrainPenalty', 0);
+    particles.dangerZonePenalty(idx) = getFieldOrDefault(components, 'dangerZonePenalty', 0);
+    particles.duplicatePenalty(idx) = getFieldOrDefault(components, 'duplicatePenalty', 0);
+    particles.balancedFitness(idx) = getFieldOrDefault(components, 'balancedFitness', particles.fitness(idx));
+    particles.isFeasible(idx) = isfinite(particles.collisionPenalty(idx)) && ...
+        particles.collisionPenalty(idx) <= 0 && ...
+        particles.terrainPenalty(idx) <= 0 && ...
+        isfinite(particles.dangerZonePenalty(idx));
+end
+
+function value = getFieldOrDefault(s, fieldName, defaultValue)
+    if isfield(s, fieldName)
+        value = s.(fieldName);
+    else
+        value = defaultValue;
     end
 end
 

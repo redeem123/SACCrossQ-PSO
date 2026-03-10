@@ -1,0 +1,14 @@
+scenario_id,metric_name,algorithm,n_valid,mean,std,median,min,max,average_rank,significant_wins_holm_t,friedman_chi_square,friedman_df,friedman_p,n_friedman_runs
+1,global_fitness_total,RLAMPSO (Global),1,14152.37092,NaN,14152.37092,14152.37092,14152.37092,8,0,NaN,12,NaN,1
+1,global_fitness_total,DQN-PSO (Global),1,13900.15724,NaN,13900.15724,13900.15724,13900.15724,6,0,NaN,12,NaN,1
+1,global_fitness_total,RRSACPSO,1,14383.04975,NaN,14383.04975,14383.04975,14383.04975,10,0,NaN,12,NaN,1
+1,global_fitness_total,MPSORL (Multi-Strategy RL-PSO),1,14275.972,NaN,14275.972,14275.972,14275.972,9,0,NaN,12,NaN,1
+1,global_fitness_total,SAC-SAPSO,1,13045.41876,NaN,13045.41876,13045.41876,13045.41876,2,0,NaN,12,NaN,1
+1,global_fitness_total,PPO-PSO (Global),1,13727.1265,NaN,13727.1265,13727.1265,13727.1265,5,0,NaN,12,NaN,1
+1,global_fitness_total,PSO-Standard,1,13974.00414,NaN,13974.00414,13974.00414,13974.00414,7,0,NaN,12,NaN,1
+1,global_fitness_total,PSO-LDIW,1,13474.63734,NaN,13474.63734,13474.63734,13474.63734,3,0,NaN,12,NaN,1
+1,global_fitness_total,FIPS,1,14828.57308,NaN,14828.57308,14828.57308,14828.57308,13,0,NaN,12,NaN,1
+1,global_fitness_total,CLPSO,1,14613.74976,NaN,14613.74976,14613.74976,14613.74976,11,0,NaN,12,NaN,1
+1,global_fitness_total,SAEPSO [11],1,12179.62307,NaN,12179.62307,12179.62307,12179.62307,1,0,NaN,12,NaN,1
+1,global_fitness_total,SAEPSO* [11],1,13615.99831,NaN,13615.99831,13615.99831,13615.99831,4,0,NaN,12,NaN,1
+1,global_fitness_total,UAPSO [25],1,14817.44707,NaN,14817.44707,14817.44707,14817.44707,12,0,NaN,12,NaN,1

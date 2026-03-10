@@ -1,11 +1,11 @@
-% Quick Training Test for APEX-PSO
+% Quick Training Test for RRSACPSO
 % Runs a short training session to observe behavior
 %
 % This will run 5 episodes with 100 iterations each
 
 clc; clear;
 fprintf('╔══════════════════════════════════════════════════════════╗\n');
-fprintf('║         APEX-PSO Quick Training Test                    ║\n');
+fprintf('║         RRSACPSO Quick Training Test                    ║\n');
 fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
 % Add paths
@@ -24,7 +24,7 @@ fprintf('Test Configuration:\n');
 fprintf('  Episodes: %d\n', config.numEpisodes);
 fprintf('  Iterations per episode: %d\n', config.maxIterations);
 fprintf('  Population: %d particles\n', config.popSize);
-fprintf('  Action space: %dD (per-particle)\n\n', config.actionSize);
+fprintf('  Action space: %dD (%s)\n\n', config.actionSize, config.paramMode);
 
 % Load terrain
 try
@@ -40,11 +40,8 @@ end
 startPoint = [10, 10, 20];
 goalPoint = [390, 390, 20];
 
-% Create proper empty matrices for obstacles and trees
-% Format: [x, y, z, radius] for obstacles
-% Format: [x, y, z, radius, height] for trees
-obstacles = [];  % Empty Nx4 matrix
-trees = [];      % Empty Nx5 matrix
+% No danger zones for the smoke test.
+dangerZones = [];
 
 fprintf('Starting quick training test...\n');
 fprintf('────────────────────────────────────────────────────────────\n\n');
@@ -52,7 +49,7 @@ fprintf('───────────────────────�
 tic;
 try
     [bestPath, bestFitness, fitnessHistory, agent, stateEncoder] = ...
-        globalPathPlanningAPEXPSO(startPoint, goalPoint, obstacles, trees, ...
+        globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, ...
         terrainGrid, terrainX, terrainY, config);
 
     elapsedTime = toc;
@@ -81,11 +78,11 @@ try
     end
 
     % Plot fitness history
-    figure('Name', 'APEX-PSO Training Progress');
+    figure('Name', 'RRSACPSO Training Progress');
     plot(1:length(fitnessHistory), fitnessHistory, 'b-o', 'LineWidth', 2);
     xlabel('Episode');
     ylabel('Best Fitness');
-    title('APEX-PSO Learning Curve (Quick Test)');
+    title('RRSACPSO Learning Curve (Quick Test)');
     grid on;
 
     fprintf('\n✓ Test completed successfully!\n');

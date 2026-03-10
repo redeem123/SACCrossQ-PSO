@@ -31,13 +31,24 @@ function [finalPath, pathLength, executionTime, timeHistory, metrics] = directGl
     % Parse algorithm-specific parameters
     [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmName, remainingParams);
 
+    displayName = algorithmName;
+    if startsWith(displayName, 'RRSACPSO_')
+        displayName = strrep(displayName, 'RRSACPSO_Online', 'RRSACPSO');
+    end
+    if strcmp(displayName, 'SACSAPSO_Paper')
+        displayName = 'SAC-SAPSO (Paper)';
+    end
+    if strcmp(displayName, 'PPO_PSO')
+        displayName = 'PPO-PSO';
+    end
+
     % Initialize metrics structure
     metrics = struct();
-    metrics.algorithmName = algorithmName;
+    metrics.algorithmName = displayName;
 
     % Single global planning call (no replanning, no simulation)
     fprintf('\n========== Direct Global Planning ==========\n');
-    fprintf('Algorithm: %s\n', algorithmName);
+    fprintf('Algorithm: %s\n', displayName);
     fprintf('Start: [%.1f, %.1f, %.1f]\n', startPoint);
     fprintf('Goal:  [%.1f, %.1f, %.1f]\n', goalPoint);
     fprintf('============================================\n\n');
@@ -75,6 +86,14 @@ function [finalPath, pathLength, executionTime, timeHistory, metrics] = directGl
         metrics.convergenceHistory = algorithmSpecificStats.convergenceHistory;
     end
 
+    if isfield(algorithmSpecificStats, 'rewardHistory')
+        metrics.rewardHistory = algorithmSpecificStats.rewardHistory;
+    end
+
+    if isfield(algorithmSpecificStats, 'criticLossHistory')
+        metrics.criticLossHistory = algorithmSpecificStats.criticLossHistory;
+    end
+
     % Store parameter history if available (for RL-based PSO)
     if isfield(algorithmSpecificStats, 'parameterHistory')
         if isfield(algorithmSpecificStats.parameterHistory, 'w')
@@ -85,6 +104,15 @@ function [finalPath, pathLength, executionTime, timeHistory, metrics] = directGl
         end
         if isfield(algorithmSpecificStats.parameterHistory, 'c2')
             metrics.c2_history = algorithmSpecificStats.parameterHistory.c2;
+        end
+        if isfield(algorithmSpecificStats.parameterHistory, 'w_samples')
+            metrics.w_samples = algorithmSpecificStats.parameterHistory.w_samples;
+        end
+        if isfield(algorithmSpecificStats.parameterHistory, 'c1_samples')
+            metrics.c1_samples = algorithmSpecificStats.parameterHistory.c1_samples;
+        end
+        if isfield(algorithmSpecificStats.parameterHistory, 'c2_samples')
+            metrics.c2_samples = algorithmSpecificStats.parameterHistory.c2_samples;
         end
     end
 
@@ -102,7 +130,7 @@ function [finalPath, pathLength, executionTime, timeHistory, metrics] = directGl
 
     % Display final results
     fprintf('\n========== Planning Complete ==========\n');
-    fprintf('Algorithm: %s\n', algorithmName);
+    fprintf('Algorithm: %s\n', displayName);
     fprintf('Execution time: %.4f seconds\n', executionTime);
     fprintf('Path length: %.4f units\n', pathLength);
     fprintf('Waypoints: %d\n', size(globalPath, 1));

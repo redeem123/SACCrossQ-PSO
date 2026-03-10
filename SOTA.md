@@ -1,4 +1,4 @@
-# APEXPSO SOTA Gap, Novelty Hypothesis, and Current Direction (2026-03-06)
+# RRSACPSO SOTA Gap, Novelty Hypothesis, and Current Direction (2026-03-06)
 
 ## 1) Recent Related Work (Targeted)
 
@@ -26,7 +26,7 @@ Observed gap in current benchmark behavior:
   - or RL for planning policy directly rather than PSO parameter residuals.
 
 Technical gap still not covered well by prior hybrids:
-- target-free CrossQ SAC + deterministic cross-scale swarm encoding + rank-residual PSO control + uncertainty-aware critic shaping in one online loop.
+- target-free CrossQ SAC + deterministic cross-scale swarm encoding + rank-residual PSO control in one online loop.
 
 ## 3) Current Novelty Hypothesis
 
@@ -34,7 +34,7 @@ Hypothesis H6:
 A lean CrossQ-SAC controller for rank-residual PSO updates will outperform heavier RL-PSO hybrids if the controller focuses on three things only:
 1. informative swarm state compression,
 2. low-dimensional but expressive residual control over `w, c1, c2`,
-3. critic stabilization through robust loss shaping instead of auxiliary replay or backup machinery.
+3. critic stabilization through a simple target-free CrossQ training setup instead of auxiliary replay or backup machinery.
 
 ## 4) Current Mathematical Direction
 
@@ -57,16 +57,16 @@ y_t = r_t + \gamma(1-d_t)\left(\min(Q_1',Q_2') - \alpha\log\pi(a'|s')\right)
 \end{cases}
 \]
 
-3) Actor objective with critic-disagreement uncertainty penalty:
+3) Actor objective:
 \[
-\mathcal L_\pi = \mathbb E\left[\alpha\log\pi(a|s) - \min(Q_1,Q_2) + \eta |Q_1-Q_2|\right]
+\mathcal L_\pi = \mathbb E\left[\alpha\log\pi(a|s) - \min(Q_1,Q_2)\right]
 \]
 
-4) Entropy schedule with optional uncertainty coupling:
+4) Entropy schedule:
 \[
 \mathcal H_t^{\star} = \mathcal H_0^{\star}\left(1-\kappa\,p_t\right)
 \]
-where \(p_t\) is anneal progress and uncertainty coupling can modulate the target entropy in harder regions.
+where \(p_t\) is anneal progress.
 
 ## 5) What Is Currently Novel in This Repo
 
@@ -74,8 +74,7 @@ Compared with the cited RL-PSO hybrids, this implementation currently combines:
 - CrossQ-style target-free SAC backbone,
 - deterministic cross-scale swarm state encoding,
 - rank-residual mapping from low-dimensional SAC actions to particle-wise PSO control,
-- robust critic fitting with Huber and overestimation-weighted loss,
-- critic-disagreement uncertainty penalties inside the actor objective.
+- simple fitness-improvement reward inside the online PSO loop.
 
 ## 6) Current Status vs Termination Criterion
 

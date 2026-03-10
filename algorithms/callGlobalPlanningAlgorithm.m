@@ -85,34 +85,11 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.convergenceHistory = convergence;
             algorithmSpecificStats.igStats = igStats;
 
-        case 'APEXPSO'
-            % APEX-PSO: Advanced Parameter Exploration CrossQ-SAC for PSO
-            % State-of-the-art RL algorithm combining SAC, CrossQ, Transformer attention
-            config = APEXPSO_Config();  % DEFAULT MODE: 150 episodes, 600 iterations
-            config.mapSize = mapSize;   % Enforce map size from comparison script
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
-            intermediateWaypoints = globalPath(2:end-1, :);
-            position = reshape(intermediateWaypoints', 1, []);
-            numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-            
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;  % For metrics compatibility
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
+        case {'RRSACPSO', 'RRSACPSO_Online'}
+            % RRSACPSO online-only operation.
+            config = APEXPSO_Config('online');
+            config.mapSize = mapSize;
 
-        case 'APEXPSO_Online'
-            % APEX-PSO Online Learning: Learns during actual PSO run (no pretraining)
-            % Single episode with N iterations - learns while optimizing
-            config = APEXPSO_Config('online');  % ONLINE MODE: 1 episode
-            config.mapSize = mapSize;           % Enforce map size from comparison script
-
-            % Override maxIterations from params (for testing with fewer iterations)
             if isfield(params, 'maxIterations')
                 config.maxIterations = params.maxIterations;
                 config.warmupPeriod = min(50, floor(config.maxIterations * 0.1));
@@ -121,117 +98,26 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             if isfield(params, 'paramMode')
                 config.paramMode = params.paramMode;
             else
-                config.paramMode = 'per-particle';
+                config.paramMode = 'rank-residual';
             end
 
-            % Update config based on paramMode (must update both actionSize AND usePerParticleActions)
-            switch config.paramMode
-                case 'global'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 3;  % w, c1, c2 for all particles
-                    config.targetEntropy = -3;  % Update target entropy for new action size
-                case '5subgroup'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 15;  % 5 groups × 3 params
-                    config.targetEntropy = -15;
-                case 'per-particle'
-                    config.usePerParticleActions = true;
-                    config.actionSize = 120;  % 40 particles × 3 params
-                    config.targetEntropy = -120;
-                otherwise
-                    error('Unknown paramMode: %s', config.paramMode);
+            if isfield(params, 'configOverrides') && isstruct(params.configOverrides)
+                overrideFields = fieldnames(params.configOverrides);
+                for iField = 1:numel(overrideFields)
+                    fieldName = overrideFields{iField};
+                    config.(fieldName) = params.configOverrides.(fieldName);
+                end
             end
+            config = applyAPEXPSOParamMode(config);
 
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
+            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = ...
+                globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
+
             intermediateWaypoints = globalPath(2:end-1, :);
             position = reshape(intermediateWaypoints', 1, []);
             numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;  % For metrics compatibility
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
-
-        case 'APEXPSO_Pretrained'
-            config = APEXPSO_Config('pretrained');
-            config.mapSize = mapSize;  % Enforce map size from comparison script
-            config.pretrainedModelPath = params.pretrainedModelPath;
-
-            if isfield(params, 'paramMode')
-                config.paramMode = params.paramMode;
-            else
-                config.paramMode = 'per-particle';
-            end
-
-            % Update config based on paramMode (CRITICAL for loading correct model)
-            switch config.paramMode
-                case 'global'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 3;
-                case '5subgroup'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 15;
-                case 'per-particle'
-                    config.usePerParticleActions = true;
-                    config.actionSize = config.popSize * 3;
-            end
-
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
-            intermediateWaypoints = globalPath(2:end-1, :);
-            position = reshape(intermediateWaypoints', 1, []);
-            numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
-
-        case 'APEXPSO_Train'
-            % APEX-PSO Training: Train model from scratch
-            config = APEXPSO_Config('default');
-            config.mapSize = mapSize;  % Enforce map size from comparison script
-            config.numEpisodes = params.trainingEpisodes;
-            config.savePath = params.savePath;
-
-            % Set paramMode if provided
-            if isfield(params, 'paramMode')
-                config.paramMode = params.paramMode;
-            else
-                config.paramMode = 'per-particle';
-            end
-
-            % Update config based on paramMode
-            switch config.paramMode
-                case 'global'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 3;
-                case '5subgroup'
-                    config.usePerParticleActions = false;
-                    config.actionSize = 15;
-                case 'per-particle'
-                    config.usePerParticleActions = true;
-                    config.actionSize = config.popSize * 3;
-            end
-
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
-            intermediateWaypoints = globalPath(2:end-1, :);
-            position = reshape(intermediateWaypoints', 1, []);
-            numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
+            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, ...
+                dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
 
             algorithmSpecificStats.convergenceHistory = fitnessHistory;
             algorithmSpecificStats.fitnessComponents = fitnessComponents;
@@ -268,58 +154,6 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.modelSavePath = params.savePath;
             algorithmSpecificStats.trainedAgent = trainedAgent;
 
-        case 'APEXPSO_AblationTrain'
-            % APEX-PSO Ablation Training: Train with specific features disabled
-            config = APEXPSO_Config(params.ablationMode);
-            config.numEpisodes = params.trainingEpisodes;
-            config.savePath = params.savePath;
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
-            intermediateWaypoints = globalPath(2:end-1, :);
-            position = reshape(intermediateWaypoints', 1, []);
-            numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
-
-        case 'APEXPSO_AblationRun'
-            % APEX-PSO Ablation Run: Test with pretrained ablated model
-            config = APEXPSO_Config('pretrained');  % FIXED: Use 'pretrained' mode first
-            config.pretrainedModelPath = params.pretrainedModelPath;
-
-            % Apply ablation modifications
-            switch params.ablationMode
-                case 'ablation_no_attention'
-                    config.useTransformerState = false;
-                    config.stateSize = 15;
-                case 'ablation_simple_reward'
-                    config.useMultiObjectiveReward = false;
-                    config.useCuriosityBonus = false;
-            end
-
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-            
-            % Calculate fitness components for metrics
-            intermediateWaypoints = globalPath(2:end-1, :);
-            position = reshape(intermediateWaypoints', 1, []);
-            numWaypoints = size(intermediateWaypoints, 1);
-            [~, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
-
         % ========================================================================
         % NEW ALGORITHMS FOR TOP-TIER JOURNAL COMPARISON
         % ========================================================================
@@ -331,6 +165,13 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
                 params.popSize, params.maxIterations, params.c_min, params.c_max);
             algorithmSpecificStats.convergenceHistory = convergence;
             algorithmSpecificStats.parameterHistory = paramHist;
+
+        case 'MPSORL'
+            [globalPath, convergence, algorithmSpecificStats] = globalPathPlanningMPSORL( ...
+                startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, ...
+                params.popSize, params.maxIterations, params.w, params.c1, params.c2, ...
+                params.alpha, params.gamma, params.epsilon, params.learningPeriod, params.pop1Ratio);
+            algorithmSpecificStats.convergenceHistory = convergence;
 
         case 'FIPS'
             % FIPS: Fully Informed Particle Swarm (Mendes et al., 2004)
@@ -396,10 +237,99 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.trainingStats = trainingStats;
             algorithmSpecificStats.modelSavePath = params.savePath;
 
+        case 'SACSAPSO_Paper'
+            config = SACSAPSO_Config('paper');
+            config.popSize = params.popSize;
+            config.maxIterations = params.maxIterations;
+            config.observationInterval = params.observationInterval;
+            config.mapSize = mapSize;
+            config.stateSize = config.popSize + 3;
+
+            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory, learningStats] = ...
+                globalPathPlanningSACSAPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
+
+            [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath, startPoint, goalPoint, ...
+                dangerZones, terrainGrid, terrainX, terrainY, bestFitness);
+
+            algorithmSpecificStats.convergenceHistory = fitnessHistory;
+            algorithmSpecificStats.fitnessComponents = fitnessComponents;
+            algorithmSpecificStats.finalFitness = bestFitness;
+            algorithmSpecificStats.actualBestFitness = bestFitness;
+            algorithmSpecificStats.parameterHistory = paramHistory;
+            algorithmSpecificStats.rewardHistory = learningStats.rewardHistory;
+            algorithmSpecificStats.criticLossHistory = learningStats.criticLossHistory;
+            algorithmSpecificStats.agent = agent;
+            algorithmSpecificStats.stateEncoder = stateEncoder;
+
+        case 'PPO_PSO'
+            config = PPOPSO_Config('online');
+            config.popSize = params.popSize;
+            config.maxIterations = params.maxIterations;
+            config.mapSize = mapSize;
+
+            [globalPath, bestFitness, fitnessHistory, agent, stateTracker, paramHistory, learningStats] = ...
+                globalPathPlanningPPOPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
+
+            [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath, startPoint, goalPoint, ...
+                dangerZones, terrainGrid, terrainX, terrainY, bestFitness);
+
+            algorithmSpecificStats.convergenceHistory = fitnessHistory;
+            algorithmSpecificStats.fitnessComponents = fitnessComponents;
+            algorithmSpecificStats.finalFitness = bestFitness;
+            algorithmSpecificStats.actualBestFitness = bestFitness;
+            algorithmSpecificStats.parameterHistory = paramHistory;
+            algorithmSpecificStats.rewardHistory = learningStats.rewardHistory;
+            algorithmSpecificStats.criticLossHistory = learningStats.criticLossHistory;
+            algorithmSpecificStats.agent = agent;
+            algorithmSpecificStats.stateTracker = stateTracker;
+
         otherwise
             error('Unknown algorithm: %s', algorithmName);
     end
 end
 
-%% 1.. RLAM-PSO (DDPG-based)
+function config = applyAPEXPSOParamMode(config)
+    switch config.paramMode
+        case 'global'
+            config.usePerParticleActions = false;
+            config.useRankResidualControl = false;
+            config.actionSize = 3;
+        case '5subgroup'
+            config.usePerParticleActions = false;
+            config.useRankResidualControl = false;
+            config.actionSize = 15;
+        case 'per-particle'
+            config.usePerParticleActions = true;
+            config.useRankResidualControl = false;
+            config.actionSize = config.popSize * config.paramsPerParticle;
+        otherwise
+            config.paramMode = 'rank-residual';
+            config.usePerParticleActions = false;
+            config.useRankResidualControl = true;
+            config.actionSize = 9;
+    end
 
+    config.targetEntropy = -config.actionSize;
+end
+
+function [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath, startPoint, goalPoint, ...
+    dangerZones, terrainGrid, terrainX, terrainY, fallbackFitness)
+    fitnessComponents = struct();
+    bestFitness = fallbackFitness;
+
+    if isempty(globalPath) || size(globalPath, 1) < 2
+        return;
+    end
+
+    intermediateWaypoints = globalPath(2:end-1, :);
+    numWaypoints = size(intermediateWaypoints, 1);
+    position = reshape(intermediateWaypoints', 1, []);
+    [evaluatedFitness, fitnessComponents] = evaluatePathFitness(position, startPoint, goalPoint, ...
+        dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
+
+    if isfinite(evaluatedFitness)
+        bestFitness = evaluatedFitness;
+    end
+end
+
+%% 1.. RLAM-PSO (DDPG-based)

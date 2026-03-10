@@ -1,17 +1,15 @@
 function config = APEXPSO_Config(mode)
-    % CQSAC-PSO Configuration: Advanced Parameter Exploration CrossQ-SAC for PSO
+    % RRSACPSO SAC configuration: retained 2-component SAC-side stack.
     %
-    % State-of-the-art RL algorithm combining:
+    % RL-PSO algorithm combining:
     %   - SAC (Soft Actor-Critic) for automatic entropy tuning
-    %   - CrossQ optimizations (BatchNorm, no target networks, UTD=1)
-    %   - Transformer state encoding with attention
-    %   - Per-particle parameter adaptation (120D action space)
-    %   - Multi-objective reward with curiosity bonus
+    %   - TQC-style truncated quantile critics with target networks
+    %   - Rank-residual parameter adaptation (9D latent action)
+    %   - Simple fitness-improvement reward
     %
-    % Based on 2024-2025 research:
-    %   - CrossQ (ICLR 2024): Most sample-efficient with BatchNorm
+    % Based on 2024-2026 research:
     %   - SAC: Maximum entropy RL framework
-    %   - Attention mechanisms for temporal context
+    %   - TQC: distributional twin critics with truncated target quantiles
     %
     % Usage:
     %   config = APEXPSO_Config()           % Default mode
@@ -26,26 +24,56 @@ function config = APEXPSO_Config(mode)
     config = struct();
     config.mode = mode;
     config.algorithm = 'RRSACPSO';
-    config.version = '2.1-research';
+    config.version = '4.6-tqc-rank2';
     config.createdAt = datetime('now');
-    config.researchVariant = 'v2_loo_reduced';
 
     % ===== ALGORITHM FEATURES =====
 
-    % Core: SAC with CrossQ optimizations
+    % Core: SAC with configurable critic-side research branches
     config.useSAC = true;                   % Use SAC instead of DDPG/TD3
     config.useAutomaticEntropyTuning = true; % SAC's automatic alpha tuning
-    config.useBatchNorm = true;             % CrossQ: BatchNorm in all networks
-    config.useTargetNetworks = false;       % CrossQ: No target networks (UTD=1)
-    config.numCritics = 2;                  % Small ensemble (2 critics)
+    config.useCrossQCritic = false;         % Retired after failing LOO significance
+    config.useREDQCritic = false;           % Research branch: critic ensemble + random subset targets
+    config.useSimBaBackbone = false;        % Disabled in retained stack
+    config.useAQECritic = false;            % Retained as an optional research branch
+    config.useDroQCritic = false;           % Retired after failing LOO significance
+    config.useObservationNormalization = false;
+    config.observationNormClip = 5.0;
+    config.useBatchNorm = false;            % Legacy alias kept for ablations only
+    config.useCriticBatchNorm = true;
+    config.useActorBatchNorm = false;
+    config.useJointCriticBatchForBN = true;
+    config.useWeightNormCritic = false;
+    config.criticWeightNormRadius = 1.0;
+    config.useTargetNetworks = true;
+    config.targetCriticTrainMode = false;
+    config.numCritics = 2;                  % Standard twin critics; REDQ/AQE reinterpret this
+    config.redqNumCritics = 5;
+    config.redqTargetSubsetSize = 2;
+    config.redqTargetMode = 'min';
+    config.redqPolicyUpdateDelay = 5;
+    config.redqWarmupSteps = 128;
 
     % Advanced features
-    config.useCrossScaleState = true;       % Deterministic cross-scale encoder
+    config.useCrossScaleState = false;      % Cross-scale encoder retired from retained stack
     config.usePerParticleActions = false;   % Use low-dim latent control by default
     config.useRankResidualControl = true;   % Expand latent action to per-particle params
-    config.useMultiObjectiveReward = true;  % Fitness + diversity + curiosity
-    config.useCuriosityBonus = true;        % Exploration bonus
-    config.useActorUncertaintyPenalty = true;
+    config.usePrioritizedReplay = false;
+    config.useResidualCriticDecomposition = false;
+    config.usePilarReturns = false;
+    config.pilarEffectiveNStep = 3;
+    config.pilarLongHorizon = 6;
+    config.pilarMixCoefficient = 0.406;
+    config.useTQCCritic = true;
+    config.useD2RLBackbone = false;
+    config.useEmphasizingRecentExperience = false;
+    config.ereEtaStart = 0.996;
+    config.ereEtaEnd = 1.0;
+    config.ereExponentScale = 1000;
+    config.ereAnnealSteps = 1200;
+    config.ereMinRecentSize = 128;
+    config.useDelayedPolicyUpdates = false;
+    config.actorUpdateInterval = 1;
 
     % ===== NETWORK ARCHITECTURE =====
 
@@ -53,20 +81,45 @@ function config = APEXPSO_Config(mode)
     config.useAttention = false;
     config.attentionHeads = 4;              % Multi-head attention
     config.temporalWindow = 8;              % Track longer temporal context
-    config.stateSize = 45;                  % Rich state features
+    config.stateSize = 15;                  % Flat temporal summary state
+    config.crossScaleBlockSize = 9;
+    config.crossScaleBlockNames = {'current', 'short_ema', 'long_ema', 'volatility', 'trend'};
+    config.useCrossScaleBranching = false;
+    config.useCrossScaleGatedFusion = false;
+    config.actorCrossScaleBranchWidths = [32, 28, 28, 16, 16];
+    config.criticCrossScaleBranchWidths = [28, 28, 28, 16, 16];
+    config.crossScaleActorGateHiddenWidth = 64;
+    config.crossScaleCriticGateHiddenWidth = 64;
+    config.crossScalePredictiveGain = 0.25;
+    config.crossScaleTrendGain = 0.20;
+    config.crossScaleAccelerationGain = 0.02;
+    config.crossScaleConsistencyMix = 0.50;
+    config.crossScaleQuantizationSharpness = 20;
+    config.crossScaleQuantizationCenters = [0.15, 0.38, 0.62, 0.85];
 
     % Action space: low-dimensional latent residual control
     config.actionSize = 9;                  % [w,c1,c2] residual coefficients
     config.popSize = 40;                    % PSO population size
     config.paramsPerParticle = 3;           % [w, c1, c2]
 
-    % Actor network: state → 128 → 128 → 128 → action
-    % (Larger for 120D action space)
-    config.actorHiddenLayers = [128, 128, 128];
+    % Flat MLP actor remains the non-component baseline policy network.
+    config.actorHiddenLayers = [256, 256];
+    config.simbaActorWidth = 128;
+    config.simbaActorBlocks = 3;
 
-    % Critic networks: [state; action] → 128 → 128 → 64 → 1
-    % Two critics with BatchNorm (CrossQ approach)
-    config.criticHiddenLayers = [128, 128, 64];
+    config.criticHiddenLayers = [256, 256, 128];
+    config.aqeHeadsPerCritic = 3;
+    config.aqeKeepHeads = 2;
+    config.simbaCriticWidth = 192;
+    config.simbaCriticBlocks = 3;
+    config.droqCriticWidth = 256;
+    config.droqCriticDepth = 3;
+    config.droqDropoutProbability = 0.01;
+    config.tqcNumQuantiles = 25;
+    config.tqcDropQuantilesPerCritic = 2;
+    config.tqcHuberKappa = 1.0;
+    config.criticActionBranchWidth = 64;
+    config.criticAdvantageHiddenWidth = 128;
 
     % ===== SAC HYPERPARAMETERS =====
 
@@ -74,6 +127,10 @@ function config = APEXPSO_Config(mode)
     config.actorLR = 3e-4;                  % SAC standard
     config.criticLR = 3e-4;                 % SAC standard
     config.alphaLR = 3e-4;                  % Entropy coefficient LR
+    config.actorAdamBeta1 = 0.9;
+    config.actorAdamBeta2 = 0.999;
+    config.criticAdamBeta1 = 0.9;
+    config.criticAdamBeta2 = 0.999;
 
     % SAC-specific
     config.gamma = 0.99;                    % Discount factor
@@ -82,19 +139,11 @@ function config = APEXPSO_Config(mode)
     config.initAlpha = 0.2;                 % Initial entropy coefficient
     config.entropyAnnealStrength = 0.40;    % Reduce exploration late in run
     config.entropyAnnealSteps = 1200;       % Anneal horizon (train steps)
-    config.useEntropyUncertaintyCoupling = false;
-    config.entropyUncertaintyGain = 0.25;
 
-    % Robust critic fitting
-    config.useHuberCriticLoss = true;
-    config.criticHuberDelta = 2.50;
-    config.useOverestimationPenalty = true;
-    config.overestimationPenaltyTau = 0.75;
-
-    % CrossQ optimizations
+    % Legacy normalization knobs kept for ablations and backwards compatibility
     config.batchNormMomentum = 0.99;        % BatchNorm momentum
     config.batchNormEpsilon = 1e-5;         % BatchNorm epsilon
-    config.utdRatio = 1;                    % Update-to-data ratio (CrossQ: 1)
+    config.utdRatio = 1;                    % CrossQ reaches strong sample efficiency at low UTD
 
     % ===== TRAINING CONFIGURATION =====
     %
@@ -106,10 +155,10 @@ function config = APEXPSO_Config(mode)
     config.numEpisodes = 250;               % Training episodes (matches run_comparison.m default)
     config.maxIterations = 600;             % PSO iterations per episode
     config.trainEveryNIterations = 1;       % Train every iteration
-    config.gradientStepsPerTraining = 1;    % Gradient steps per training call
+    config.gradientStepsPerTraining = config.utdRatio;  % Keep UTD explicit in training loop
 
     % Experience replay (SAC uses large replay buffer)
-    config.batchSize = 256;                 % Batch size (REDUCED for stability)
+    config.batchSize = 128;                 % Batch size (earlier online learning)
     config.bufferSize = 150000;             % 150k experiences (OPTIMIZED: 80% utilization @ 200 eps)
     config.warmupPeriod = 0;                % No warmup (train immediately)
 
@@ -117,29 +166,6 @@ function config = APEXPSO_Config(mode)
     config.explorationNoiseStart = 0.05;    % Small initial noise
     config.explorationNoiseEnd = 0.01;      % Even smaller final noise
     config.explorationDecay = 0.995;        % Decay per episode
-
-    % ===== MULTI-OBJECTIVE REWARD =====
-
-    % Reward components weights
-    config.rewardWeightFitness = 1.0;       % Fitness improvement (primary)
-    config.rewardWeightDiversity = 0.2;     % Maintain diversity
-    config.rewardWeightConvergence = 0.1;   % Convergence speed bonus
-    config.rewardWeightCuriosity = 0.05;    % Curiosity exploration bonus
-    config.rewardWeightStagnation = 0.25;   % Escape pressure
-
-    % Diversity tracking
-    config.minDiversityThreshold = 0.01;    % Penalty if diversity too low
-    config.diversityHistorySize = 10;       % Track diversity over 10 iters
-    config.rewardImprovementScale = 0.02;
-    config.stagnationTimeConstant = 35;
-    config.rewardClip = 10;
-
-    config.diversityTarget = struct();
-    config.diversityTarget.max = 0.30;
-    config.diversityTarget.min = 0.03;
-    config.diversityTarget.power = 1.20;
-
-    config.uncertaintyPenaltyWeight = 0.08;
 
     config.baseParamSchedule = struct();
     config.baseParamSchedule.wMax = 0.90;
@@ -209,38 +235,9 @@ function config = APEXPSO_Config(mode)
             % Quick testing mode (for debugging)
             config.numEpisodes = 50;
             config.maxIterations = 300;
-            config.batchSize = 128;
+            config.batchSize = 64;
             config.bufferSize = 20000;          % Right-sized: 50*300 = 15k @ 75% full
             config.warmupPeriod = 0;
-
-        case 'ablation_no_attention'
-            % Ablation: Remove structured cross-scale encoding
-            config.useCrossScaleState = false;
-            config.stateSize = 15;
-
-        case 'ablation_subgroup'
-            % Ablation: Use 5-subgroup instead of per-particle
-            config.usePerParticleActions = false;
-            config.actionSize = 20;  % 5 × 4 params
-
-        case 'ablation_no_rank_residual'
-            config.useRankResidualControl = false;
-            config.paramMode = 'global';
-            config.actionSize = 3;
-
-        case 'ablation_no_uncertainty_penalty'
-            config.useActorUncertaintyPenalty = false;
-            config.uncertaintyPenaltyWeight = 0.0;
-
-        case 'ablation_simple_reward'
-            % Ablation: Binary reward only
-            config.useMultiObjectiveReward = false;
-            config.useCuriosityBonus = false;
-
-        case 'ablation_no_crossq'
-            % Ablation: Standard SAC without CrossQ optimizations
-            config.useBatchNorm = false;        % No BatchNorm (use standard networks)
-            config.useTargetNetworks = true;    % Use target networks (standard SAC)
 
         case 'online'
             % Online learning mode: learn during actual PSO run
@@ -252,7 +249,7 @@ function config = APEXPSO_Config(mode)
             end
             config.warmupPeriod = 0;
             config.trainEveryNIterations = 1;    % Train every iteration
-            config.batchSize = 256;              % Smaller batch for online
+            config.batchSize = 128;              % Earlier online learning onset
             config.bufferSize = 10000;           % Smaller buffer (only 600 samples)
             config.paramMode = 'rank-residual';
 
@@ -283,12 +280,81 @@ function config = APEXPSO_Config(mode)
         config.targetEntropy = -config.actionSize;
     end
 
+    % Keep the training loop aligned with the configured UTD ratio unless
+    % a caller explicitly overrides gradientStepsPerTraining later.
+    if ~(isfield(config, 'gradientStepsPerTraining') && ~isempty(config.gradientStepsPerTraining))
+        config.gradientStepsPerTraining = max(1, round(config.utdRatio));
+    else
+        config.gradientStepsPerTraining = max(1, round(config.gradientStepsPerTraining));
+    end
+    config.ereMinRecentSize = max(1, min(config.bufferSize, round(config.ereMinRecentSize)));
+    config.ereAnnealSteps = max(1, round(config.ereAnnealSteps));
+
     % ===== VALIDATION =====
 
     % Ensure consistency
     if config.usePerParticleActions
         assert(config.actionSize == config.popSize * config.paramsPerParticle, ...
             'Action size mismatch for per-particle params');
+    end
+    if config.useREDQCritic
+        config.useCrossQCritic = false;
+        config.useAQECritic = false;
+        config.useDroQCritic = false;
+        config.useTQCCritic = false;
+        config.useCriticBatchNorm = false;
+        config.useActorBatchNorm = false;
+        config.useJointCriticBatchForBN = false;
+        config.useWeightNormCritic = false;
+        config.useTargetNetworks = true;
+        config.redqNumCritics = max(3, round(max(config.numCritics, config.redqNumCritics)));
+        config.numCritics = config.redqNumCritics;
+        config.redqTargetSubsetSize = max(2, min(config.numCritics, round(config.redqTargetSubsetSize)));
+        config.utdRatio = max(1, round(config.utdRatio));
+        config.gradientStepsPerTraining = max(1, round(config.gradientStepsPerTraining));
+        config.redqPolicyUpdateDelay = max(1, round(config.redqPolicyUpdateDelay));
+        config.useDelayedPolicyUpdates = config.redqPolicyUpdateDelay > 1;
+        if config.useDelayedPolicyUpdates
+            config.actorUpdateInterval = config.redqPolicyUpdateDelay;
+        else
+            config.actorUpdateInterval = 1;
+        end
+    end
+    if config.useCrossQCritic
+        config.useREDQCritic = false;
+        config.useAQECritic = false;
+        config.useDroQCritic = false;
+        config.useTQCCritic = false;
+        config.useCriticBatchNorm = true;
+        config.useJointCriticBatchForBN = true;
+        config.useTargetNetworks = false;
+        config.utdRatio = 1;
+        config.gradientStepsPerTraining = 1;
+    end
+    if config.useTQCCritic
+        config.useCrossQCritic = false;
+        config.useREDQCritic = false;
+        config.useAQECritic = false;
+        config.useDroQCritic = false;
+        config.useCriticBatchNorm = false;
+        config.useActorBatchNorm = false;
+        config.useJointCriticBatchForBN = false;
+        config.useWeightNormCritic = false;
+        config.useTargetNetworks = true;
+        config.numCritics = 2;
+        config.utdRatio = 1;
+        config.gradientStepsPerTraining = 1;
+        config.useDelayedPolicyUpdates = false;
+        config.actorUpdateInterval = 1;
+        config.tqcNumQuantiles = max(5, round(config.tqcNumQuantiles));
+        config.tqcDropQuantilesPerCritic = max(0, min(config.tqcNumQuantiles - 1, ...
+            round(config.tqcDropQuantilesPerCritic)));
+        config.tqcHuberKappa = max(eps, config.tqcHuberKappa);
+    end
+    if config.useAQECritic
+        totalAqeHeads = config.numCritics * config.aqeHeadsPerCritic;
+        assert(totalAqeHeads >= 2, 'AQE requires at least two total critic heads.');
+        config.aqeKeepHeads = max(1, min(totalAqeHeads, round(config.aqeKeepHeads)));
     end
 
     % ===== DISPLAY CONFIGURATION =====
@@ -309,20 +375,44 @@ function displayConfiguration(config)
 
     fprintf('\n--- Core Features ---\n');
     fprintf('  SAC Framework:        %s (automatic entropy tuning)\n', bool2str(config.useSAC));
-    fprintf('  CrossQ BatchNorm:     %s\n', bool2str(config.useBatchNorm));
-    fprintf('  Target Networks:      %s (CrossQ approach)\n', bool2str(config.useTargetNetworks));
-    fprintf('  Critic Ensemble:      %d critics\n', config.numCritics);
+    fprintf('  CrossQ Critic:        %s\n', bool2str(config.useCrossQCritic));
+    fprintf('  REDQ Critic:          %s (N=%d, M=%d, mode=%s, delay=%d)\n', ...
+        bool2str(config.useREDQCritic), config.numCritics, ...
+        config.redqTargetSubsetSize, config.redqTargetMode, config.actorUpdateInterval);
+    fprintf('  AQE Critic:           %s (%d heads/critic, keep=%d)\n', ...
+        bool2str(config.useAQECritic), config.aqeHeadsPerCritic, config.aqeKeepHeads);
+    fprintf('  DroQ Critic:          %s\n', bool2str(config.useDroQCritic));
+    fprintf('  SimBa Backbone:       %s\n', bool2str(config.useSimBaBackbone));
+    fprintf('  PiLaR Returns:        %s (eff=%d, long=%d, c=%.3f)\n', ...
+        bool2str(config.usePilarReturns), config.pilarEffectiveNStep, ...
+        config.pilarLongHorizon, config.pilarMixCoefficient);
+    fprintf('  TQC Critic:           %s (%d quantiles, drop=%d/critic)\n', ...
+        bool2str(config.useTQCCritic), config.tqcNumQuantiles, config.tqcDropQuantilesPerCritic);
+    fprintf('  D2RL Backbone:        %s\n', bool2str(config.useD2RLBackbone));
+    fprintf('  ERE Replay:           %s (eta %.3f -> %.3f, cmin=%d)\n', ...
+        bool2str(config.useEmphasizingRecentExperience), config.ereEtaStart, ...
+        config.ereEtaEnd, config.ereMinRecentSize);
+    fprintf('  Delayed Actor:        %s (interval=%d)\n', ...
+        bool2str(config.useDelayedPolicyUpdates), config.actorUpdateInterval);
+    fprintf('  Obs Normalization:    %s (clip=%.1f)\n', ...
+        bool2str(config.useObservationNormalization), config.observationNormClip);
+    fprintf('  Critic BatchNorm:     %s (legacy ablation)\n', bool2str(config.useCriticBatchNorm));
+    fprintf('  Target Networks:      %s (train-mode targets)\n', bool2str(config.useTargetNetworks));
+    if config.useREDQCritic
+        fprintf('  Critic Ensemble:      %d critics (random target subset=%d)\n', ...
+            config.numCritics, config.redqTargetSubsetSize);
+    elseif config.useAQECritic
+        fprintf('  Critic Ensemble:      %d critics (%d total AQE heads)\n', ...
+            config.numCritics, config.numCritics * max(1, config.aqeHeadsPerCritic));
+    else
+        fprintf('  Critic Ensemble:      %d critics\n', config.numCritics);
+    end
     fprintf('  Cross-Scale State:    %s (%dD, window=%d)\n', ...
         bool2str(config.useCrossScaleState), config.stateSize, config.temporalWindow);
     fprintf('  Rank-Residual Ctrl:   %s (%dD latent)\n', ...
         bool2str(config.useRankResidualControl), config.actionSize);
     fprintf('  Per-Particle Actions: %s\n', bool2str(config.usePerParticleActions));
-    fprintf('  Multi-Obj Reward:     %s (fitness+diversity+curiosity)\n', ...
-        bool2str(config.useMultiObjectiveReward));
-    fprintf('  Uncertainty Penalty:  %s (%.3f)\n', ...
-        bool2str(config.useActorUncertaintyPenalty), config.uncertaintyPenaltyWeight);
-    fprintf('  Huber Critic Loss:    %s (delta=%.2f)\n', ...
-        bool2str(config.useHuberCriticLoss), config.criticHuberDelta);
+    fprintf('  Reward Signal:        Fitness-improvement binary reward\n');
 
     fprintf('\n--- Training Parameters ---\n');
     fprintf('  Episodes:             %d\n', config.numEpisodes);
@@ -331,8 +421,13 @@ function displayConfiguration(config)
     fprintf('  Batch Size:           %d\n', config.batchSize);
     fprintf('  Learning Rates:       Actor=%.5f, Critic=%.5f, Alpha=%.5f\n', ...
         config.actorLR, config.criticLR, config.alphaLR);
-    fprintf('  UTD Ratio:            %d (CrossQ optimized)\n', config.utdRatio);
+    fprintf('  Adam Betas:           Actor=(%.2f, %.3f), Critic=(%.2f, %.3f)\n', ...
+        config.actorAdamBeta1, config.actorAdamBeta2, ...
+        config.criticAdamBeta1, config.criticAdamBeta2);
+    fprintf('  UTD Ratio:            %d\n', config.utdRatio);
     fprintf('  Train Frequency:      Every %d iterations\n', config.trainEveryNIterations);
+    fprintf('  Actor Backbone:       width=%d, blocks=%d\n', config.simbaActorWidth, config.simbaActorBlocks);
+    fprintf('  Critic Backbone:      width=%d, blocks=%d\n', config.simbaCriticWidth, config.simbaCriticBlocks);
 
     fprintf('\n--- Compute ---\n');
     fprintf('  GPU:                  %s', bool2str(config.useGPU));

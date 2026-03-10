@@ -168,51 +168,36 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             algorithmParams.hiddenNeurons = remainingParams{4};
             commonStartIdx = 5;
 
-        case 'APEXPSO'
-            % APEX-PSO: No algorithm-specific params (all in config), [common params]
-            % Configuration handled internally by APEXPSO_Config()
+        case 'RRSACPSO'
+            % RRSACPSO: No algorithm-specific params (all in config), [common params]
+            % Configuration handled internally by APEXPSO_Config (RRSACPSO).
             algorithmParams = struct();  % Empty struct, no algorithm-specific params
             commonStartIdx = 1;
 
-        case 'APEXPSO_Online'
-            % APEX-PSO Online Learning: maxIterations, paramMode, [common params]
-            % Configuration handled internally by APEXPSO_Config('online')
-            algorithmParams.maxIterations = remainingParams{1};  % PSO iterations
-            algorithmParams.paramMode = remainingParams{2};      % 'global', '5subgroup', or 'per-particle'
-            commonStartIdx = 3;
-
-        case 'APEXPSO_Pretrained'
-            algorithmParams.pretrainedModelPath = remainingParams{1};
+        case 'RRSACPSO_Online'
+            % RRSACPSO online learning: maxIterations, [paramMode], [configOverrides], [common params]
+            algorithmParams.maxIterations = remainingParams{1};
 
             paramIdx = 2;
-            if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx})
-                paramMode = remainingParams{paramIdx};
-                if any(strcmp(paramMode, {'global', '5subgroup', 'per-particle'}))
-                    algorithmParams.paramMode = paramMode;
-                    paramIdx = paramIdx + 1;
-                end
+            algorithmParams.paramMode = 'rank-residual';
+            if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx}) && ...
+                    any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle', 'rank-residual'}))
+                algorithmParams.paramMode = remainingParams{paramIdx};
+                paramIdx = paramIdx + 1;
             end
+
+            if length(remainingParams) >= paramIdx && isstruct(remainingParams{paramIdx})
+                algorithmParams.configOverrides = remainingParams{paramIdx};
+                paramIdx = paramIdx + 1;
+            end
+
             commonStartIdx = paramIdx;
 
-        case 'APEXPSO_Train'
-            % APEX-PSO Training: trainingEpisodes, savePath, [paramMode], [common params]
-            algorithmParams.trainingEpisodes = remainingParams{1};
-            algorithmParams.savePath = remainingParams{2};
-
-            paramIdx = 3;
-            if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx})
-                paramMode = remainingParams{paramIdx};
-                if any(strcmp(paramMode, {'global', '5subgroup', 'per-particle'}))
-                    algorithmParams.paramMode = paramMode;
-                    paramIdx = paramIdx + 1;
-                else
-                    % Default to per-particle if not specified
-                    algorithmParams.paramMode = 'per-particle';
-                end
-            else
-                algorithmParams.paramMode = 'per-particle';
-            end
-            commonStartIdx = paramIdx;
+        case 'PPO_PSO'
+            % PPO-PSO: popSize, maxIterations, [common params]
+            algorithmParams.popSize = remainingParams{1};
+            algorithmParams.maxIterations = remainingParams{2};
+            commonStartIdx = 3;
 
         case 'RLAMPSO_Train'
             % RLAMPSO Training: episodes, savePath, [configMode], [paramMode], popSize, maxIterations, w, c1, c2, [common params]
@@ -226,7 +211,7 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
                 paramIdx = paramIdx + 1;
             end
 
-            algorithmParams.paramMode = '5subgroup';
+            algorithmParams.paramMode = 'global';
             if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx}) && ...
                     any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle'}))
                 algorithmParams.paramMode = remainingParams{paramIdx};
@@ -241,18 +226,12 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
 
             commonStartIdx = paramIdx;
 
-        case 'APEXPSO_AblationTrain'
-            % APEX-PSO Ablation Training: trainingEpisodes, savePath, ablationMode, [common params]
-            algorithmParams.trainingEpisodes = remainingParams{1};
-            algorithmParams.savePath = remainingParams{2};
-            algorithmParams.ablationMode = remainingParams{3};
+        case 'SACSAPSO_Paper'
+            % SAC-SAPSO (paper): popSize, maxIterations, observationInterval, [common params]
+            algorithmParams.popSize = remainingParams{1};
+            algorithmParams.maxIterations = remainingParams{2};
+            algorithmParams.observationInterval = remainingParams{3};
             commonStartIdx = 4;
-
-        case 'APEXPSO_AblationRun'
-            % APEX-PSO Ablation Run: pretrainedModelPath, ablationMode, [common params]
-            algorithmParams.pretrainedModelPath = remainingParams{1};
-            algorithmParams.ablationMode = remainingParams{2};
-            commonStartIdx = 3;
 
         % ========================================================================
         % NEW ALGORITHMS FOR TOP-TIER JOURNAL COMPARISON
@@ -300,6 +279,27 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             algorithmParams.w = remainingParams{3};
             algorithmParams.c = remainingParams{4};
             commonStartIdx = 5;
+
+        case 'MPSORL'
+            % MPSORL: popSize, maxIterations, wMax, c1Max, c2Max, alpha, gamma, epsilon, learningPeriod, pop1Ratio, [common params]
+            algorithmParams.popSize = remainingParams{1};
+            algorithmParams.maxIterations = remainingParams{2};
+            algorithmParams.w = remainingParams{3};
+            algorithmParams.c1 = remainingParams{4};
+            algorithmParams.c2 = remainingParams{5};
+
+            paramIdx = 6;
+            algorithmParams.alpha = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
+            algorithmParams.gamma = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
+            algorithmParams.epsilon = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
+            algorithmParams.learningPeriod = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
+            if length(remainingParams) >= paramIdx
+                algorithmParams.pop1Ratio = remainingParams{paramIdx};
+                paramIdx = paramIdx + 1;
+            else
+                algorithmParams.pop1Ratio = 0.4;
+            end
+            commonStartIdx = paramIdx;
 
         case 'DQN_PSO_Train'
             % DQN-PSO Training: episodes, savePath, [paramMode], popSize, maxIterations, w, c1, c2, [common params]

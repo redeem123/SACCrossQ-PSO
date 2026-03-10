@@ -1,30 +1,25 @@
 classdef APEXPSO_Agent < handle
-    % CQSAC-PSO SAC Agent with Automatic Entropy Tuning
-    %
-    % Implements Soft Actor-Critic (SAC) with CrossQ optimizations:
-    %   - Automatic entropy tuning (temperature parameter α)
-    %   - Twin critics for stability
-    %   - BatchNorm in networks (CrossQ)
-    %   - Off-policy learning with experience replay
-    %
-    % Based on:
-    %   - SAC: Haarnoja et al. (2018)
-    %   - CrossQ: Bhat et al. (ICLR 2024)
+    % RRSACPSO SAC agent with retained two-component stack:
+    %   - RankResidualControl
+    %   - Pluggable SAC-side critic improvement under research
 
     properties
-        config          % CQSAC-PSO configuration
+        config          % RRSACPSO configuration
 
         % Networks
         actor           % Actor network (Gaussian policy)
         critic1         % First critic network
         critic2         % Second critic network
+        critics         % Critic ensemble for REDQ-style variants
         targetCritic1   % Target critic network (optional)
         targetCritic2   % Target critic network (optional)
+        targetCritics   % Target critic ensemble for REDQ-style variants
 
         % Optimizers (using ADAM)
         actorOptimizer
         critic1Optimizer
         critic2Optimizer
+        criticOptimizers
         alphaOptimizer
 
         % SAC entropy temperature
@@ -38,25 +33,56 @@ classdef APEXPSO_Agent < handle
         trainingStep
         explorationNoise
         useTargetNetworks
-        disagreementEMA
+        obsNormCount
+        obsNormMean
+        obsNormM2
     end
 
     methods
         function obj = APEXPSO_Agent(config)
             % Constructor
             obj.config = config;
+            obj.config = obj.normalizeRuntimeConfig(obj.config);
+            config = obj.config;
+
+            obj.critics = {};
+            obj.targetCritics = {};
+            obj.criticOptimizers = {};
 
             % Create networks
             obj.actor = createActorNetwork(config);
-            obj.critic1 = createCriticNetwork(config);
-            obj.critic2 = createCriticNetwork(config);
+            if obj.getConfigValue('useREDQCritic', false)
+                obj.useTargetNetworks = true;
+                numCritics = max(2, round(obj.getConfigValue('numCritics', 5)));
+                obj.critics = cell(1, numCritics);
+                obj.criticOptimizers = cell(1, numCritics);
+                for criticIdx = 1:numCritics
+                    obj.critics{criticIdx} = createCriticNetwork(config);
+                    obj.criticOptimizers{criticIdx} = struct('avg', [], 'avgSq', []);
+                end
+                obj.critic1 = obj.critics{1};
+                obj.critic2 = obj.critics{2};
+                if obj.useTargetNetworks
+                    obj.targetCritics = cell(1, numCritics);
+                    for criticIdx = 1:numCritics
+                        obj.targetCritics{criticIdx} = obj.cloneCriticNetwork(obj.critics{criticIdx});
+                    end
+                    obj.targetCritic1 = obj.targetCritics{1};
+                    obj.targetCritic2 = obj.targetCritics{2};
+                end
+            else
+                obj.critic1 = createCriticNetwork(config);
+                obj.critic2 = createCriticNetwork(config);
 
-            % Optional target networks (standard SAC)
-            obj.useTargetNetworks = isfield(config, 'useTargetNetworks') && config.useTargetNetworks;
-            if obj.useTargetNetworks
-                obj.targetCritic1 = obj.cloneNetwork(obj.critic1);
-                obj.targetCritic2 = obj.cloneNetwork(obj.critic2);
+                % Optional target networks (standard SAC)
+                obj.useTargetNetworks = isfield(config, 'useTargetNetworks') && config.useTargetNetworks;
+                if obj.useTargetNetworks
+                    obj.targetCritic1 = obj.cloneCriticNetwork(obj.critic1);
+                    obj.targetCritic2 = obj.cloneCriticNetwork(obj.critic2);
+                end
             end
+            obj.applyCriticWeightNorm();
+            obj.syncREDQMirrors();
 
             % Initialize entropy temperature
             obj.logAlpha = log(config.initAlpha);
@@ -67,6 +93,10 @@ classdef APEXPSO_Agent < handle
             obj.actorOptimizer   = struct('avg', [], 'avgSq', []);
             obj.critic1Optimizer = struct('avg', [], 'avgSq', []);
             obj.critic2Optimizer = struct('avg', [], 'avgSq', []);
+            if obj.getConfigValue('useREDQCritic', false)
+                obj.critic1Optimizer = obj.criticOptimizers{1};
+                obj.critic2Optimizer = obj.criticOptimizers{2};
+            end
             obj.alphaOptimizer = struct('m', 0, 'v', 0, 'beta1', 0.9, 'beta2', 0.999, 'eps', 1e-8);
 
             % Create replay buffer
@@ -76,7 +106,9 @@ classdef APEXPSO_Agent < handle
             % Initialize training state
             obj.trainingStep = 0;
             obj.explorationNoise = config.explorationNoiseStart;
-            obj.disagreementEMA = 0;
+            obj.obsNormCount = 0;
+            obj.obsNormMean = zeros(config.stateSize, 1, 'single');
+            obj.obsNormM2 = ones(config.stateSize, 1, 'single');
         end
 
         function action = getAction(obj, state, training)
@@ -93,21 +125,17 @@ classdef APEXPSO_Agent < handle
                 training = true;
             end
 
-            % Convert to dlarray
+            state = obj.normalizeStateVector(single(state));
             stateDL = dlarray(state, 'CB');
 
-            % Forward pass through actor (outputs mean and log_std concatenated)
-            % Use predict in evaluation to avoid batch-norm collapse with batch size 1.
-            if training
-                output = forward(obj.actor, stateDL);
-            else
-                output = predict(obj.actor, stateDL);
-            end
+            % Use predict for acting to keep single-state decisions decoupled from
+            % any training-mode normalization behavior.
+            output = predict(obj.actor, stateDL);
             output = extractdata(output);
 
             % Check for NaN/Inf in network output
             if any(isnan(output(:))) || any(isinf(output(:)))
-                warning('APEXPSO:NaNDetected', 'NaN/Inf detected in actor network output. Resetting to zeros.');
+                warning('RRSACPSO:NaNDetected', 'NaN/Inf detected in actor network output. Resetting to zeros.');
                 output = zeros(size(output));
             end
 
@@ -116,13 +144,13 @@ classdef APEXPSO_Agent < handle
             meanAction = output(1:actionSize);
             logStd = output(actionSize+1:end);
 
-            % Clip logStd BEFORE exp() to prevent overflow
-            logStd = max(min(logStd, 2.0), -20.0);
+            % Keep collection-time exploration aligned with the policy used
+            % for SAC targets and actor optimization.
+            logStd = clampPolicyLogStd(logStd);
 
             if training
                 % Sample from Gaussian distribution (SAC stochastic policy)
                 std = exp(logStd);
-                std = max(min(std, 1.0), 0.01);  % Clip std to reasonable range
                 action = meanAction + randn(size(meanAction)) .* std;
             else
                 % Deterministic action for evaluation
@@ -134,7 +162,7 @@ classdef APEXPSO_Agent < handle
 
             % Final NaN check after all operations
             if any(isnan(action(:))) || any(isinf(action(:)))
-                warning('APEXPSO:NaNDetected', 'NaN/Inf detected in final action. Resetting to zeros.');
+                warning('RRSACPSO:NaNDetected', 'NaN/Inf detected in final action. Resetting to zeros.');
                 action = zeros(size(action));
             end
         end
@@ -156,131 +184,235 @@ classdef APEXPSO_Agent < handle
             end
 
             % Sample batch from replay buffer
-            [states, actions, rewards, nextStates, dones] = ...
-                obj.replayBuffer.sample(obj.config.batchSize);
+            beta = obj.getPriorityReplayBeta();
+            recentWindowSize = obj.getERERecentWindowSize();
+            [states, actions, rewards, nextStates, dones, discounts, sampleIdx, sampleWeights, ...
+                auxRewards, auxNextStates, auxDones, auxDiscounts] = ...
+                obj.replayBuffer.sample(obj.config.batchSize, beta, recentWindowSize);
+
+            if obj.getConfigValue('usePilarReturns', false)
+                obj.updateObservationNormalizer(states, [nextStates; auxNextStates]);
+            else
+                obj.updateObservationNormalizer(states, nextStates);
+            end
+            statesNorm = obj.normalizeStateBatch(states);
+            nextStatesNorm = obj.normalizeStateBatch(nextStates);
+            auxNextStatesNorm = obj.normalizeStateBatch(auxNextStates);
 
             % Convert to dlarray
-            statesDL = dlarray(states', 'CB');
+            statesDL = dlarray(statesNorm', 'CB');
             actionsDL = dlarray(actions', 'CB');
-            nextStatesDL = dlarray(nextStates', 'CB');
+            nextStatesDL = dlarray(nextStatesNorm', 'CB');
             donesDL = dlarray(dones', 'CB');
             rewardsDL = dlarray(rewards', 'CB');
+            discountsDL = dlarray(discounts', 'CB');
+            sampleWeightsDL = dlarray(sampleWeights', 'CB');
+            auxNextStatesDL = dlarray(auxNextStatesNorm', 'CB');
+            auxDonesDL = dlarray(auxDones', 'CB');
+            auxRewardsDL = dlarray(auxRewards', 'CB');
+            auxDiscountsDL = dlarray(auxDiscounts', 'CB');
 
             % Get current alpha
             alpha = exp(obj.logAlpha);
 
             % ===== UPDATE CRITICS =====
-            % Compute target Q-value using next state
-            [nextActions, nextLogProbs] = obj.sampleAction(nextStatesDL);
-
-            % Concatenate next_state and next_action for critics
-            nextStatAction = cat(1, nextStatesDL, nextActions);
-
-            % Q-values from both critics (take minimum for stability)
-            if obj.useTargetNetworks
-                q1Next = forward(obj.targetCritic1, nextStatAction);
-                q2Next = forward(obj.targetCritic2, nextStatAction);
-            else
-                q1Next = forward(obj.critic1, nextStatAction);
-                q2Next = forward(obj.critic2, nextStatAction);
-            end
-            qNext = min(q1Next, q2Next);
-            disagreementNext = abs(q1Next - q2Next);
-            obj.updateDisagreementEMA(extractdata(mean(disagreementNext)));
-
-            % SAC target: r + γ * (Q(s',a') - α * log π(a'|s'))
-            targetQ = rewardsDL + obj.config.gamma .* (1 - donesDL) .* ...
-                     (qNext - alpha .* nextLogProbs);
-            % Stop gradient (detach from computation graph)
-            targetQ = dlarray(extractdata(targetQ), 'CB');
-
-            % Critic loss: MSE between Q and target
             stateAction = cat(1, statesDL, actionsDL);
+            useJointBatch = obj.useJointCriticBatch();
 
-            % Track TD error magnitude for diagnostics.
-            q1Pred = forward(obj.critic1, stateAction);
-            q2Pred = forward(obj.critic2, stateAction);
-            tdErr = 0.5 .* (abs(extractdata(q1Pred - targetQ)) + abs(extractdata(q2Pred - targetQ)));
+            if obj.getConfigValue('useREDQCritic', false)
+                losses = obj.trainREDQUpdate(stateAction, statesDL, nextStatesDL, rewardsDL, donesDL, ...
+                    discountsDL, sampleIdx, sampleWeightsDL, auxRewardsDL, auxNextStatesDL, ...
+                    auxDonesDL, auxDiscountsDL, alpha);
+
+                % Increment training step
+                obj.trainingStep = obj.trainingStep + 1;
+
+                % Decay exploration noise
+                obj.explorationNoise = max(obj.config.explorationNoiseEnd, ...
+                    obj.explorationNoise * obj.config.explorationDecay);
+                return;
+            end
+
+            if obj.getConfigValue('useTQCCritic', false)
+                targetQuantiles = obj.buildTQCTargetQuantiles( ...
+                    stateAction, nextStatesDL, rewardsDL, donesDL, discountsDL, alpha);
+                if obj.getConfigValue('usePilarReturns', false)
+                    auxTargetQuantiles = obj.buildTQCTargetQuantiles( ...
+                        stateAction, auxNextStatesDL, auxRewardsDL, auxDonesDL, auxDiscountsDL, alpha);
+                    mixCoeff = obj.getConfigValue('pilarMixCoefficient', 0.406);
+                    targetQuantiles = (1 - mixCoeff) .* targetQuantiles + mixCoeff .* auxTargetQuantiles;
+                    targetQuantiles = dlarray(extractdata(targetQuantiles), 'CB');
+                end
+                targetQMean = mean(targetQuantiles, 1);
+                tauHat = obj.getTQCTauHat();
+                huberKappa = obj.getConfigValue('tqcHuberKappa', 1.0);
+
+                [loss1, critic1Grads, critic1State, q1Pred] = dlfeval( ...
+                    @tqcCriticModelLoss, obj.critic1, stateAction, targetQuantiles, tauHat, huberKappa, sampleWeightsDL);
+                critic1Grads = obj.clipGradients(critic1Grads, 1.0);
+                [obj.critic1.Learnables, obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq] = ...
+                    adamupdate(obj.critic1.Learnables, critic1Grads, ...
+                    obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.criticLR, ...
+                    obj.getConfigValue('criticAdamBeta1', 0.9), ...
+                    obj.getConfigValue('criticAdamBeta2', 0.999));
+                obj.critic1.State = critic1State;
+                obj.critic1 = obj.projectCriticWeights(obj.critic1);
+
+                [loss2, critic2Grads, critic2State, q2Pred] = dlfeval( ...
+                    @tqcCriticModelLoss, obj.critic2, stateAction, targetQuantiles, tauHat, huberKappa, sampleWeightsDL);
+                critic2Grads = obj.clipGradients(critic2Grads, 1.0);
+                [obj.critic2.Learnables, obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq] = ...
+                    adamupdate(obj.critic2.Learnables, critic2Grads, ...
+                    obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.criticLR, ...
+                    obj.getConfigValue('criticAdamBeta1', 0.9), ...
+                    obj.getConfigValue('criticAdamBeta2', 0.999));
+                obj.critic2.State = critic2State;
+                obj.critic2 = obj.projectCriticWeights(obj.critic2);
+
+                tdErr = 0.5 .* (abs(extractdata(q1Pred - targetQMean)) + abs(extractdata(q2Pred - targetQMean)));
+            else
+                [nextActions, nextLogProbs] = obj.sampleAction(nextStatesDL);
+                nextStateAction = cat(1, nextStatesDL, nextActions);
+
+                if obj.useTargetNetworks
+                    updateTargetState = obj.getConfigValue('targetCriticTrainMode', false);
+                    [~, q1Next, targetState1] = obj.forwardCriticTargets( ...
+                        obj.targetCritic1, stateAction, nextStateAction, updateTargetState);
+                    [~, q2Next, targetState2] = obj.forwardCriticTargets( ...
+                        obj.targetCritic2, stateAction, nextStateAction, updateTargetState);
+                    if updateTargetState
+                        obj.targetCritic1.State = targetState1;
+                        obj.targetCritic2.State = targetState2;
+                    end
+                else
+                    [~, q1Next, criticState1] = obj.forwardCriticTargets( ...
+                        obj.critic1, stateAction, nextStateAction, useJointBatch);
+                    [~, q2Next, criticState2] = obj.forwardCriticTargets( ...
+                        obj.critic2, stateAction, nextStateAction, useJointBatch);
+                    if useJointBatch
+                        obj.critic1.State = criticState1;
+                        obj.critic2.State = criticState2;
+                    end
+                end
+                qNext = obj.aggregateTargetCritics(q1Next, q2Next);
+
+                targetQ = rewardsDL + discountsDL .* (1 - donesDL) .* ...
+                         (qNext - alpha .* nextLogProbs);
+                if obj.getConfigValue('usePilarReturns', false)
+                    [auxActions, auxLogProbs] = obj.sampleAction(auxNextStatesDL);
+                    auxStateAction = cat(1, statesDL, actionsDL);
+                    auxNextStateAction = cat(1, auxNextStatesDL, auxActions);
+                    if obj.useTargetNetworks
+                        updateTargetState = obj.getConfigValue('targetCriticTrainMode', false);
+                        [~, q1AuxNext, targetState1] = obj.forwardCriticTargets( ...
+                            obj.targetCritic1, auxStateAction, auxNextStateAction, updateTargetState);
+                        [~, q2AuxNext, targetState2] = obj.forwardCriticTargets( ...
+                            obj.targetCritic2, auxStateAction, auxNextStateAction, updateTargetState);
+                        if updateTargetState
+                            obj.targetCritic1.State = targetState1;
+                            obj.targetCritic2.State = targetState2;
+                        end
+                    else
+                        [~, q1AuxNext, criticState1] = obj.forwardCriticTargets( ...
+                            obj.critic1, auxStateAction, auxNextStateAction, useJointBatch);
+                        [~, q2AuxNext, criticState2] = obj.forwardCriticTargets( ...
+                            obj.critic2, auxStateAction, auxNextStateAction, useJointBatch);
+                        if useJointBatch
+                            obj.critic1.State = criticState1;
+                            obj.critic2.State = criticState2;
+                        end
+                    end
+                    auxQNext = obj.aggregateTargetCritics(q1AuxNext, q2AuxNext);
+                    auxTargetQ = auxRewardsDL + auxDiscountsDL .* (1 - auxDonesDL) .* ...
+                        (auxQNext - alpha .* auxLogProbs);
+                    mixCoeff = obj.getConfigValue('pilarMixCoefficient', 0.406);
+                    targetQ = (1 - mixCoeff) .* targetQ + mixCoeff .* auxTargetQ;
+                end
+                targetQ = dlarray(extractdata(targetQ), 'CB');
+
+                [loss1, critic1Grads, critic1State, q1Pred] = dlfeval( ...
+                    @criticModelLoss, obj.critic1, stateAction, nextStateAction, targetQ, useJointBatch, sampleWeightsDL);
+                critic1Grads = obj.clipGradients(critic1Grads, 1.0);
+                [obj.critic1.Learnables, obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq] = ...
+                    adamupdate(obj.critic1.Learnables, critic1Grads, ...
+                    obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.criticLR, ...
+                    obj.getConfigValue('criticAdamBeta1', 0.9), ...
+                    obj.getConfigValue('criticAdamBeta2', 0.999));
+                obj.critic1.State = critic1State;
+                obj.critic1 = obj.projectCriticWeights(obj.critic1);
+
+                [loss2, critic2Grads, critic2State, q2Pred] = dlfeval( ...
+                    @criticModelLoss, obj.critic2, stateAction, nextStateAction, targetQ, useJointBatch, sampleWeightsDL);
+                critic2Grads = obj.clipGradients(critic2Grads, 1.0);
+                [obj.critic2.Learnables, obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq] = ...
+                    adamupdate(obj.critic2.Learnables, critic2Grads, ...
+                    obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.criticLR, ...
+                    obj.getConfigValue('criticAdamBeta1', 0.9), ...
+                    obj.getConfigValue('criticAdamBeta2', 0.999));
+                obj.critic2.State = critic2State;
+                obj.critic2 = obj.projectCriticWeights(obj.critic2);
+
+                tdErr = obj.aggregateTDError(q1Pred, q2Pred, targetQ);
+            end
             meanTdErr = mean(tdErr(:));
-
-            % Train critic 1 using dlfeval
-            useHuber = isfield(obj.config, 'useHuberCriticLoss') && obj.config.useHuberCriticLoss;
-            huberDelta = obj.getConfigValue('criticHuberDelta', 2.0);
-            useOverestPenalty = isfield(obj.config, 'useOverestimationPenalty') && obj.config.useOverestimationPenalty;
-            overestTau = obj.getConfigValue('overestimationPenaltyTau', 0.75);
-            [loss1, critic1Grads] = dlfeval(@criticModelLoss, obj.critic1, stateAction, targetQ, ...
-                useHuber, huberDelta, useOverestPenalty, overestTau);
-            % Gradient clipping for critic 1
-            critic1Grads = obj.clipGradients(critic1Grads, 1.0);
-            [obj.critic1.Learnables, obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq] = ...
-                adamupdate(obj.critic1.Learnables, critic1Grads, ...
-                obj.critic1Optimizer.avg, obj.critic1Optimizer.avgSq, ...
-                obj.trainingStep + 1, obj.config.criticLR);
-
-            % Train critic 2 using dlfeval
-            [loss2, critic2Grads] = dlfeval(@criticModelLoss, obj.critic2, stateAction, targetQ, ...
-                useHuber, huberDelta, useOverestPenalty, overestTau);
-            % Gradient clipping for critic 2
-            critic2Grads = obj.clipGradients(critic2Grads, 1.0);
-            [obj.critic2.Learnables, obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq] = ...
-                adamupdate(obj.critic2.Learnables, critic2Grads, ...
-                obj.critic2Optimizer.avg, obj.critic2Optimizer.avgSq, ...
-                obj.trainingStep + 1, obj.config.criticLR);
+            obj.replayBuffer.updatePriorities(sampleIdx, tdErr(:));
 
             criticLoss = extractdata(loss1) + extractdata(loss2);
             if obj.useTargetNetworks
                 obj.softUpdateTargetNetworks();
             end
 
-            % ===== UPDATE ACTOR =====
-            uncertaintyPenaltyWeight = 0.0;
-            if isfield(obj.config, 'useActorUncertaintyPenalty') && obj.config.useActorUncertaintyPenalty && ...
-                    isfield(obj.config, 'uncertaintyPenaltyWeight')
-                uncertaintyPenaltyWeight = obj.config.uncertaintyPenaltyWeight;
-            end
-            [actorLoss, actorGrads] = dlfeval(@actorModelLoss, obj.actor, statesDL, ...
-                obj.critic1, obj.critic2, alpha, uncertaintyPenaltyWeight);
-            % Gradient clipping for actor
-            actorGrads = obj.clipGradients(actorGrads, 1.0);
-            [obj.actor.Learnables, obj.actorOptimizer.avg, obj.actorOptimizer.avgSq] = ...
-                adamupdate(obj.actor.Learnables, actorGrads, ...
-                obj.actorOptimizer.avg, obj.actorOptimizer.avgSq, ...
-                obj.trainingStep + 1, obj.config.actorLR);
-
-            % ===== UPDATE ALPHA (Automatic Entropy Tuning) =====
+            shouldUpdateActor = obj.shouldUpdateActorNow();
+            actorLoss = dlarray(0, 'CB');
+            alphaLoss = dlarray(0, 'CB');
             targetEntropyNow = obj.targetEntropy;
-            if isfield(obj.config, 'entropyAnnealStrength') && isfield(obj.config, 'entropyAnnealSteps')
-                annealProgress = min(1, obj.trainingStep / max(1, obj.config.entropyAnnealSteps));
-                annealScale = 1 - obj.config.entropyAnnealStrength * annealProgress;
-                targetEntropyNow = obj.targetEntropy * annealScale;
-            end
-            if isfield(obj.config, 'useEntropyUncertaintyCoupling') && obj.config.useEntropyUncertaintyCoupling
-                uncertaintySignal = 1 - exp(-obj.disagreementEMA);
-                targetEntropyNow = targetEntropyNow * (1 + obj.getConfigValue('entropyUncertaintyGain', 0.25) * uncertaintySignal);
-            end
+            avgLogProb = NaN;
 
-            [alphaLoss, avgLogProb] = obj.alphaLossFunc(statesDL, targetEntropyNow);
+            if shouldUpdateActor
+                % ===== UPDATE ACTOR =====
+                [actorLoss, actorGrads, actorState] = dlfeval(@actorModelLoss, obj.actor, statesDL, ...
+                    obj.critic1, obj.critic2, alpha, obj.getConfigValue('useAQECritic', false), ...
+                    obj.getConfigValue('useTQCCritic', false));
+                actorGrads = obj.clipGradients(actorGrads, 1.0);
+                [obj.actor.Learnables, obj.actorOptimizer.avg, obj.actorOptimizer.avgSq] = ...
+                    adamupdate(obj.actor.Learnables, actorGrads, ...
+                    obj.actorOptimizer.avg, obj.actorOptimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.actorLR, ...
+                    obj.getConfigValue('actorAdamBeta1', 0.9), ...
+                    obj.getConfigValue('actorAdamBeta2', 0.999));
+                obj.actor.State = actorState;
 
-            % Manual gradient for log_alpha: d/d(log_alpha) [alpha * (-log_prob - target)]
-            % = exp(log_alpha) * (-log_prob - target) = -log_prob - target
-            avgLogProb = extractdata(avgLogProb);
-            alphaGrad = -avgLogProb - targetEntropyNow;
+                % ===== UPDATE ALPHA (Automatic Entropy Tuning) =====
+                if isfield(obj.config, 'entropyAnnealStrength') && isfield(obj.config, 'entropyAnnealSteps')
+                    annealProgress = min(1, obj.trainingStep / max(1, obj.config.entropyAnnealSteps));
+                    annealScale = 1 - obj.config.entropyAnnealStrength * annealProgress;
+                    targetEntropyNow = obj.targetEntropy * annealScale;
+                end
+                [alphaLossCandidate, avgLogProbValue] = obj.alphaLossFunc(statesDL, targetEntropyNow);
+                avgLogProb = extractdata(avgLogProbValue);
+                if obj.getConfigValue('useAutomaticEntropyTuning', true)
+                    alphaLoss = alphaLossCandidate;
+                    alphaGrad = -avgLogProb - targetEntropyNow;
 
-            % Safety: Check for NaN/Inf and clip gradient
-            if isnan(alphaGrad) || isinf(alphaGrad)
-                alphaGrad = 0;  % Skip update if invalid
-            else
-                alphaGrad = max(min(alphaGrad, 10), -10);  % Clip gradient
-            end
+                    if isnan(alphaGrad) || isinf(alphaGrad)
+                        alphaGrad = 0;
+                    else
+                        alphaGrad = max(min(alphaGrad, 10), -10);
+                    end
 
-            [obj.logAlpha, obj.alphaOptimizer] = obj.adamUpdateScalar(obj.logAlpha, ...
-                alphaGrad, obj.alphaOptimizer, obj.config.alphaLR, obj.trainingStep);
+                    [obj.logAlpha, obj.alphaOptimizer] = obj.adamUpdateScalar(obj.logAlpha, ...
+                        alphaGrad, obj.alphaOptimizer, obj.config.alphaLR, obj.trainingStep);
 
-            % Safety: Clip log_alpha to reasonable range and check for NaN
-            if isnan(obj.logAlpha) || isinf(obj.logAlpha)
-                obj.logAlpha = log(0.2);  % Reset to default
-            else
-                obj.logAlpha = max(min(obj.logAlpha, 1), -10);  % alpha in [0.000045, 2.718]
+                    if isnan(obj.logAlpha) || isinf(obj.logAlpha)
+                        obj.logAlpha = log(0.2);
+                    else
+                        obj.logAlpha = max(min(obj.logAlpha, 1), -10);
+                    end
+                end
             end
 
             % Increment training step
@@ -297,11 +429,12 @@ classdef APEXPSO_Agent < handle
             losses.alpha = extractdata(alphaLoss);
             losses.alphaValue = exp(obj.logAlpha);
             losses.targetEntropy = targetEntropyNow;
-            losses.disagreementEMA = obj.disagreementEMA;
             losses.meanTdError = meanTdErr;
             losses.actorLoss = losses.actor;
             losses.critic1Loss = extractdata(loss1);
             losses.critic2Loss = extractdata(loss2);
+            losses.qValue = mean(extractdata(obj.aggregateActorCritics(q1Pred, q2Pred)), 'all');
+            losses.entropy = -avgLogProb;
         end
 
         function [actions, logProbs] = sampleAction(obj, states)
@@ -315,11 +448,11 @@ classdef APEXPSO_Agent < handle
             %   logProbs: Log probabilities [1 × batchSize]
 
             % Get output from actor (mean and log_std concatenated)
-            output = forward(obj.actor, states);
+            output = predict(obj.actor, states);
 
             % Check for NaN/Inf in network output
             if any(isnan(output(:))) || any(isinf(output(:)))
-                warning('APEXPSO:NaNDetected', 'NaN/Inf detected in sampleAction forward pass. Resetting to zeros.');
+                warning('RRSACPSO:NaNDetected', 'NaN/Inf detected in sampleAction forward pass. Resetting to zeros.');
                 output = zeros(size(output), 'like', output);
             end
 
@@ -328,8 +461,9 @@ classdef APEXPSO_Agent < handle
             meanActions = output(1:actionSize, :);
             logStd = output(actionSize+1:end, :);
 
-            % Clip log_std to reasonable range
-            logStd = max(min(logStd, 2.0), -20.0);
+            % Match the same bounded policy parameterization used at
+            % collection time so replay and target sampling stay aligned.
+            logStd = clampPolicyLogStd(logStd);
             std = exp(logStd);
 
             % Sample from Gaussian
@@ -354,9 +488,193 @@ classdef APEXPSO_Agent < handle
             logProbs = max(min(logProbs, 100), -100);
         end
 
-        function netCopy = cloneNetwork(~, net)
-            % Clone a dlnetwork with identical learnables and state.
-            netCopy = dlnetwork(layerGraph(net.Layers));
+        function config = normalizeRuntimeConfig(~, config)
+            % Research overrides are applied after APEXPSO_Config runs, so
+            % sanitize the effective runtime config here as well.
+            if ~isfield(config, 'useREDQCritic')
+                config.useREDQCritic = false;
+            end
+            if ~isfield(config, 'useCrossQCritic')
+                config.useCrossQCritic = false;
+            end
+            if ~isfield(config, 'redqNumCritics')
+                config.redqNumCritics = getFieldOrDefault(config, 'numCritics', 5);
+            end
+            if ~isfield(config, 'redqTargetSubsetSize')
+                config.redqTargetSubsetSize = 2;
+            end
+            if ~isfield(config, 'redqTargetMode')
+                config.redqTargetMode = 'min';
+            end
+            if ~isfield(config, 'redqPolicyUpdateDelay')
+                config.redqPolicyUpdateDelay = getFieldOrDefault(config, 'actorUpdateInterval', 5);
+            end
+            if ~isfield(config, 'redqWarmupSteps')
+                config.redqWarmupSteps = getFieldOrDefault(config, 'warmupPeriod', 128);
+            end
+
+            if config.useREDQCritic
+                config.useCrossQCritic = false;
+                config.useAQECritic = false;
+                config.useDroQCritic = false;
+                config.useTQCCritic = false;
+                config.useCriticBatchNorm = false;
+                config.useActorBatchNorm = false;
+                config.useJointCriticBatchForBN = false;
+                config.useWeightNormCritic = false;
+                config.useTargetNetworks = true;
+                config.redqNumCritics = max(3, round(max( ...
+                    getFieldOrDefault(config, 'redqNumCritics', 5), ...
+                    getFieldOrDefault(config, 'numCritics', 5))));
+                config.numCritics = config.redqNumCritics;
+                config.redqTargetSubsetSize = max(2, min(config.numCritics, ...
+                    round(getFieldOrDefault(config, 'redqTargetSubsetSize', 2))));
+                config.redqPolicyUpdateDelay = max(1, round(getFieldOrDefault(config, ...
+                    'redqPolicyUpdateDelay', getFieldOrDefault(config, 'actorUpdateInterval', 5))));
+                config.redqWarmupSteps = max(0, round(getFieldOrDefault(config, ...
+                    'redqWarmupSteps', getFieldOrDefault(config, 'warmupPeriod', 128))));
+                config.utdRatio = max(1, round(getFieldOrDefault(config, 'utdRatio', 5)));
+                config.gradientStepsPerTraining = max(1, round( ...
+                    getFieldOrDefault(config, 'gradientStepsPerTraining', config.utdRatio)));
+                config.useDelayedPolicyUpdates = config.gradientStepsPerTraining > 1;
+                if config.useDelayedPolicyUpdates
+                    config.actorUpdateInterval = max(1, round(getFieldOrDefault(config, ...
+                        'actorUpdateInterval', config.gradientStepsPerTraining)));
+                else
+                    config.actorUpdateInterval = 1;
+                end
+                config.warmupPeriod = max(round(getFieldOrDefault(config, 'warmupPeriod', 0)), ...
+                    config.redqWarmupSteps);
+            elseif config.useCrossQCritic
+                config.useREDQCritic = false;
+                config.useAQECritic = false;
+                config.useDroQCritic = false;
+                config.useTQCCritic = false;
+                config.useCriticBatchNorm = true;
+                config.useJointCriticBatchForBN = true;
+                config.useTargetNetworks = false;
+                config.utdRatio = 1;
+                config.gradientStepsPerTraining = 1;
+                config.useDelayedPolicyUpdates = false;
+                config.actorUpdateInterval = 1;
+                config.numCritics = 2;
+            elseif getFieldOrDefault(config, 'useTQCCritic', false)
+                config.useCrossQCritic = false;
+                config.useREDQCritic = false;
+                config.useAQECritic = false;
+                config.useDroQCritic = false;
+                config.useCriticBatchNorm = false;
+                config.useActorBatchNorm = false;
+                config.useJointCriticBatchForBN = false;
+                config.useWeightNormCritic = false;
+                config.useTargetNetworks = true;
+                config.useDelayedPolicyUpdates = false;
+                config.actorUpdateInterval = 1;
+                config.numCritics = 2;
+                config.utdRatio = 1;
+                config.gradientStepsPerTraining = 1;
+                config.tqcNumQuantiles = max(5, round(getFieldOrDefault(config, 'tqcNumQuantiles', 25)));
+                config.tqcDropQuantilesPerCritic = max(0, min(config.tqcNumQuantiles - 1, ...
+                    round(getFieldOrDefault(config, 'tqcDropQuantilesPerCritic', 2))));
+                config.tqcHuberKappa = max(eps, getFieldOrDefault(config, 'tqcHuberKappa', 1.0));
+            elseif getFieldOrDefault(config, 'useAQECritic', false)
+                totalAqeHeads = max(1, round(getFieldOrDefault(config, 'numCritics', 2))) * ...
+                    max(1, round(getFieldOrDefault(config, 'aqeHeadsPerCritic', 3)));
+                config.aqeKeepHeads = max(1, min(totalAqeHeads, ...
+                    round(getFieldOrDefault(config, 'aqeKeepHeads', 2))));
+            else
+                config.numCritics = max(2, round(getFieldOrDefault(config, 'numCritics', 2)));
+                config.gradientStepsPerTraining = max(1, round( ...
+                    getFieldOrDefault(config, 'gradientStepsPerTraining', ...
+                    getFieldOrDefault(config, 'utdRatio', 1))));
+                config.actorUpdateInterval = max(1, round(getFieldOrDefault(config, 'actorUpdateInterval', 1)));
+            end
+        end
+
+        function syncREDQMirrors(obj)
+            if ~obj.getConfigValue('useREDQCritic', false) || isempty(obj.critics)
+                return;
+            end
+
+            obj.critic1 = obj.critics{1};
+            obj.critic2 = obj.critics{2};
+            obj.critic1Optimizer = obj.criticOptimizers{1};
+            obj.critic2Optimizer = obj.criticOptimizers{2};
+
+            if obj.useTargetNetworks && ~isempty(obj.targetCritics)
+                obj.targetCritic1 = obj.targetCritics{1};
+                obj.targetCritic2 = obj.targetCritics{2};
+            end
+        end
+
+        function shouldUpdate = shouldUpdateActorNow(obj)
+            if ~obj.getConfigValue('useDelayedPolicyUpdates', false)
+                shouldUpdate = true;
+                return;
+            end
+
+            interval = max(1, round(obj.getConfigValue('actorUpdateInterval', 2)));
+            shouldUpdate = mod(obj.trainingStep + 1, interval) == 0;
+        end
+
+        function criticSet = getCriticEnsemble(obj)
+            if obj.getConfigValue('useREDQCritic', false)
+                criticSet = obj.critics;
+            else
+                criticSet = {obj.critic1, obj.critic2};
+            end
+        end
+
+        function criticSet = getTargetCriticEnsemble(obj)
+            if obj.getConfigValue('useREDQCritic', false)
+                criticSet = obj.targetCritics;
+            else
+                criticSet = {obj.targetCritic1, obj.targetCritic2};
+            end
+        end
+
+        function [qValues, criticSet] = forwardCriticEnsembleTargets(obj, criticSet, currentInput, nextInput, updateState)
+            numCritics = numel(criticSet);
+            qCells = cell(1, numCritics);
+            for criticIdx = 1:numCritics
+                [~, qCells{criticIdx}, newState] = obj.forwardCriticTargets( ...
+                    criticSet{criticIdx}, currentInput, nextInput, updateState);
+                if updateState
+                    criticSet{criticIdx}.State = newState;
+                end
+            end
+            qValues = cat(1, qCells{:});
+        end
+
+        function aggregatedQ = aggregateTargetEnsemble(obj, qValues)
+            targetMode = lower(string(obj.getConfigValue('redqTargetMode', 'min')));
+            if targetMode == "ave"
+                aggregatedQ = mean(qValues, 1);
+                return;
+            end
+            subsetSize = min(size(qValues, 1), max(2, round(obj.getConfigValue('redqTargetSubsetSize', 2))));
+            subsetIdx = randperm(size(qValues, 1), subsetSize);
+            aggregatedQ = min(qValues(subsetIdx, :), [], 1);
+        end
+
+        function aggregatedQ = aggregateActorEnsemble(~, qValues)
+            aggregatedQ = mean(qValues, 1);
+        end
+
+        function tdErr = aggregateEnsembleTDError(obj, qPreds, targetQ)
+            targetData = extractdata(targetQ);
+            tdErr = zeros(1, size(targetData, 2), 'single');
+            numCritics = numel(qPreds);
+            for criticIdx = 1:numCritics
+                reducedPred = obj.reduceCriticPrediction(qPreds{criticIdx});
+                tdErr = tdErr + abs(extractdata(reducedPred) - targetData);
+            end
+            tdErr = tdErr ./ max(1, numCritics);
+        end
+
+        function netCopy = cloneCriticNetwork(obj, net)
+            % Clone a critic network while preserving graph connectivity.
+            netCopy = createCriticNetwork(obj.config);
             netCopy.Learnables = net.Learnables;
             netCopy.State = net.State;
         end
@@ -364,8 +682,19 @@ classdef APEXPSO_Agent < handle
         function softUpdateTargetNetworks(obj)
             % Soft update target critics (standard SAC).
             tau = obj.config.tau;
-            obj.targetCritic1 = obj.softUpdateNetwork(obj.targetCritic1, obj.critic1, tau);
-            obj.targetCritic2 = obj.softUpdateNetwork(obj.targetCritic2, obj.critic2, tau);
+            if obj.getConfigValue('useREDQCritic', false)
+                for criticIdx = 1:numel(obj.critics)
+                    obj.targetCritics{criticIdx} = obj.softUpdateNetwork( ...
+                        obj.targetCritics{criticIdx}, obj.critics{criticIdx}, tau);
+                    obj.targetCritics{criticIdx} = obj.projectCriticWeights(obj.targetCritics{criticIdx});
+                end
+                obj.syncREDQMirrors();
+            else
+                obj.targetCritic1 = obj.softUpdateNetwork(obj.targetCritic1, obj.critic1, tau);
+                obj.targetCritic2 = obj.softUpdateNetwork(obj.targetCritic2, obj.critic2, tau);
+                obj.targetCritic1 = obj.projectCriticWeights(obj.targetCritic1);
+                obj.targetCritic2 = obj.projectCriticWeights(obj.targetCritic2);
+            end
         end
 
         function targetNet = softUpdateNetwork(~, targetNet, sourceNet, tau)
@@ -412,11 +741,139 @@ classdef APEXPSO_Agent < handle
             stateAction = cat(1, states, actions);
             q1 = forward(obj.critic1, stateAction);
             q2 = forward(obj.critic2, stateAction);
-            q = min(q1, q2);
+            q = obj.aggregateActorCritics(q1, q2);
 
             % SAC objective: maximize Q - α*log_prob
             % Loss: minimize -(Q - α*log_prob)
             loss = mean(alpha .* logProbs - q);
+        end
+
+        function targetQ = buildREDQTargetQ(obj, stateAction, nextStates, rewards, dones, discounts, alpha)
+            [nextActions, nextLogProbs] = obj.sampleAction(nextStates);
+            nextStateAction = cat(1, nextStates, nextActions);
+
+            if obj.useTargetNetworks
+                updateTargetState = obj.getConfigValue('targetCriticTrainMode', false);
+                targetCriticSet = obj.getTargetCriticEnsemble();
+                [qNextAll, targetCriticSet] = obj.forwardCriticEnsembleTargets( ...
+                    targetCriticSet, stateAction, nextStateAction, updateTargetState);
+                if updateTargetState
+                    obj.targetCritics = targetCriticSet;
+                    obj.syncREDQMirrors();
+                end
+            else
+                criticSet = obj.getCriticEnsemble();
+                [qNextAll, criticSet] = obj.forwardCriticEnsembleTargets( ...
+                    criticSet, stateAction, nextStateAction, false);
+                if obj.getConfigValue('useREDQCritic', false)
+                    obj.critics = criticSet;
+                    obj.syncREDQMirrors();
+                end
+            end
+
+            qNext = obj.aggregateTargetEnsemble(qNextAll);
+            targetQ = rewards + discounts .* (1 - dones) .* (qNext - alpha .* nextLogProbs);
+            targetQ = dlarray(extractdata(targetQ), 'CB');
+        end
+
+        function losses = trainREDQUpdate(obj, stateAction, statesDL, nextStatesDL, rewardsDL, donesDL, ...
+                discountsDL, sampleIdx, sampleWeightsDL, auxRewardsDL, auxNextStatesDL, ...
+                auxDonesDL, auxDiscountsDL, alpha)
+            targetQ = obj.buildREDQTargetQ(stateAction, nextStatesDL, rewardsDL, donesDL, discountsDL, alpha);
+            if obj.getConfigValue('usePilarReturns', false)
+                auxTargetQ = obj.buildREDQTargetQ(stateAction, auxNextStatesDL, ...
+                    auxRewardsDL, auxDonesDL, auxDiscountsDL, alpha);
+                mixCoeff = obj.getConfigValue('pilarMixCoefficient', 0.406);
+                targetQ = (1 - mixCoeff) .* targetQ + mixCoeff .* auxTargetQ;
+                targetQ = dlarray(extractdata(targetQ), 'CB');
+            end
+
+            numCritics = numel(obj.critics);
+            criticLossValues = zeros(1, numCritics);
+            qPreds = cell(1, numCritics);
+            for criticIdx = 1:numCritics
+                [loss, criticGrads, criticState, qPred] = dlfeval( ...
+                    @criticModelLoss, obj.critics{criticIdx}, stateAction, [], targetQ, false, sampleWeightsDL);
+                criticGrads = obj.clipGradients(criticGrads, 1.0);
+                [obj.critics{criticIdx}.Learnables, obj.criticOptimizers{criticIdx}.avg, ...
+                    obj.criticOptimizers{criticIdx}.avgSq] = ...
+                    adamupdate(obj.critics{criticIdx}.Learnables, criticGrads, ...
+                    obj.criticOptimizers{criticIdx}.avg, obj.criticOptimizers{criticIdx}.avgSq, ...
+                    obj.trainingStep + 1, obj.config.criticLR, ...
+                    obj.getConfigValue('criticAdamBeta1', 0.9), ...
+                    obj.getConfigValue('criticAdamBeta2', 0.999));
+                obj.critics{criticIdx}.State = criticState;
+                obj.critics{criticIdx} = obj.projectCriticWeights(obj.critics{criticIdx});
+                criticLossValues(criticIdx) = extractdata(loss);
+                qPreds{criticIdx} = qPred;
+            end
+            obj.syncREDQMirrors();
+
+            tdErr = obj.aggregateEnsembleTDError(qPreds, targetQ);
+            meanTdErr = mean(tdErr(:));
+            obj.replayBuffer.updatePriorities(sampleIdx, tdErr(:));
+
+            if obj.useTargetNetworks
+                obj.softUpdateTargetNetworks();
+            end
+
+            actorLoss = dlarray(0, 'CB');
+            alphaLoss = dlarray(0, 'CB');
+            targetEntropyNow = obj.targetEntropy;
+            avgLogProb = NaN;
+            if obj.shouldUpdateActorNow()
+                [actorLoss, actorGrads, actorState] = dlfeval(@redqActorModelLoss, ...
+                    obj.actor, statesDL, obj.critics, alpha);
+                actorGrads = obj.clipGradients(actorGrads, 1.0);
+                [obj.actor.Learnables, obj.actorOptimizer.avg, obj.actorOptimizer.avgSq] = ...
+                    adamupdate(obj.actor.Learnables, actorGrads, ...
+                    obj.actorOptimizer.avg, obj.actorOptimizer.avgSq, ...
+                    obj.trainingStep + 1, obj.config.actorLR, ...
+                    obj.getConfigValue('actorAdamBeta1', 0.9), ...
+                    obj.getConfigValue('actorAdamBeta2', 0.999));
+                obj.actor.State = actorState;
+
+                if isfield(obj.config, 'entropyAnnealStrength') && isfield(obj.config, 'entropyAnnealSteps')
+                    annealProgress = min(1, obj.trainingStep / max(1, obj.config.entropyAnnealSteps));
+                    annealScale = 1 - obj.config.entropyAnnealStrength * annealProgress;
+                    targetEntropyNow = obj.targetEntropy * annealScale;
+                end
+                [alphaLossCandidate, avgLogProbValue] = obj.alphaLossFunc(statesDL, targetEntropyNow);
+                avgLogProb = extractdata(avgLogProbValue);
+                if obj.getConfigValue('useAutomaticEntropyTuning', true)
+                    alphaLoss = alphaLossCandidate;
+                    alphaGrad = -avgLogProb - targetEntropyNow;
+                    if isnan(alphaGrad) || isinf(alphaGrad)
+                        alphaGrad = 0;
+                    else
+                        alphaGrad = max(min(alphaGrad, 10), -10);
+                    end
+                    [obj.logAlpha, obj.alphaOptimizer] = obj.adamUpdateScalar(obj.logAlpha, ...
+                        alphaGrad, obj.alphaOptimizer, obj.config.alphaLR, obj.trainingStep);
+                    if isnan(obj.logAlpha) || isinf(obj.logAlpha)
+                        obj.logAlpha = log(0.2);
+                    else
+                        obj.logAlpha = max(min(obj.logAlpha, 1), -10);
+                    end
+                end
+            end
+
+            losses = struct();
+            losses.actor = extractdata(actorLoss);
+            losses.critic = sum(criticLossValues);
+            losses.alpha = extractdata(alphaLoss);
+            losses.alphaValue = exp(obj.logAlpha);
+            losses.targetEntropy = targetEntropyNow;
+            losses.meanTdError = meanTdErr;
+            losses.actorLoss = losses.actor;
+            losses.critic1Loss = criticLossValues(1);
+            losses.critic2Loss = criticLossValues(min(2, numCritics));
+            qValueMeans = zeros(1, numCritics);
+            for criticIdx = 1:numCritics
+                qValueMeans(criticIdx) = mean(extractdata(obj.reduceCriticPrediction(qPreds{criticIdx})), 'all');
+            end
+            losses.qValue = mean(qValueMeans);
+            losses.entropy = -avgLogProb;
         end
 
         function [loss, avgLogProb] = alphaLossFunc(obj, states, targetEntropyNow)
@@ -434,6 +891,140 @@ classdef APEXPSO_Agent < handle
             avgLogProb = mean(logProbs);
         end
 
+        function enabled = useJointCriticBatch(obj)
+            criticBN = obj.getConfigValue('useCriticBatchNorm', obj.getConfigValue('useBatchNorm', false));
+            enabled = criticBN && obj.getConfigValue('useJointCriticBatchForBN', false);
+        end
+
+        function aggregatedQ = aggregateTargetCritics(obj, q1, q2)
+            if obj.getConfigValue('useAQECritic', false)
+                combinedQ = cat(1, q1, q2);
+                keepHeads = min(size(combinedQ, 1), obj.getConfigValue('aqeKeepHeads', 2));
+                combinedQ = sort(combinedQ, 1, 'ascend');
+                aggregatedQ = mean(combinedQ(1:keepHeads, :), 1);
+            else
+                aggregatedQ = min(q1, q2);
+            end
+        end
+
+        function aggregatedQ = aggregateActorCritics(obj, q1, q2)
+            if obj.getConfigValue('useAQECritic', false)
+                aggregatedQ = mean(cat(1, q1, q2), 1);
+            elseif obj.getConfigValue('useTQCCritic', false)
+                aggregatedQ = mean(cat(1, q1, q2), 1);
+            else
+                if size(q1, 1) > 1
+                    q1 = mean(q1, 1);
+                end
+                if size(q2, 1) > 1
+                    q2 = mean(q2, 1);
+                end
+                aggregatedQ = min(q1, q2);
+            end
+        end
+
+        function tdErr = aggregateTDError(obj, q1Pred, q2Pred, targetQ)
+            q1Pred = obj.reduceCriticPrediction(q1Pred);
+            q2Pred = obj.reduceCriticPrediction(q2Pred);
+            targetData = dlarray(extractdata(targetQ), 'CB');
+            tdErr = 0.5 .* (abs(extractdata(q1Pred - targetData)) + abs(extractdata(q2Pred - targetData)));
+        end
+
+        function reducedQ = reduceCriticPrediction(obj, qValues)
+            if obj.getConfigValue('useAQECritic', false) && size(qValues, 1) > 1
+                reducedQ = mean(qValues, 1);
+            elseif size(qValues, 1) > 1
+                reducedQ = mean(qValues, 1);
+            else
+                reducedQ = qValues;
+            end
+        end
+
+        function [currentQ, nextQ, newState] = forwardCriticTargets(obj, net, currentInput, nextInput, updateState)
+            currentQ = [];
+            newState = net.State;
+
+            if obj.useJointCriticBatch()
+                mixedInput = cat(2, currentInput, nextInput);
+                if updateState
+                    [mixedQ, newState] = forward(net, mixedInput);
+                else
+                    mixedQ = forward(net, mixedInput);
+                end
+                currentBatch = size(currentInput, 2);
+                currentQ = mixedQ(:, 1:currentBatch);
+                nextQ = mixedQ(:, currentBatch+1:end);
+            else
+                if updateState
+                    [nextQ, newState] = forward(net, nextInput);
+                else
+                    nextQ = forward(net, nextInput);
+                end
+            end
+
+            if ~isempty(currentQ) && (any(isnan(currentQ(:))) || any(isinf(currentQ(:))))
+                currentQ = zeros(size(currentQ), 'like', currentQ);
+            end
+            if any(isnan(nextQ(:))) || any(isinf(nextQ(:)))
+                nextQ = zeros(size(nextQ), 'like', nextQ);
+            end
+        end
+
+        function applyCriticWeightNorm(obj)
+            if obj.getConfigValue('useREDQCritic', false)
+                for criticIdx = 1:numel(obj.critics)
+                    obj.critics{criticIdx} = obj.projectCriticWeights(obj.critics{criticIdx});
+                end
+                if obj.useTargetNetworks
+                    for criticIdx = 1:numel(obj.targetCritics)
+                        obj.targetCritics{criticIdx} = obj.projectCriticWeights(obj.targetCritics{criticIdx});
+                    end
+                end
+                obj.syncREDQMirrors();
+                return;
+            end
+
+            obj.critic1 = obj.projectCriticWeights(obj.critic1);
+            obj.critic2 = obj.projectCriticWeights(obj.critic2);
+            if obj.useTargetNetworks
+                obj.targetCritic1 = obj.projectCriticWeights(obj.targetCritic1);
+                obj.targetCritic2 = obj.projectCriticWeights(obj.targetCritic2);
+            end
+        end
+
+        function net = projectCriticWeights(obj, net)
+            if ~obj.getConfigValue('useWeightNormCritic', false)
+                return;
+            end
+
+            radius = obj.getConfigValue('criticWeightNormRadius', 1.0);
+            layerNames = obj.getCriticWeightNormLayerNames(net);
+            learnables = net.Learnables;
+            for i = 1:height(learnables)
+                if ~strcmp(learnables.Parameter{i}, 'Weights')
+                    continue;
+                end
+                if ~any(strcmp(string(learnables.Layer{i}), layerNames))
+                    continue;
+                end
+
+                weights = extractdata(learnables.Value{i});
+                rowNorms = sqrt(sum(weights.^2, 2));
+                scale = min(1, radius ./ (rowNorms + 1e-8));
+                learnables.Value{i} = dlarray(weights .* scale);
+            end
+            net.Learnables = learnables;
+        end
+
+        function layerNames = getCriticWeightNormLayerNames(~, net)
+            allLayerNames = string(net.Learnables.Layer);
+            if any(allLayerNames == "trunk_fc1")
+                layerNames = ["trunk_fc1", "trunk_fc2"];
+            else
+                layerNames = ["fc1", "fc2"];
+            end
+        end
+
         function value = getConfigValue(obj, fieldName, defaultValue)
             if isfield(obj.config, fieldName)
                 value = obj.config.(fieldName);
@@ -442,12 +1033,56 @@ classdef APEXPSO_Agent < handle
             end
         end
 
-        function updateDisagreementEMA(obj, batchDisagreement)
-            if isnan(batchDisagreement) || isinf(batchDisagreement)
+        function updateObservationNormalizer(obj, states, nextStates)
+            if ~obj.getConfigValue('useObservationNormalization', false)
                 return;
             end
-            ema = 0.95;
-            obj.disagreementEMA = ema * obj.disagreementEMA + (1 - ema) * batchDisagreement;
+
+            samples = single([states; nextStates]);
+            batchCount = size(samples, 1);
+            if batchCount == 0
+                return;
+            end
+
+            batchMean = mean(samples, 1)';
+            centered = samples - batchMean';
+            batchM2 = sum(centered .^ 2, 1)';
+
+            if obj.obsNormCount == 0
+                obj.obsNormCount = batchCount;
+                obj.obsNormMean = batchMean;
+                obj.obsNormM2 = max(batchM2, ones(size(batchM2), 'single'));
+                return;
+            end
+
+            totalCount = obj.obsNormCount + batchCount;
+            delta = batchMean - obj.obsNormMean;
+            obj.obsNormMean = obj.obsNormMean + delta * (batchCount / totalCount);
+            obj.obsNormM2 = obj.obsNormM2 + batchM2 + ...
+                (delta .^ 2) * (obj.obsNormCount * batchCount / totalCount);
+            obj.obsNormCount = totalCount;
+        end
+
+        function state = normalizeStateVector(obj, state)
+            if ~obj.getConfigValue('useObservationNormalization', false) || obj.obsNormCount < 2
+                return;
+            end
+            variance = obj.obsNormM2 / max(1, obj.obsNormCount - 1);
+            state = (state - obj.obsNormMean) ./ sqrt(variance + 1e-6);
+            clipVal = obj.getConfigValue('observationNormClip', 5.0);
+            state = max(-clipVal, min(clipVal, state));
+        end
+
+        function states = normalizeStateBatch(obj, states)
+            if ~obj.getConfigValue('useObservationNormalization', false) || obj.obsNormCount < 2
+                states = single(states);
+                return;
+            end
+            variance = obj.obsNormM2 / max(1, obj.obsNormCount - 1);
+            states = single(states);
+            states = (states - obj.obsNormMean') ./ sqrt(variance' + 1e-6);
+            clipVal = obj.getConfigValue('observationNormClip', 5.0);
+            states = max(-clipVal, min(clipVal, states));
         end
 
         function [net, opt] = adamUpdate(~, net, grads, opt, lr, step)
@@ -485,6 +1120,88 @@ classdef APEXPSO_Agent < handle
             param = param - lr * mHat / (sqrt(vHat) + opt.eps);
         end
 
+        function beta = getPriorityReplayBeta(obj)
+            if ~obj.getConfigValue('usePrioritizedReplay', false)
+                beta = 0.0;
+                return;
+            end
+
+            betaStart = obj.getConfigValue('priorityReplayBetaStart', 0.4);
+            betaEnd = obj.getConfigValue('priorityReplayBetaEnd', 1.0);
+            annealSteps = max(1, obj.getConfigValue('entropyAnnealSteps', 1200));
+            progress = min(1, obj.trainingStep / annealSteps);
+            beta = betaStart + progress * (betaEnd - betaStart);
+        end
+
+        function recentWindowSize = getERERecentWindowSize(obj)
+            if ~obj.getConfigValue('useEmphasizingRecentExperience', false)
+                recentWindowSize = obj.replayBuffer.size;
+                return;
+            end
+
+            totalUpdates = max(1, round(obj.getConfigValue('gradientStepsPerTraining', 1)));
+            updateIndex = mod(obj.trainingStep, totalUpdates) + 1;
+            etaStart = obj.getConfigValue('ereEtaStart', 0.996);
+            etaEnd = obj.getConfigValue('ereEtaEnd', 1.0);
+            annealSteps = max(1, round(obj.getConfigValue('ereAnnealSteps', ...
+                obj.getConfigValue('entropyAnnealSteps', 1200))));
+            progress = min(1, obj.trainingStep / annealSteps);
+            eta = etaStart + progress * (etaEnd - etaStart);
+            exponentScale = obj.getConfigValue('ereExponentScale', 1000);
+            minRecentSize = max(obj.config.batchSize, round(obj.getConfigValue('ereMinRecentSize', obj.config.batchSize)));
+
+            % Adapt the ERE replay window to the currently-filled online buffer.
+            recentWindowSize = round(obj.replayBuffer.size * eta ^ (updateIndex * exponentScale / totalUpdates));
+            recentWindowSize = max(minRecentSize, recentWindowSize);
+            recentWindowSize = min(obj.replayBuffer.size, recentWindowSize);
+        end
+
+        function targetQuantiles = buildTQCTargetQuantiles(obj, stateAction, nextStates, rewards, dones, discounts, alpha)
+            [nextActions, nextLogProbs] = obj.sampleAction(nextStates);
+            nextStateAction = cat(1, nextStates, nextActions);
+
+            if obj.useTargetNetworks
+                updateTargetState = obj.getConfigValue('targetCriticTrainMode', false);
+                [~, q1Next, targetState1] = obj.forwardCriticTargets( ...
+                    obj.targetCritic1, stateAction, nextStateAction, updateTargetState);
+                [~, q2Next, targetState2] = obj.forwardCriticTargets( ...
+                    obj.targetCritic2, stateAction, nextStateAction, updateTargetState);
+                if updateTargetState
+                    obj.targetCritic1.State = targetState1;
+                    obj.targetCritic2.State = targetState2;
+                end
+            else
+                useJointBatch = obj.useJointCriticBatch();
+                [~, q1Next, criticState1] = obj.forwardCriticTargets( ...
+                    obj.critic1, stateAction, nextStateAction, useJointBatch);
+                [~, q2Next, criticState2] = obj.forwardCriticTargets( ...
+                    obj.critic2, stateAction, nextStateAction, useJointBatch);
+                if useJointBatch
+                    obj.critic1.State = criticState1;
+                    obj.critic2.State = criticState2;
+                end
+            end
+
+            combinedQuantiles = cat(1, q1Next, q2Next);
+            combinedQuantiles = sort(extractdata(combinedQuantiles), 1, 'ascend');
+            dropTotal = obj.getConfigValue('tqcDropQuantilesPerCritic', 2) * 2;
+            keepCount = max(1, size(combinedQuantiles, 1) - dropTotal);
+            truncatedQuantiles = combinedQuantiles(1:keepCount, :);
+
+            rewardsData = extractdata(rewards);
+            donesData = extractdata(dones);
+            discountsData = extractdata(discounts);
+            logProbData = extractdata(nextLogProbs);
+            targetQuantiles = rewardsData + discountsData .* (1 - donesData) .* ...
+                (truncatedQuantiles - alpha .* logProbData);
+            targetQuantiles = dlarray(targetQuantiles, 'CB');
+        end
+
+        function tauHat = getTQCTauHat(obj)
+            numQuantiles = obj.getConfigValue('tqcNumQuantiles', 7);
+            tauHat = dlarray(((2 * (1:numQuantiles) - 1) ./ (2 * numQuantiles))', 'CB');
+        end
+
         function toCPU(obj)
             % Move all agent components to CPU
             
@@ -496,17 +1213,36 @@ classdef APEXPSO_Agent < handle
             % but safer to gather values if needed. Usually dlnetwork handles it,
             % but we ensure underlying data is CPU.
             obj.actor.Learnables = gather(obj.actor.Learnables);
-            obj.critic1.Learnables = gather(obj.critic1.Learnables);
-            obj.critic2.Learnables = gather(obj.critic2.Learnables);
-            if obj.useTargetNetworks
-                obj.targetCritic1.Learnables = gather(obj.targetCritic1.Learnables);
-                obj.targetCritic2.Learnables = gather(obj.targetCritic2.Learnables);
+            if obj.getConfigValue('useREDQCritic', false)
+                for criticIdx = 1:numel(obj.critics)
+                    obj.critics{criticIdx}.Learnables = gather(obj.critics{criticIdx}.Learnables);
+                end
+                if obj.useTargetNetworks
+                    for criticIdx = 1:numel(obj.targetCritics)
+                        obj.targetCritics{criticIdx}.Learnables = gather(obj.targetCritics{criticIdx}.Learnables);
+                    end
+                end
+                obj.syncREDQMirrors();
+            else
+                obj.critic1.Learnables = gather(obj.critic1.Learnables);
+                obj.critic2.Learnables = gather(obj.critic2.Learnables);
+                if obj.useTargetNetworks
+                    obj.targetCritic1.Learnables = gather(obj.targetCritic1.Learnables);
+                    obj.targetCritic2.Learnables = gather(obj.targetCritic2.Learnables);
+                end
             end
             
             % 3. Optimizers (gather states)
             obj.actorOptimizer = obj.gatherOptimizer(obj.actorOptimizer);
-            obj.critic1Optimizer = obj.gatherOptimizer(obj.critic1Optimizer);
-            obj.critic2Optimizer = obj.gatherOptimizer(obj.critic2Optimizer);
+            if obj.getConfigValue('useREDQCritic', false)
+                for criticIdx = 1:numel(obj.criticOptimizers)
+                    obj.criticOptimizers{criticIdx} = obj.gatherOptimizer(obj.criticOptimizers{criticIdx});
+                end
+                obj.syncREDQMirrors();
+            else
+                obj.critic1Optimizer = obj.gatherOptimizer(obj.critic1Optimizer);
+                obj.critic2Optimizer = obj.gatherOptimizer(obj.critic2Optimizer);
+            end
             obj.alphaOptimizer = obj.gatherOptimizer(obj.alphaOptimizer);
             
             % 4. Scalars
@@ -560,7 +1296,7 @@ classdef APEXPSO_Agent < handle
                 grad = gradients.Value{i};
                 % Check for NaN/Inf and reset to zero if found
                 if any(isnan(grad(:))) || any(isinf(grad(:)))
-                    warning('APEXPSO:NaNGradient', 'NaN/Inf detected in gradient %s. Resetting to zeros.', gradients.Parameter{i});
+                    warning('RRSACPSO:NaNGradient', 'NaN/Inf detected in gradient %s. Resetting to zeros.', gradients.Parameter{i});
                     gradients.Value{i} = zeros(size(grad), 'like', grad);
                     grad = gradients.Value{i};
                 end
@@ -582,22 +1318,24 @@ classdef APEXPSO_Agent < handle
 end
 
 % Local functions for dlfeval (must be outside classdef)
-function [loss, gradients] = criticModelLoss(net, input, target, useHuber, huberDelta, useOverestPenalty, overestTau)
-    % Critic loss: MSE between prediction and target
-    if nargin < 4
-        useHuber = false;
-    end
+function [loss, gradients, state, pred] = criticModelLoss(net, input, auxInput, target, useJointBatch, sampleWeights)
+    % Critic loss: MSE between prediction and target, with optional joint
+    % current/next forwarding to keep BatchNorm statistics aligned.
     if nargin < 5
-        huberDelta = 2.0;
+        useJointBatch = false;
     end
-    if nargin < 6
-        useOverestPenalty = false;
-    end
-    if nargin < 7
-        overestTau = 0.75;
+    if nargin < 6 || isempty(sampleWeights)
+        sampleWeights = dlarray(ones(1, size(input, 2), 'single'), 'CB');
     end
 
-    pred = forward(net, input);
+    if useJointBatch && ~isempty(auxInput)
+        jointInput = cat(2, input, auxInput);
+        [jointPred, state] = forward(net, jointInput);
+        batchSize = size(input, 2);
+        pred = jointPred(:, 1:batchSize);
+    else
+        [pred, state] = forward(net, input);
+    end
 
     % Check for NaN/Inf in critic output
     if any(isnan(pred(:))) || any(isinf(pred(:)))
@@ -605,23 +1343,10 @@ function [loss, gradients] = criticModelLoss(net, input, target, useHuber, huber
     end
 
     residual = pred - target;
-    if useHuber
-        absResidual = abs(residual);
-        quadratic = min(absResidual, huberDelta);
-        linear = absResidual - quadratic;
-        perSampleLoss = 0.5 * quadratic.^2 + huberDelta .* linear;
-    else
-        perSampleLoss = residual.^2;
-    end
-
-    if useOverestPenalty
-        overestTau = max(min(overestTau, 0.99), 0.5);
-        residualData = extractdata(residual);
-        weightData = overestTau * (residualData >= 0) + (1 - overestTau) * (residualData < 0);
-        perSampleLoss = perSampleLoss .* dlarray(weightData, 'CB');
-    end
-
-    loss = mean(perSampleLoss);
+    squaredError = residual.^2;
+    headCount = max(1, size(pred, 1));
+    loss = sum(sampleWeights .* squaredError, 'all') / ...
+        (headCount * (sum(sampleWeights, 'all') + 1e-8));
 
     % Check for NaN/Inf in loss
     if isnan(loss) || isinf(loss)
@@ -631,14 +1356,94 @@ function [loss, gradients] = criticModelLoss(net, input, target, useHuber, huber
     gradients = dlgradient(loss, net.Learnables);
 end
 
-function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic2Net, alphaVal, ...
-    uncertaintyPenaltyWeight)
-    % Actor loss for SAC
-    if nargin < 6
-        uncertaintyPenaltyWeight = 0.0;
+function [loss, gradients, state, predMean] = tqcCriticModelLoss(net, input, targetQuantiles, tauHat, huberKappa, sampleWeights)
+    if nargin < 6 || isempty(sampleWeights)
+        sampleWeights = dlarray(ones(1, size(input, 2), 'single'), 'CB');
     end
+
+    [pred, state] = forward(net, input);
+    if any(isnan(pred(:))) || any(isinf(pred(:)))
+        pred = zeros(size(pred), 'like', pred);
+    end
+
+    predMean = mean(pred, 1);
+    numPred = size(pred, 1);
+    numTarget = size(targetQuantiles, 1);
+    batchSize = size(pred, 2);
+
+    predExpanded = reshape(pred, [numPred, 1, batchSize]);
+    targetExpanded = reshape(targetQuantiles, [1, numTarget, batchSize]);
+    tdErrors = targetExpanded - predExpanded;
+    absTd = abs(tdErrors);
+    huber = 0.5 .* tdErrors.^2 .* (absTd <= huberKappa) + ...
+        huberKappa .* (absTd - 0.5 .* huberKappa) .* (absTd > huberKappa);
+
+    tauExpanded = reshape(tauHat, [numPred, 1, 1]);
+    quantileWeights = abs(tauExpanded - cast(tdErrors < 0, 'like', tdErrors));
+    quantileLoss = quantileWeights .* huber ./ huberKappa;
+    sampleLoss = reshape(mean(quantileLoss, [1, 2]), 1, []);
+    loss = sum(sampleWeights .* sampleLoss, 'all') / (sum(sampleWeights, 'all') + 1e-8);
+
+    if isnan(loss) || isinf(loss)
+        loss = dlarray(0, 'CB');
+    end
+
+    gradients = dlgradient(loss, net.Learnables);
+end
+
+function [loss, gradients, actorState] = redqActorModelLoss(actorNet, states, criticNets, alphaVal)
+    [output, actorState] = forward(actorNet, states);
+    if any(isnan(output(:))) || any(isinf(output(:)))
+        output = zeros(size(output), 'like', output);
+    end
+
+    actionSize = size(output, 1) / 2;
+    meanActions = output(1:actionSize, :);
+    logStd = output(actionSize+1:end, :);
+    logStd = clampPolicyLogStd(logStd);
+    std = exp(logStd);
+    epsilon = randn(size(meanActions), 'like', meanActions);
+    unsquashedActions = meanActions + std .* epsilon;
+    actions = tanh(unsquashedActions);
+
+    gaussianLogProb = -0.5 * sum(epsilon.^2 + 2 * logStd + log(2 * pi), 1);
+    actionSquared = min(actions.^2, 0.9999);
+    tanhCorrection = sum(log(1 - actionSquared + 1e-6), 1);
+    logProbs = max(min(gaussianLogProb - tanhCorrection, 100), -100);
+
+    stateAction = cat(1, states, actions);
+    qCells = cell(1, numel(criticNets));
+    for criticIdx = 1:numel(criticNets)
+        qValue = forward(criticNets{criticIdx}, stateAction);
+        if any(isnan(qValue(:))) || any(isinf(qValue(:)))
+            qValue = zeros(size(qValue), 'like', qValue);
+        end
+        if size(qValue, 1) > 1
+            qValue = mean(qValue, 1);
+        end
+        qCells{criticIdx} = qValue;
+    end
+    q = mean(cat(1, qCells{:}), 1);
+
+    loss = mean(alphaVal .* logProbs - q);
+    if isnan(loss) || isinf(loss)
+        loss = dlarray(0, 'CB');
+    end
+
+    gradients = dlgradient(loss, actorNet.Learnables);
+end
+
+function [loss, gradients, actorState] = actorModelLoss(actorNet, states, critic1Net, critic2Net, alphaVal, useAQECritic, useTQCCritic)
+    % Standard SAC actor loss.
+    if nargin < 6
+        useAQECritic = false;
+    end
+    if nargin < 7
+        useTQCCritic = false;
+    end
+
     % Sample actions from actor
-    output = forward(actorNet, states);
+    [output, actorState] = forward(actorNet, states);
 
     % Check for NaN/Inf in actor output
     if any(isnan(output(:))) || any(isinf(output(:)))
@@ -648,7 +1453,7 @@ function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic
     actionSize = size(output, 1) / 2;
     meanActions = output(1:actionSize, :);
     logStd = output(actionSize+1:end, :);
-    logStd = max(min(logStd, 2.0), -20.0);
+    logStd = clampPolicyLogStd(logStd);
     std = exp(logStd);
     epsilon = randn(size(meanActions), 'like', meanActions);
     unsquashedActions = meanActions + std .* epsilon;
@@ -680,11 +1485,19 @@ function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic
         q2 = zeros(size(q2), 'like', q2);
     end
 
-    q = min(q1, q2);
+    if useAQECritic || useTQCCritic
+        q = mean(cat(1, q1, q2), 1);
+    else
+        if size(q1, 1) > 1
+            q1 = mean(q1, 1);
+        end
+        if size(q2, 1) > 1
+            q2 = mean(q2, 1);
+        end
+        q = min(q1, q2);
+    end
 
-    % SAC actor loss with critic-disagreement uncertainty penalty.
-    disagreement = abs(q1 - q2);
-    loss = mean(alphaVal .* logProbs - q + uncertaintyPenaltyWeight .* disagreement);
+    loss = mean(alphaVal .* logProbs - q);
 
     % Check for NaN/Inf in loss
     if isnan(loss) || isinf(loss)
@@ -692,4 +1505,18 @@ function [loss, gradients] = actorModelLoss(actorNet, states, critic1Net, critic
     end
 
     gradients = dlgradient(loss, actorNet.Learnables);
+end
+
+function value = getFieldOrDefault(structValue, fieldName, defaultValue)
+    if isfield(structValue, fieldName)
+        value = structValue.(fieldName);
+    else
+        value = defaultValue;
+    end
+end
+
+function logStd = clampPolicyLogStd(logStd)
+    minStd = 0.01;
+    maxStd = 1.0;
+    logStd = max(min(logStd, log(maxStd)), log(minStd));
 end

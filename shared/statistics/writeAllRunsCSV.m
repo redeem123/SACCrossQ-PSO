@@ -39,7 +39,7 @@ function writeAllRunsCSV(allRunResults, algorithms, filename)
                     dangerZonePenalty = getFieldValue(components, 'dangerZonePenalty', 0);
                     duplicatePenalty = getFieldValue(components, 'duplicatePenalty', 0);
                 elseif isfield(allRunResults{run}.(algName), 'actualBestFitness')
-                    % For RL algorithms (APEX-PSO, RLAM-PSO) that use actualBestFitness
+                    % For RL algorithms (RRSACPSO, RLAM-PSO) that use actualBestFitness
                     globalPathFitness = allRunResults{run}.(algName).actualBestFitness;
                     pathLength = globalPathFitness;
                 elseif isfield(allRunResults{run}.(algName), 'pathLength')
