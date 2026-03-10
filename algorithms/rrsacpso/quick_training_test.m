@@ -13,7 +13,7 @@ scriptDir = fileparts(fileparts(fileparts(mfilename('fullpath'))));
 addpath(genpath(scriptDir));
 
 % Create minimal config for quick test
-config = APEXPSO_Config();
+config = RRSACPSO_Config();
 config.numEpisodes = 5;           % Just 5 episodes
 config.maxIterations = 100;       % 100 iterations per episode
 config.warmupPeriod = 10;         % Short warmup
@@ -49,7 +49,7 @@ fprintf('───────────────────────�
 tic;
 try
     [bestPath, bestFitness, fitnessHistory, agent, stateEncoder] = ...
-        globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, ...
+        globalPathPlanningRRSACPSO(startPoint, goalPoint, dangerZones, ...
         terrainGrid, terrainX, terrainY, config);
 
     elapsedTime = toc;

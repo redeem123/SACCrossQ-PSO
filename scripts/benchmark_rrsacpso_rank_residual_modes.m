@@ -1,4 +1,4 @@
-function benchmark_apexpso_rank_residual_modes(numRuns, maxIterations, popSize, scenarios, numWorkers)
+function benchmark_rrsacpso_rank_residual_modes(numRuns, maxIterations, popSize, scenarios, numWorkers)
 %BENCHMARK_APEXPSO_RANK_RESIDUAL_MODES
 % Compare RRSACPSO parameterization modes under the same SAC backbone.
 %
@@ -43,7 +43,7 @@ function benchmark_apexpso_rank_residual_modes(numRuns, maxIterations, popSize, 
     end
 
     outputDir = fullfile(repoRoot, 'outputs', 'research', ...
-        sprintf('apexpso_rank_residual_modes_%s', char(datetime('now', 'Format', 'yyyyMMdd_HHmmss'))));
+        sprintf('rrsacpso_rank_residual_modes_%s', char(datetime('now', 'Format', 'yyyyMMdd_HHmmss'))));
     resultsDir = fullfile(outputDir, 'results');
     if exist(resultsDir, 'dir') ~= 7
         mkdir(resultsDir);

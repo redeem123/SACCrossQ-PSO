@@ -1,4 +1,4 @@
-classdef APEXPSO_Agent < handle
+classdef RRSACPSO_Agent < handle
     % RRSACPSO SAC agent with retained two-component stack:
     %   - RankResidualControl
     %   - Pluggable SAC-side critic improvement under research
@@ -39,7 +39,7 @@ classdef APEXPSO_Agent < handle
     end
 
     methods
-        function obj = APEXPSO_Agent(config)
+        function obj = RRSACPSO_Agent(config)
             % Constructor
             obj.config = config;
             obj.config = obj.normalizeRuntimeConfig(obj.config);
@@ -489,7 +489,7 @@ classdef APEXPSO_Agent < handle
         end
 
         function config = normalizeRuntimeConfig(~, config)
-            % Research overrides are applied after APEXPSO_Config runs, so
+            % Research overrides are applied after RRSACPSO_Config runs, so
             % sanitize the effective runtime config here as well.
             if ~isfield(config, 'useREDQCritic')
                 config.useREDQCritic = false;

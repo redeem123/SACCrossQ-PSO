@@ -21,7 +21,7 @@ def save_inset(name):
 
 def generate_reward_inset():
     try:
-        mat = scipy.io.loadmat('models/RRSACPSO/apexpso_perparticle_log.mat')
+        mat = scipy.io.loadmat('models/RRSACPSO/rrsacpso_perparticle_log.mat')
         # Structure is logData[0,0]['episodeRewards']
         rewards = mat['logData'][0,0]['episodeRewards'].flatten()
         

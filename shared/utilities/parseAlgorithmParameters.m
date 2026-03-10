@@ -170,7 +170,7 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
 
         case 'RRSACPSO'
             % RRSACPSO: No algorithm-specific params (all in config), [common params]
-            % Configuration handled internally by APEXPSO_Config (RRSACPSO).
+            % Configuration handled internally by RRSACPSO_Config (RRSACPSO).
             algorithmParams = struct();  % Empty struct, no algorithm-specific params
             commonStartIdx = 1;
 

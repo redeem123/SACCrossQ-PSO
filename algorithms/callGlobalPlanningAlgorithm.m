@@ -87,7 +87,7 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
 
         case {'RRSACPSO', 'RRSACPSO_Online'}
             % RRSACPSO online-only operation.
-            config = APEXPSO_Config('online');
+            config = RRSACPSO_Config('online');
             config.mapSize = mapSize;
 
             if isfield(params, 'maxIterations')
@@ -111,7 +111,7 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             config = applyAPEXPSOParamMode(config);
 
             [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = ...
-                globalPathPlanningAPEXPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
+                globalPathPlanningRRSACPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
 
             intermediateWaypoints = globalPath(2:end-1, :);
             position = reshape(intermediateWaypoints', 1, []);

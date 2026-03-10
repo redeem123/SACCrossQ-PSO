@@ -1,4 +1,4 @@
-function config = APEXPSO_Config(mode)
+function config = RRSACPSO_Config(mode)
     % RRSACPSO SAC configuration: retained 2-component SAC-side stack.
     %
     % RL-PSO algorithm combining:
@@ -12,8 +12,8 @@ function config = APEXPSO_Config(mode)
     %   - TQC: distributional twin critics with truncated target quantiles
     %
     % Usage:
-    %   config = APEXPSO_Config()           % Default mode
-    %   config = APEXPSO_Config('fast')     % Quick testing
+    %   config = RRSACPSO_Config()           % Default mode
+    %   config = RRSACPSO_Config('fast')     % Quick testing
 
     if nargin < 1
         mode = 'online';
@@ -224,7 +224,7 @@ function config = APEXPSO_Config(mode)
 
     config.logInterval = 5;                 % Log every 5 episodes
     config.saveInterval = 50;               % Save every 50 episodes
-    config.savePath = 'models/apexpso.mat';
+    config.savePath = 'models/rrsacpso.mat';
     config.verbose = false;                 % Detailed logs
     config.disableVisualization = false;    % Disable plotting in batch research runs
 

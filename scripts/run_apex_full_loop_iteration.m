@@ -37,8 +37,8 @@ function result = run_apex_full_loop_iteration()
 
     % Map user terminology:
     % "NoCrossScaleState" in this codebase corresponds to the No-CrossQ ablation model.
-    fullCurrent = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/apexpso_perparticle.mat';
-    noCrossScaleState = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/apexpso_abl_nocrossq.mat';
+    fullCurrent = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/rrsacpso_perparticle.mat';
+    noCrossScaleState = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/rrsacpso_abl_nocrossq.mat';
 
     assert(isfile(fullCurrent), 'Missing Full model: %s', fullCurrent);
     assert(isfile(noCrossScaleState), 'Missing NoCrossScaleState model: %s', noCrossScaleState);
@@ -200,9 +200,9 @@ function iteration = runFocusedIteration(currentFull, nocrossPath, baseline, set
     % Minimal candidate set: only Full checkpoint variant swaps.
     candidates = {
         currentFull;
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/apexpso_perparticle_ep250.mat';
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/apexpso_perparticle_ep200.mat';
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/apexpso_perparticle.mat'
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/rrsacpso_perparticle_ep250.mat';
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/rrsacpso_perparticle_ep200.mat';
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/rrsacpso_perparticle.mat'
     };
     candidates = unique(candidates(cellfun(@isfile, candidates)));
 

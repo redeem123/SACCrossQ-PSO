@@ -1,4 +1,4 @@
-function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory, learningStats] = globalPathPlanningAPEXPSO(...
+function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterHistory, learningStats] = globalPathPlanningRRSACPSO(...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config)
     % RRSACPSO: Advanced Parameter Exploration CrossQ-SAC for PSO
     %
@@ -30,7 +30,7 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     fprintf('╚══════════════════════════════════════════════════════════╝\n\n');
 
     % Online-only initialization: always start from scratch in-memory.
-    agent = APEXPSO_Agent(config);
+    agent = RRSACPSO_Agent(config);
     if isfield(config, 'useCrossScaleState') && config.useCrossScaleState
         stateEncoder = CrossScaleStateEncoder(config);
     else

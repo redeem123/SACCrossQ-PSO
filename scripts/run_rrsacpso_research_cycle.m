@@ -1,4 +1,4 @@
-function run_apexpso_research_cycle(numRuns, maxIterations)
+function run_rrsacpso_research_cycle(numRuns, maxIterations)
 %RUN_APEXPSO_RESEARCH_CYCLE Run the retained RRSACPSO ablation suite.
 %
 % This script benchmarks:
@@ -28,7 +28,7 @@ function run_apexpso_research_cycle(numRuns, maxIterations)
 
     outputDir = resolveResearchOutputDir(repoRoot);
     ensureDir(outputDir);
-    checkpointFile = fullfile(outputDir, 'apexpso_checkpoint.csv');
+    checkpointFile = fullfile(outputDir, 'rrsacpso_checkpoint.csv');
     ensureCheckpointFile(checkpointFile);
     upgradeCheckpointFileIfNeeded(checkpointFile);
     completedKeys = loadCompletedKeyMap(checkpointFile);
@@ -225,13 +225,13 @@ function run_apexpso_research_cycle(numRuns, maxIterations)
 
     summary = summarizeRuns(allRuns, variants);
 
-    writetable(allRuns, fullfile(outputDir, 'apexpso_all_runs.csv'));
-    writetable(summary, fullfile(outputDir, 'apexpso_variant_summary.csv'));
+    writetable(allRuns, fullfile(outputDir, 'rrsacpso_all_runs.csv'));
+    writetable(summary, fullfile(outputDir, 'rrsacpso_variant_summary.csv'));
     writeMarkdownSummary(summary, fullfile(outputDir, 'comparison.md'));
 
     fprintf('\nSaved files:\n');
-    fprintf('  %s\n', fullfile(outputDir, 'apexpso_all_runs.csv'));
-    fprintf('  %s\n', fullfile(outputDir, 'apexpso_variant_summary.csv'));
+    fprintf('  %s\n', fullfile(outputDir, 'rrsacpso_all_runs.csv'));
+    fprintf('  %s\n', fullfile(outputDir, 'rrsacpso_variant_summary.csv'));
     fprintf('  %s\n', fullfile(outputDir, 'comparison.md'));
 
     function checkpointRunResult(runData)

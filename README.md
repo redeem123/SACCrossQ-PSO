@@ -4,13 +4,13 @@ MATLAB research repository for UAV global path planning with PSO-based optimizer
 
 The current trustworthy story of this repo is narrower than some legacy filenames and drafts suggest:
 - The main proposed method is `RRSACPSO`.
-- The strongest validated contribution is the `RankResidualControl` path inside `algorithms/apexpso/`.
+- The strongest validated contribution is the `RankResidualControl` path inside `algorithms/rrsacpso/`.
 - Critic-side SAC variants remain research branches, not settled claims.
 
 ## Start Here
 
 - Main comparison entry point: `run_comparison.m`
-- Proposed algorithm: `algorithms/apexpso/`
+- Proposed algorithm: `algorithms/rrsacpso/`
 - Shared infrastructure: `shared/`
 - Experiment and analysis helpers: `scripts/`
 
@@ -33,7 +33,7 @@ The current trustworthy story of this repo is narrower than some legacy filename
 
 ## What Is Current
 
-- `algorithms/apexpso/` is the active development target.
+- `algorithms/rrsacpso/` is the active development target.
 - `sage_latex_template_4_unzipped/` is the active manuscript source.
 - `paper/` should be treated as archived submission material unless explicitly revived.
 - `docs/archive_old_draft/` is historical only.
@@ -45,7 +45,7 @@ The current trustworthy story of this repo is narrower than some legacy filename
 run_comparison
 
 % RRSACPSO component tests
-run('algorithms/apexpso/test_apexpso_components.m')
+run('algorithms/rrsacpso/test_rrsacpso_components.m')
 ```
 
 ## Artifact Policy

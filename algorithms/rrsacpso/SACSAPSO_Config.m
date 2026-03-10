@@ -20,7 +20,6 @@ function config = SACSAPSO_Config(mode)
 
     % State/action configuration (global CPs)
     config.usePerParticleActions = false;
-    config.useMultiObjectiveReward = false;
     config.useCuriosityBonus = false;
     config.paramsPerParticle = 3;
     config.popSize = 30;

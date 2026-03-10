@@ -4,7 +4,7 @@
 % Usage: Run from MATLAB command window
 %   cd 'C:\Users\PC\Desktop\Copy_of_New Folder - Copy'
 %   addpath(genpath('.'))
-%   algorithms/apexpso/test_apexpso_components
+%   algorithms/rrsacpso/test_rrsacpso_components
 
 clc;
 fprintf('╔══════════════════════════════════════════════════════════╗\n');
@@ -17,7 +17,7 @@ totalTests = 9;
 try
     %% Test 1: Configuration Creation
     fprintf('[Test 1/9] Creating configuration...\n');
-    config = APEXPSO_Config('fast');
+    config = RRSACPSO_Config('fast');
     assert(config.stateSize == 15, 'State size mismatch');
     assert(config.actionSize == 9, 'Action size mismatch');
     assert(~config.useCrossQCritic, 'CrossQ critic should be disabled by default');
@@ -111,7 +111,7 @@ try
 
     %% Test 6: Agent Initialization
     fprintf('\n[Test 6/9] Initializing SAC agent...\n');
-    agent = APEXPSO_Agent(config);
+    agent = RRSACPSO_Agent(config);
     fprintf('  ✓ Agent initialized\n');
     fprintf('    - Actor LR: %.5f\n', config.actorLR);
     fprintf('    - Critic LR: %.5f\n', config.criticLR);
@@ -133,7 +133,7 @@ try
     redqConfig.gradientStepsPerTraining = 2;
     redqConfig.warmupPeriod = 0;
     redqConfig.batchSize = 32;
-    redqAgent = APEXPSO_Agent(redqConfig);
+    redqAgent = RRSACPSO_Agent(redqConfig);
     assert(numel(redqAgent.critics) == redqConfig.redqNumCritics, 'REDQ critic ensemble size mismatch');
     assert(redqAgent.useTargetNetworks, 'REDQ should require target networks');
     fprintf('    - REDQ critics: %d (subset=%d)\n', numel(redqAgent.critics), redqConfig.redqTargetSubsetSize);
