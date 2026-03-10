@@ -7,7 +7,7 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     fprintf('============================================\n\n');
 
     stateEncoder = [];
-    agent = RRSACPSO_Agent(config);
+    agent = SACSAPSO_Agent(config);
 
     % Initialize PSO
     [particles, mapSize, numWaypoints] = initializePSOParticles(config, startPoint, goalPoint, ...

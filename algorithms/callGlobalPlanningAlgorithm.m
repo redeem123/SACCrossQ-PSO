@@ -60,6 +60,13 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.convergenceHistory = convergence;
             algorithmSpecificStats.parameterHistory = paramHist;
 
+        case 'PSO_LDIW'
+            [globalPath, convergence, paramHist, algorithmSpecificStats] = globalPathPlanningPSOLDIW( ...
+                startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, ...
+                params.popSize, params.maxIterations, params.initialW, params.initialC1, params.initialC2);
+            algorithmSpecificStats.convergenceHistory = convergence;
+            algorithmSpecificStats.parameterHistory = paramHist;
+
         case 'RLNNPSO'
             % RL-NNPSO: Reinforcement Learning based Neural-Guided PSO with TD3
             % Pass pre-trained network path if available (14th parameter)

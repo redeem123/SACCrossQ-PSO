@@ -98,6 +98,15 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             algorithmParams.initialC2 = remainingParams{5};
             commonStartIdx = 6;
 
+        case 'PSO_LDIW'
+            % PSO_LDIW: popSize, maxIterations, initialW, initialC1, initialC2, [common params]
+            algorithmParams.popSize = remainingParams{1};
+            algorithmParams.maxIterations = remainingParams{2};
+            algorithmParams.initialW = remainingParams{3};
+            algorithmParams.initialC1 = remainingParams{4};
+            algorithmParams.initialC2 = remainingParams{5};
+            commonStartIdx = 6;
+
         case 'RLNNPSO'
             % RL-NNPSO (TD3-based velocity guidance): popSize, maxIterations, fixedW, fixedC1, fixedC2, pretrainedNetworkPath (optional), [common params]
             algorithmParams.popSize = remainingParams{1};

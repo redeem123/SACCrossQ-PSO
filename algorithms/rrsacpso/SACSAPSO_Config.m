@@ -17,6 +17,18 @@ function config = SACSAPSO_Config(mode)
     config.useBatchNorm = false;
     config.useTargetNetworks = true;
     config.numCritics = 2;
+    config.useTQCCritic = false;
+    config.useCriticBatchNorm = false;
+    config.useJointCriticBatchForBN = false;
+    config.useCrossQCritic = false;
+    config.useREDQCritic = false;
+    config.useDroQCritic = false;
+    config.useAQECritic = false;
+    config.useResidualCriticDecomposition = false;
+    config.usePrioritizedReplay = false;
+    config.useCrossScaleState = false;
+    config.useRankResidualControl = false;
+    config.useSimBaBackbone = false;
 
     % State/action configuration (global CPs)
     config.usePerParticleActions = false;
@@ -39,6 +51,7 @@ function config = SACSAPSO_Config(mode)
     config.tau = 0.005;
     config.targetEntropy = -config.actionSize;
     config.initAlpha = 0.2;
+    config.paramMode = 'global';
 
     % Training configuration
     config.numEpisodes = 1;
