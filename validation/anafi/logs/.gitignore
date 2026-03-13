@@ -1,0 +1,4 @@
+# GPS flight logs — git-ignored
+*.csv
+*.json
+*.png

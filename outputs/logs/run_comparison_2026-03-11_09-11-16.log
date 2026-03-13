@@ -1,0 +1,597 @@
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+Execution mode: parallel
+Independent runs: 1
+Logging to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_09-11-16.log
+
+Initialising parallel pool (parallel mode)...
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+
+==========================================================
+Scenario 1: ChrismasTerrain2 - Medium
+Terrain: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/data/ChrismasTerrain2.tif
+Danger Zones: 5
+==========================================================
+Executing 1 runs for 8 parallel-safe algorithms...
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+      [Iter  50] Action stats: mean=0.0465±0.7108 [-0.9929-0.8631]
+  [Iter  50/1000] Best: 1814.6119 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.0231±0.4376 [-0.8407-0.4865]
+      [Iter 100] Fitness: current=1746.2720, best=1746.2720, diversity=8.430916
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 1746.2720 | Alpha: 0.2000
+      [Iter 150] Action stats: mean=0.0080±0.7857 [-0.9407-0.9680]
+  [Iter 150/1000] Best: 1731.8543 | Alpha: 0.1986
+      [Iter 200] Action stats: mean=-0.2838±0.5174 [-0.7324-0.7576]
+      [Iter 200] Fitness: current=1722.8071, best=1722.8071, diversity=6.781277
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 1722.8071 | Alpha: 0.1957
+      [Iter 250] Action stats: mean=0.0617±0.5249 [-0.8202-0.7385]
+  [Iter 250/1000] Best: 1717.7967 | Alpha: 0.1928
+      [Iter 300] Action stats: mean=0.4123±0.6770 [-0.9326-0.9598]
+      [Iter 300] Fitness: current=1680.1180, best=1680.1180, diversity=5.449150
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 1680.1180 | Alpha: 0.1899
+      [Iter 350] Action stats: mean=0.0290±0.6610 [-0.8804-0.9313]
+  [Iter 350/1000] Best: 1671.3894 | Alpha: 0.1871
+      [Iter 400] Action stats: mean=0.2853±0.4374 [-0.4550-0.8142]
+      [Iter 400] Fitness: current=1665.9951, best=1665.9951, diversity=4.788581
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 1665.9951 | Alpha: 0.1843
+      [Iter 450] Action stats: mean=-0.0649±0.7541 [-0.9891-0.9374]
+  [Iter 450/1000] Best: 1665.5078 | Alpha: 0.1815
+      [Iter 500] Action stats: mean=-0.0254±0.5918 [-0.7636-0.9064]
+      [Iter 500] Fitness: current=1660.0079, best=1660.0079, diversity=2.794492
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 1660.0079 | Alpha: 0.1788
+      [Iter 550] Action stats: mean=-0.0586±0.7048 [-0.9291-0.9676]
+  [Iter 550/1000] Best: 1645.8198 | Alpha: 0.1762
+      [Iter 600] Action stats: mean=0.0009±0.8244 [-0.9216-0.9813]
+      [Iter 600] Fitness: current=1634.6515, best=1634.6515, diversity=1.706273
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 1634.6515 | Alpha: 0.1735
+      [Iter 650] Action stats: mean=0.1361±0.6067 [-0.8828-0.9271]
+  [Iter 650/1000] Best: 1625.2355 | Alpha: 0.1710
+      [Iter 700] Action stats: mean=0.1609±0.7679 [-0.9419-0.8973]
+      [Iter 700] Fitness: current=1622.4561, best=1622.4561, diversity=1.172726
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 1622.4561 | Alpha: 0.1684
+      [Iter 750] Action stats: mean=0.2404±0.6737 [-0.6331-0.9716]
+  [Iter 750/1000] Best: 1622.2434 | Alpha: 0.1659
+      [Iter 800] Action stats: mean=-0.3682±0.5227 [-0.9886-0.2844]
+      [Iter 800] Fitness: current=1603.2814, best=1603.2814, diversity=0.823864
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 1603.2814 | Alpha: 0.1634
+      [Iter 850] Action stats: mean=0.3686±0.5346 [-0.3294-0.9959]
+  [Iter 850/1000] Best: 1581.4637 | Alpha: 0.1610
+      [Iter 900] Action stats: mean=0.0596±0.4017 [-0.5660-0.6414]
+      [Iter 900] Fitness: current=1580.8361, best=1580.8361, diversity=0.909296
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 1580.8361 | Alpha: 0.1586
+      [Iter 950] Action stats: mean=-0.1908±0.5790 [-0.9368-0.7179]
+  [Iter 950/1000] Best: 1580.5140 | Alpha: 0.1562
+      [Iter 1000] Action stats: mean=-0.0994±0.6322 [-0.9894-0.8589]
+      [Iter 1000] Fitness: current=1580.5045, best=1580.5045, diversity=0.696980
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 1580.5045 | Alpha: 0.1539
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      1580.5045
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 54.2979 seconds
+Path length: 152.4788 units
+Waypoints: 7
+Best fitness: 1580.5045
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 2/100
+First feasible path found at iteration: 0
+Traditional PSO iteration: 50/1000 - Best fitness: 1727.357
+Traditional PSO iteration: 100/1000 - Best fitness: 1564.0126
+Traditional PSO iteration: 150/1000 - Best fitness: 1546.8785
+Traditional PSO iteration: 200/1000 - Best fitness: 1540.1634
+Traditional PSO iteration: 250/1000 - Best fitness: 1538.9675
+Traditional PSO iteration: 300/1000 - Best fitness: 1538.7345
+Traditional PSO iteration: 350/1000 - Best fitness: 1538.5657
+Traditional PSO iteration: 400/1000 - Best fitness: 1538.1586
+Traditional PSO iteration: 450/1000 - Best fitness: 1538.041
+Traditional PSO iteration: 500/1000 - Best fitness: 1538.0313
+Traditional PSO iteration: 550/1000 - Best fitness: 1538.0267
+Traditional PSO iteration: 600/1000 - Best fitness: 1538.0213
+Traditional PSO iteration: 650/1000 - Best fitness: 1538.0189
+Traditional PSO iteration: 700/1000 - Best fitness: 1538.0132
+Traditional PSO iteration: 750/1000 - Best fitness: 1537.5836
+Traditional PSO iteration: 800/1000 - Best fitness: 1536.4081
+Traditional PSO iteration: 850/1000 - Best fitness: 1536.3497
+Traditional PSO iteration: 900/1000 - Best fitness: 1536.3401
+Traditional PSO iteration: 950/1000 - Best fitness: 1536.3353
+Traditional PSO iteration: 1000/1000 - Best fitness: 1536.3265
+Traditional PSO completed with final fitness: 1536.3265
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 21.1693 seconds
+Path length: 161.0567 units
+Waypoints: 7
+Best fitness: 1536.3265
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 15684.5037 - w=0.8995, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 1856.0058 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 1820.2774 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 1805.4594 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 1792.9819 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 1749.6417 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 1720.5362 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 1685.8913 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 1666.208 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 1662.1594 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 1661.2346 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 1660.6555 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 1660.6339 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 1660.5609 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 1660.3035 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 1659.8116 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 1659.5522 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 1659.3797 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 1659.2242 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 1659.0027 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 1658.8615 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 21.7046 seconds
+Path length: 160.8583 units
+Waypoints: 7
+Best fitness: 1658.8615
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 2/100
+First feasible path found at iteration: 0
+FIPS iteration: 50/1000 - Best fitness: 2367.3
+FIPS iteration: 100/1000 - Best fitness: 1899.5353
+FIPS iteration: 150/1000 - Best fitness: 1896.0352
+FIPS iteration: 200/1000 - Best fitness: 1772.0964
+FIPS iteration: 250/1000 - Best fitness: 1745.8618
+FIPS iteration: 300/1000 - Best fitness: 1727.7835
+FIPS iteration: 350/1000 - Best fitness: 1727.7835
+FIPS iteration: 400/1000 - Best fitness: 1727.7835
+FIPS iteration: 450/1000 - Best fitness: 1727.7835
+FIPS iteration: 500/1000 - Best fitness: 1727.7835
+FIPS iteration: 550/1000 - Best fitness: 1724.08
+FIPS iteration: 600/1000 - Best fitness: 1724.08
+FIPS iteration: 650/1000 - Best fitness: 1724.08
+FIPS iteration: 700/1000 - Best fitness: 1724.08
+FIPS iteration: 750/1000 - Best fitness: 1724.08
+FIPS iteration: 800/1000 - Best fitness: 1724.08
+FIPS iteration: 850/1000 - Best fitness: 1724.08
+FIPS iteration: 900/1000 - Best fitness: 1724.08
+FIPS iteration: 950/1000 - Best fitness: 1724.08
+FIPS iteration: 1000/1000 - Best fitness: 1724.08
+FIPS completed with final fitness: 1724.08
+
+========== Planning Complete ==========
+Algorithm: FIPS
+Execution time: 21.5160 seconds
+Path length: 229.5182 units
+Waypoints: 7
+Best fitness: 1724.0800
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: CLPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting CLPSO (Comprehensive Learning PSO) path planning...
+Number of Initial feasible particles: 2/100
+First feasible path found at iteration: 0
+CLPSO iteration: 50/1000 - Best fitness: 3086.4397 - w: 0.860
+CLPSO iteration: 100/1000 - Best fitness: 3063.0425 - w: 0.820
+CLPSO iteration: 150/1000 - Best fitness: 2583.9395 - w: 0.780
+CLPSO iteration: 200/1000 - Best fitness: 2522.9793 - w: 0.740
+CLPSO iteration: 250/1000 - Best fitness: 2522.9793 - w: 0.700
+CLPSO iteration: 300/1000 - Best fitness: 2522.9793 - w: 0.660
+CLPSO iteration: 350/1000 - Best fitness: 2518.8362 - w: 0.620
+CLPSO iteration: 400/1000 - Best fitness: 2518.8362 - w: 0.580
+CLPSO iteration: 450/1000 - Best fitness: 2464.1206 - w: 0.540
+CLPSO iteration: 500/1000 - Best fitness: 2373.9112 - w: 0.500
+CLPSO iteration: 550/1000 - Best fitness: 2320.5805 - w: 0.460
+CLPSO iteration: 600/1000 - Best fitness: 2248.5332 - w: 0.420
+CLPSO iteration: 650/1000 - Best fitness: 2248.5332 - w: 0.380
+CLPSO iteration: 700/1000 - Best fitness: 2242.0791 - w: 0.340
+CLPSO iteration: 750/1000 - Best fitness: 2242.0742 - w: 0.300
+CLPSO iteration: 800/1000 - Best fitness: 2141.3389 - w: 0.260
+CLPSO iteration: 850/1000 - Best fitness: 2141.3389 - w: 0.220
+CLPSO iteration: 900/1000 - Best fitness: 2141.3389 - w: 0.180
+CLPSO iteration: 950/1000 - Best fitness: 2141.3389 - w: 0.140
+CLPSO iteration: 1000/1000 - Best fitness: 2141.3389 - w: 0.100
+CLPSO completed with final fitness: 2141.3389
+
+========== Planning Complete ==========
+Algorithm: CLPSO
+Execution time: 21.4925 seconds
+Path length: 209.2023 units
+Waypoints: 7
+Best fitness: 2141.3389
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAEPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting SAEPSO-FULL (All improvements enabled)...
+  Stage 1: Tent map initialization in spherical coordinates...
+  Stage 2: Opposition-based learning...
+  Stage 3: Main optimization loop...
+Iteration: 50/1000 - Best fitness: 1926.4725
+Iteration: 100/1000 - Best fitness: 1886.7829
+Iteration: 150/1000 - Best fitness: 1820.3775
+Iteration: 200/1000 - Best fitness: 1810.0214
+Iteration: 250/1000 - Best fitness: 1752.3355
+Iteration: 300/1000 - Best fitness: 1752.3355
+Iteration: 350/1000 - Best fitness: 1658.3835
+Iteration: 400/1000 - Best fitness: 1658.3835
+Iteration: 450/1000 - Best fitness: 1658.3835
+Iteration: 500/1000 - Best fitness: 1658.3835
+Iteration: 550/1000 - Best fitness: 1658.3835
+Iteration: 600/1000 - Best fitness: 1658.3835
+Iteration: 650/1000 - Best fitness: 1658.3835
+Iteration: 700/1000 - Best fitness: 1658.3835
+Iteration: 750/1000 - Best fitness: 1607.8751
+Iteration: 800/1000 - Best fitness: 1607.8751
+Iteration: 850/1000 - Best fitness: 1607.8751
+Iteration: 900/1000 - Best fitness: 1607.8751
+Iteration: 950/1000 - Best fitness: 1607.8751
+Iteration: 1000/1000 - Best fitness: 1607.8751
+SAEPSO-FULL completed with final fitness: 1607.8751
+
+========== Planning Complete ==========
+Algorithm: SAEPSO
+Execution time: 58.2589 seconds
+Path length: 201.9187 units
+Waypoints: 7
+Best fitness: 1607.8751
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAEPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting SAEPSO-ParamsOnly (Parameter control strategy only)...
+  Initialization: Random Cartesian coordinates...
+  Stage 3: Main optimization loop...
+Iteration: 50/1000 - Best fitness: 2448.3917
+Iteration: 100/1000 - Best fitness: 1847.3548
+Iteration: 150/1000 - Best fitness: 1692.7148
+Iteration: 200/1000 - Best fitness: 1682.7984
+Iteration: 250/1000 - Best fitness: 1646.4264
+Iteration: 300/1000 - Best fitness: 1635.5021
+Iteration: 350/1000 - Best fitness: 1562.3064
+Iteration: 400/1000 - Best fitness: 1562.3064
+Iteration: 450/1000 - Best fitness: 1509.6258
+Iteration: 500/1000 - Best fitness: 1484.3665
+Iteration: 550/1000 - Best fitness: 1467.2783
+Iteration: 600/1000 - Best fitness: 1454.5906
+Iteration: 650/1000 - Best fitness: 1449.5461
+Iteration: 700/1000 - Best fitness: 1447.3542
+Iteration: 750/1000 - Best fitness: 1446.8018
+Iteration: 800/1000 - Best fitness: 1446.5501
+Iteration: 850/1000 - Best fitness: 1438.4242
+Iteration: 900/1000 - Best fitness: 1435.8184
+Iteration: 950/1000 - Best fitness: 1434.6681
+Iteration: 1000/1000 - Best fitness: 1433.2247
+SAEPSO-ParamsOnly completed with final fitness: 1433.2247
+
+========== Planning Complete ==========
+Algorithm: SAEPSO
+Execution time: 22.0145 seconds
+Path length: 182.0724 units
+Waypoints: 7
+Best fitness: 1433.2247
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: UAPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting UAPSO global path planning...
+Initial feasible particles: 2/100
+UAPSO iteration 50/1000 - Best fitness: 2685.3853
+UAPSO iteration 100/1000 - Best fitness: 2597.6302
+UAPSO iteration 150/1000 - Best fitness: 2360.5497
+UAPSO iteration 200/1000 - Best fitness: 2360.5497
+UAPSO iteration 250/1000 - Best fitness: 2360.5497
+UAPSO iteration 300/1000 - Best fitness: 2360.5497
+UAPSO iteration 350/1000 - Best fitness: 2360.5497
+UAPSO iteration 400/1000 - Best fitness: 2360.5497
+UAPSO iteration 450/1000 - Best fitness: 2360.5497
+UAPSO iteration 500/1000 - Best fitness: 2351.3804
+UAPSO iteration 550/1000 - Best fitness: 2312.4738
+UAPSO iteration 600/1000 - Best fitness: 2233.3544
+UAPSO iteration 650/1000 - Best fitness: 2145.0769
+UAPSO iteration 700/1000 - Best fitness: 2053.683
+UAPSO iteration 750/1000 - Best fitness: 1896.2734
+UAPSO iteration 800/1000 - Best fitness: 1763.4029
+UAPSO iteration 850/1000 - Best fitness: 1679.152
+UAPSO iteration 900/1000 - Best fitness: 1658.7419
+UAPSO iteration 950/1000 - Best fitness: 1650.9177
+UAPSO iteration 1000/1000 - Best fitness: 1648.5638
+UAPSO completed with final fitness: 1648.5638
+
+========== Planning Complete ==========
+Algorithm: UAPSO
+Execution time: 144.8871 seconds
+Path length: 176.8837 units
+Waypoints: 7
+Best fitness: 1648.5638
+========================================
+
+All runs completed. Performing statistical analysis...
+
+=== STATISTICAL ANALYSIS FOR SCENARIO 1 ===
+Metric tested: global_fitness_total
+Runs available: 1
+
+=== DESCRIPTIVE STATISTICS (global_fitness_total) ===
+Algorithm                 | N       | Mean       | Std        | Median    
+------------------------------------------------------------------------
+RRSACPSO                  |       1 |  1580.5045 |        NaN |  1580.5045
+PSO-Standard              |       1 |  1536.3265 |        NaN |  1536.3265
+PSO-LDIW                  |       1 |  1658.8615 |        NaN |  1658.8615
+FIPS                      |       1 |  1724.0800 |        NaN |  1724.0800
+CLPSO                     |       1 |  2141.3389 |        NaN |  2141.3389
+SAEPSO [11]               |       1 |  1607.8751 |        NaN |  1607.8751
+SAEPSO* [11]              |       1 |  1433.2247 |        NaN |  1433.2247
+UAPSO [25]                |       1 |  1648.5638 |        NaN |  1648.5638
+
+=== PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
+Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
+-------------------------------------------------------------------------------------------
+RRSACPSO                  vs PSO-Standard              |  1 |  44.1780 | 1.000000 | 1.000000
+RRSACPSO                  vs PSO-LDIW                  |  1 | -78.3570 | 1.000000 | 1.000000
+RRSACPSO                  vs FIPS                      |  1 | -143.5755 | 1.000000 | 1.000000
+RRSACPSO                  vs CLPSO                     |  1 | -560.8344 | 1.000000 | 1.000000
+RRSACPSO                  vs SAEPSO [11]               |  1 | -27.3707 | 1.000000 | 1.000000
+RRSACPSO                  vs SAEPSO* [11]              |  1 | 147.2797 | 1.000000 | 1.000000
+RRSACPSO                  vs UAPSO [25]                |  1 | -68.0593 | 1.000000 | 1.000000
+PSO-Standard              vs PSO-LDIW                  |  1 | -122.5350 | 1.000000 | 1.000000
+PSO-Standard              vs FIPS                      |  1 | -187.7535 | 1.000000 | 1.000000
+PSO-Standard              vs CLPSO                     |  1 | -605.0124 | 1.000000 | 1.000000
+PSO-Standard              vs SAEPSO [11]               |  1 | -71.5486 | 1.000000 | 1.000000
+PSO-Standard              vs SAEPSO* [11]              |  1 | 103.1017 | 1.000000 | 1.000000
+PSO-Standard              vs UAPSO [25]                |  1 | -112.2373 | 1.000000 | 1.000000
+PSO-LDIW                  vs FIPS                      |  1 | -65.2185 | 1.000000 | 1.000000
+PSO-LDIW                  vs CLPSO                     |  1 | -482.4774 | 1.000000 | 1.000000
+PSO-LDIW                  vs SAEPSO [11]               |  1 |  50.9864 | 1.000000 | 1.000000
+PSO-LDIW                  vs SAEPSO* [11]              |  1 | 225.6367 | 1.000000 | 1.000000
+PSO-LDIW                  vs UAPSO [25]                |  1 |  10.2977 | 1.000000 | 1.000000
+FIPS                      vs CLPSO                     |  1 | -417.2589 | 1.000000 | 1.000000
+FIPS                      vs SAEPSO [11]               |  1 | 116.2049 | 1.000000 | 1.000000
+FIPS                      vs SAEPSO* [11]              |  1 | 290.8553 | 1.000000 | 1.000000
+FIPS                      vs UAPSO [25]                |  1 |  75.5163 | 1.000000 | 1.000000
+CLPSO                     vs SAEPSO [11]               |  1 | 533.4637 | 1.000000 | 1.000000
+CLPSO                     vs SAEPSO* [11]              |  1 | 708.1141 | 1.000000 | 1.000000
+CLPSO                     vs UAPSO [25]                |  1 | 492.7751 | 1.000000 | 1.000000
+SAEPSO [11]               vs SAEPSO* [11]              |  1 | 174.6504 | 1.000000 | 1.000000
+SAEPSO [11]               vs UAPSO [25]                |  1 | -40.6886 | 1.000000 | 1.000000
+SAEPSO* [11]              vs UAPSO [25]                |  1 | -215.3390 | 1.000000 | 1.000000
+
+=== HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
+Significant pairs (Holm-corrected, paired t-test): 0/28
+Significant pairs (Holm-corrected, Wilcoxon):      0/28
+
+=== OVERALL RANKING (MEAN METRIC + HOLM T-TEST WINS) ===
+Rank | Algorithm                 | Mean | Holm Wins
+---------------------------------------------------------------
+1    | SAEPSO* [11]              |  1433.2247 |         0
+2    | PSO-Standard              |  1536.3265 |         0
+3    | RRSACPSO                  |  1580.5045 |         0
+4    | SAEPSO [11]               |  1607.8751 |         0
+5    | UAPSO [25]                |  1648.5638 |         0
+6    | PSO-LDIW                  |  1658.8615 |         0
+7    | FIPS                      |  1724.0800 |         0
+8    | CLPSO                     |  2141.3389 |         0
+
+Friedman omnibus skipped: insufficient complete run blocks.
+
+Statistical artifacts saved for Scenario 1:
+  Pairwise CSV: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_Pairwise_Scenario1.csv
+  Summary CSV:  /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_Summary_Scenario1.csv
+  MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_Results_Scenario1.mat
+Generating diagnostic visualisations...
+==== PSO Debug Information ====
+Algorithm RRSACPSO is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 54.2962 to 54.2962
+  pathLengths: 1 data points
+    Range: 152.4788 to 152.4788
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for RRSACPSO
+-------------------
+Algorithm PSO-Standard is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 21.169 to 21.169
+  pathLengths: 1 data points
+    Range: 161.0567 to 161.0567
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for PSO-Standard
+-------------------
+Algorithm PSO-LDIW is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 21.7044 to 21.7044
+  pathLengths: 1 data points
+    Range: 160.8583 to 160.8583
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for PSO-LDIW
+-------------------
+Algorithm FIPS is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 21.5158 to 21.5158
+  pathLengths: 1 data points
+    Range: 229.5182 to 229.5182
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for FIPS
+-------------------
+Algorithm CLPSO is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 21.4923 to 21.4923
+  pathLengths: 1 data points
+    Range: 209.2023 to 209.2023
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for CLPSO
+-------------------
+Algorithm SAEPSO [11] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 58.2586 to 58.2586
+  pathLengths: 1 data points
+    Range: 201.9187 to 201.9187
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for SAEPSO [11]
+-------------------
+Algorithm SAEPSO* [11] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 22.0143 to 22.0143
+  pathLengths: 1 data points
+    Range: 182.0724 to 182.0724
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for SAEPSO* [11]
+-------------------
+Algorithm UAPSO [25] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 144.8869 to 144.8869
+  pathLengths: 1 data points
+    Range: 176.8837 to 176.8837
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for UAPSO [25]
+-------------------
+
+=== ALGORITHM COMPARISON SUMMARY ===
+RRSACPSO: Path=152.48, Time=54.2962s, Safety=N/A (direct planning)
+PSO-Standard: Path=161.06, Time=21.1690s, Safety=N/A (direct planning)
+PSO-LDIW: Path=160.86, Time=21.7044s, Safety=N/A (direct planning)
+FIPS: Path=229.52, Time=21.5158s, Safety=N/A (direct planning)
+CLPSO: Path=209.20, Time=21.4923s, Safety=N/A (direct planning)
+SAEPSO [11]: Path=201.92, Time=58.2586s, Safety=N/A (direct planning)
+SAEPSO* [11]: Path=182.07, Time=22.0143s, Safety=N/A (direct planning)
+UAPSO [25]: Path=176.88, Time=144.8869s, Safety=N/A (direct planning)
+PSO comparison figures saved successfully!
+Generating trajectory and convergence figures...
+
+=== Algorithm Comparison Complete for Scenario 1 ===
+3D view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/plot_Algorithm_Comparison_Scenario1_3D.pdf
+Top view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/plot_Algorithm_Comparison_Scenario1_TopView.pdf
+
+=== Path Length Comparison ===
+RRSACPSO: 152.48 units
+PSO-Standard: 161.06 units
+PSO-LDIW: 160.86 units
+FIPS: 229.52 units
+CLPSO: 209.20 units
+SAEPSO [11]: 201.92 units
+SAEPSO* [11]: 182.07 units
+UAPSO [25]: 176.88 units
+Convergence plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/Convergence_Comparison_Scenario1.pdf
+Parameter tracking plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/Parameter_Tracking_Scenario1.pdf
+No reward history found for plotting.
+No critic loss history found for plotting.
+All runs data written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_AllRuns_Scenario1_2026-03-11_09-17-43.csv
+Summary statistics written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_AlgorithmSummary_Scenario1_2026-03-11_09-17-43.csv
+Reports generated:
+  All runs data: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_AllRuns_Scenario1_2026-03-11_09-17-43.csv
+  Algorithm summary: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_AlgorithmSummary_Scenario1_2026-03-11_09-17-43.csv
+Scenario 1 complete.
+All scenarios completed successfully!
+
+Comparison complete! Log file saved to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_09-11-16.log

@@ -1,0 +1,7 @@
+scenario_id,metric_name,algorithm,n_valid,mean,std,median,min,max,average_rank,significant_wins_holm_t,friedman_chi_square,friedman_df,friedman_p,n_friedman_runs
+1,global_fitness_total,RLAMPSO [36],1,1710.222921,NaN,1710.222921,1710.222921,1710.222921,6,0,NaN,5,NaN,1
+1,global_fitness_total,DQN-PSO [34],1,1602.550156,NaN,1602.550156,1602.550156,1602.550156,3,0,NaN,5,NaN,1
+1,global_fitness_total,SAC-SAPSO [40],1,1689.085352,NaN,1689.085352,1689.085352,1689.085352,5,0,NaN,5,NaN,1
+1,global_fitness_total,PPO-PSO,1,1402.722203,NaN,1402.722203,1402.722203,1402.722203,1,0,NaN,5,NaN,1
+1,global_fitness_total,MPSORL,1,1463.538255,NaN,1463.538255,1463.538255,1463.538255,2,0,NaN,5,NaN,1
+1,global_fitness_total,RRSACPSO,1,1621.680653,NaN,1621.680653,1621.680653,1621.680653,4,0,NaN,5,NaN,1

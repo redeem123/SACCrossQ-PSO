@@ -1,0 +1,82 @@
+%% Creator: Inkscape 1.4.2 (ebf0e940, 2025-05-08), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'MDP_svg-tex.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{752.75318536bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.39283318)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{MDP_svg-tex.pdf}}%
+    \put(0.68938435,0.0278102){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}3D UAV Flight Planning from Algorithm\\\end{tabular}}}}%
+    \put(0.48323251,0.26703725){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Features map\\\end{tabular}}}}%
+    \put(0.73546916,0.36324189){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}PSO Updates\\\\\\\\\end{tabular}}}}%
+    \put(0.43051346,0.36262403){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}State\\\\\\\\\\\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{MDP_svg-tex.pdf}}%
+    \put(0.09996685,0.18544609){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Feedforward\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{MDP_svg-tex.pdf}}%
+    \put(0.07594277,0.28766482){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Multi-head Attention\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{MDP_svg-tex.pdf}}%
+    \put(0.08805752,0.23923156){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Temporal Selection\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{MDP_svg-tex.pdf}}%
+    \put(0.09727872,0.13680388){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Encoded State\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{MDP_svg-tex.pdf}}%
+    \put(0.27747432,0.23505353){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Policy Network\end{tabular}}}}%
+    \put(0.16017965,0.36687539){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}RL Agent\end{tabular}}}}%
+    \put(0.47311875,0.12020641){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Reward\\\\\\\\\\\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{MDP_svg-tex.pdf}}%
+    \put(0.4772153,0.01980545){\color[rgb]{0,0,0}\rotatebox{89.88506272}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Cumulative Reward\\\end{tabular}}}}}%
+    \put(0.52716338,0.00676022){\color[rgb]{0,0,0}\rotatebox{-0.1239131}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Episodes\\\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{MDP_svg-tex.pdf}}%
+    \put(0.25679982,0.33117247){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Positional Encoding\end{tabular}}}}%
+    \put(0.37549177,0.3311181){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}~\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{MDP_svg-tex.pdf}}%
+    \put(0.09479222,0.33449725){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Transformer\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

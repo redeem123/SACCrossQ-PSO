@@ -128,7 +128,7 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             end
             config = applyAPEXPSOParamMode(config);
 
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory] = ...
+            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory, learningStats] = ...
                 globalPathPlanningRRSACPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
 
             intermediateWaypoints = globalPath(2:end-1, :);
@@ -142,6 +142,8 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.finalFitness = bestFitness;
             algorithmSpecificStats.actualBestFitness = bestFitness;
             algorithmSpecificStats.parameterHistory = paramHistory;
+            algorithmSpecificStats.rewardHistory = learningStats.rewardHistory;
+            algorithmSpecificStats.criticLossHistory = learningStats.criticLossHistory;
             algorithmSpecificStats.agent = agent;
             algorithmSpecificStats.stateEncoder = stateEncoder;
 

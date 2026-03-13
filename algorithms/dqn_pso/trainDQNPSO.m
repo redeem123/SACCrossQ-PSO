@@ -1,14 +1,13 @@
 function trainingStats = trainDQNPSO(config)
-%TRAINDQNPso Offline training utility for DQN-PSO parameter adaptation.
+%TRAINDQNPSO Offline training utility for DQN-PSO parameter adaptation.
 %
 %   trainingStats = trainDQNPSO(config) runs multiple UAV planning episodes
-%   using the DQN-PSO global planner, accumulates the learned Q-table, and
-%   stores the resulting model to disk for later use in comparisons.
+%   using the DQN-PSO global planner and stores the resulting model.
 %
 %   Required config fields:
 %       numEpisodes   - Number of offline training episodes
-%       savePath      - Destination .mat file for the trained Q-table
-%       paramMode     - 'global' | '5subgroup' | 'per-particle'
+%       savePath      - Destination .mat file for the trained model
+%       paramMode     - 'global' (paper)
 %       popSize       - PSO population
 %       maxIterations - Max PSO iterations per episode
 %       w, c1, c2     - Initial PSO coefficients
@@ -54,25 +53,17 @@ function trainingStats = trainDQNPSO(config)
     trainingStats.paramMode = config.paramMode;
     trainingStats.totalTimeSeconds = 0;
 
-    % Initialize Q-table size based on paramMode
-    switch config.paramMode
-        case 'global'
-            numEntities = 1;
-        case '5subgroup'
-            numEntities = 5;
-        case 'per-particle'
-            numEntities = config.popSize;
-        otherwise
-            error('Invalid paramMode: %s', config.paramMode);
+    if ~strcmp(config.paramMode, "global")
+        warning('DQN-PSO (paper) is homogeneous; forcing paramMode to global.');
+        config.paramMode = "global";
     end
 
     dqnModel = struct();
-    dqnModel.Q = zeros(5, 5, numEntities);  % 5 states x 5 actions x numEntities
-    dqnModel.alpha = alpha;
+    dqnModel.qNet = [];
+    dqnModel.targetNet = [];
     dqnModel.gamma = gamma;
     dqnModel.epsilon = epsilon;
     dqnModel.paramMode = config.paramMode;
-    dqnModel.numEntities = numEntities;
     dqnModel.lastEpisode = 0;
 
     trainingStart = tic;
@@ -85,14 +76,8 @@ function trainingStats = trainDQNPSO(config)
             config.popSize, config.maxIterations, config.w, config.c1, config.c2, ...
             config.paramMode, dqnModel);
 
-        if isfield(episodeStats, 'learnedQTable')
-            dqnModel.Q = episodeStats.learnedQTable;
-        end
-        if isfield(episodeStats, 'qLearningState')
-            state = episodeStats.qLearningState;
-            if isfield(state, 'alpha');  dqnModel.alpha = state.alpha; end
-            if isfield(state, 'gamma');  dqnModel.gamma = state.gamma; end
-            if isfield(state, 'epsilon'); dqnModel.epsilon = state.epsilon; end
+        if isfield(episodeStats, 'dqnModel')
+            dqnModel = episodeStats.dqnModel;
         end
         dqnModel.lastEpisode = episode;
 

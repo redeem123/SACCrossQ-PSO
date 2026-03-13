@@ -98,9 +98,9 @@ function [globalPath, convergenceHistory, algorithmSpecificStats] = globalPathPl
 
     convergenceHistory = [convergenceHistory; globalBestFitness];
 
-    % CLPSO inertia weight: linearly decreasing from 0.9 to 0.2 (PAPER FORMULA)
+    % CLPSO inertia weight: linearly decreasing from 0.9 to 0.1 (comparison bounds)
     w_max = 0.9;
-    w_min = 0.2;
+    w_min = 0.1;
 
     % Main CLPSO loop
     for iter = 1:maxIterations

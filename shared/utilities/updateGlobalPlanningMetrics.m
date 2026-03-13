@@ -64,6 +64,15 @@ function metrics = updateGlobalPlanningMetrics(metrics, currentTime, globalPlanD
         if isfield(algorithmSpecificStats.parameterHistory, 'c2')
             metrics.c2_history = algorithmSpecificStats.parameterHistory.c2;
         end
+        if isfield(algorithmSpecificStats.parameterHistory, 'w_samples')
+            metrics.w_samples = algorithmSpecificStats.parameterHistory.w_samples;
+        end
+        if isfield(algorithmSpecificStats.parameterHistory, 'c1_samples')
+            metrics.c1_samples = algorithmSpecificStats.parameterHistory.c1_samples;
+        end
+        if isfield(algorithmSpecificStats.parameterHistory, 'c2_samples')
+            metrics.c2_samples = algorithmSpecificStats.parameterHistory.c2_samples;
+        end
     end
     
     % Update algorithm-specific metrics only if they exist

@@ -1,6 +1,7 @@
 function dangerZones = generateDangerZones(numZones, mapSize, terrainGrid, terrainX, terrainY)
     % Generate danger zones as infinite-height cylinders from ground to infinity
     % Danger zones: [x, y, radius] - UAV cannot fly through these vertical cylinders
+    %#ok<INUSD>
 
     dangerZones = zeros(numZones, 3);  % [x, y, radius]
 
@@ -22,6 +23,11 @@ function dangerZones = generateDangerZones(numZones, mapSize, terrainGrid, terra
         40, 60, 4.0;   % 14
         90, 90, 5.0    % 15
     ];
+    xyScale = [mapSize(1) / 100, mapSize(2) / 100];
+    radiusScale = mean(xyScale);
+    dangerZonePositions(:, 1) = dangerZonePositions(:, 1) * xyScale(1);
+    dangerZonePositions(:, 2) = dangerZonePositions(:, 2) * xyScale(2);
+    dangerZonePositions(:, 3) = dangerZonePositions(:, 3) * radiusScale;
 
     numPredefined = size(dangerZonePositions, 1);
 
@@ -32,11 +38,13 @@ function dangerZones = generateDangerZones(numZones, mapSize, terrainGrid, terra
     
     % Randomly generate any additional zones required
     if numZones > numPredefined
+        marginX = max(10, 0.1 * mapSize(1));
+        marginY = max(10, 0.1 * mapSize(2));
         for i = (numPredefined + 1):numZones
-            % Generate random position within [10, mapSize-10] to avoid edges
-            x = 10 + rand() * (mapSize(1) - 20);
-            y = 10 + rand() * (mapSize(2) - 20);
-            radius = 3.0 + rand() * 3.0;  % Random radius between 3.0 and 6.0
+            % Generate random position within a padded interior to avoid edges
+            x = marginX + rand() * max(mapSize(1) - 2 * marginX, eps);
+            y = marginY + rand() * max(mapSize(2) - 2 * marginY, eps);
+            radius = (3.0 + rand() * 3.0) * radiusScale;  % Random radius scaled to map size
             
             dangerZones(i,:) = [x, y, radius];
         end

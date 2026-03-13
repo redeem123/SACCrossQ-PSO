@@ -22,6 +22,9 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
     parameterHistory.w = [];
     parameterHistory.c1 = [];
     parameterHistory.c2 = [];
+    parameterHistory.w_samples = [];
+    parameterHistory.c1_samples = [];
+    parameterHistory.c2_samples = [];
 
     % SAEPSO parameters from paper
     psi1 = 2; psi2 = 100; % Tent map parameters
@@ -168,6 +171,10 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
     % STAGE 3: Main SAEPSO loop
     disp('  Stage 3: Main optimization loop...');
     for iter = 1:maxIterations
+        iterW = zeros(1, popSize);
+        iterC1 = zeros(1, popSize);
+        iterC2 = zeros(1, popSize);
+
         % Calculate average fitness F_avge (Equation 42)
         avgPopulationFitness = sum(particles.fitness) / popSize;
         avgFitnessHistory = [avgFitnessHistory(2:end); avgPopulationFitness];
@@ -189,6 +196,10 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
             w = w_max - (w_max - w_min) * (iter/maxIterations) * fap;
             c1 = c_max - (c_max - c_min) * chi * fap;
             c2 = c_min + (c_max - c_min) * chi * fap;
+
+            iterW(i) = w;
+            iterC1(i) = c1;
+            iterC2(i) = c2;
             
             r1 = rand(1, dims);
             r2 = rand(1, dims);
@@ -309,10 +320,13 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
         
         convergenceHistory = [convergenceHistory; globalBestFitness];
         
-        % Store parameter values for tracking
-        parameterHistory.w = [parameterHistory.w; w_max - (w_max - w_min) * (iter/maxIterations) * 0.5];
-        parameterHistory.c1 = [parameterHistory.c1; c_max - (c_max - c_min) * chi * 0.5];
-        parameterHistory.c2 = [parameterHistory.c2; c_min + (c_max - c_min) * chi * 0.5];
+        % Store the actual particle-wise parameter values and their means.
+        parameterHistory.w = [parameterHistory.w; mean(iterW)];
+        parameterHistory.c1 = [parameterHistory.c1; mean(iterC1)];
+        parameterHistory.c2 = [parameterHistory.c2; mean(iterC2)];
+        parameterHistory.w_samples = [parameterHistory.w_samples; iterW];
+        parameterHistory.c1_samples = [parameterHistory.c1_samples; iterC1];
+        parameterHistory.c2_samples = [parameterHistory.c2_samples; iterC2];
         
         if mod(iter, 50) == 0
             disp(['Iteration: ', num2str(iter), '/', num2str(maxIterations), ...

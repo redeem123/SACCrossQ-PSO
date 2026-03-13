@@ -1,0 +1,29 @@
+scenario_id,algorithm_1,algorithm_2,n_pairs,metric_name,mean_1,mean_2,mean_diff,ci95_low,ci95_high,t_stat,p_raw_t,p_holm_t,sig_holm_t,cohen_dz,wilcoxon_W,p_raw_wilcoxon,p_holm_wilcoxon,sig_holm_wilcoxon,rank_biserial_r
+1,RRSACPSO,PSO-Standard,1,global_fitness_total,1576.630154,1629.908304,-53.27814964,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,RRSACPSO,PSO-LDIW,1,global_fitness_total,1576.630154,1617.753308,-41.12315422,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,RRSACPSO,FIPS,1,global_fitness_total,1576.630154,1729.077515,-152.4473611,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,RRSACPSO,CLPSO,1,global_fitness_total,1576.630154,1877.97675,-301.3465958,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,RRSACPSO,SAEPSO [11],1,global_fitness_total,1576.630154,1500.379355,76.25079897,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,RRSACPSO,SAEPSO* [11],1,global_fitness_total,1576.630154,1572.240595,4.389559363,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,RRSACPSO,UAPSO [25],1,global_fitness_total,1576.630154,1570.207109,6.423044979,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-Standard,PSO-LDIW,1,global_fitness_total,1629.908304,1617.753308,12.15499542,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-Standard,FIPS,1,global_fitness_total,1629.908304,1729.077515,-99.16921144,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,PSO-Standard,CLPSO,1,global_fitness_total,1629.908304,1877.97675,-248.0684462,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,PSO-Standard,SAEPSO [11],1,global_fitness_total,1629.908304,1500.379355,129.5289486,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-Standard,SAEPSO* [11],1,global_fitness_total,1629.908304,1572.240595,57.667709,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-Standard,UAPSO [25],1,global_fitness_total,1629.908304,1570.207109,59.70119462,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-LDIW,FIPS,1,global_fitness_total,1617.753308,1729.077515,-111.3242069,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,PSO-LDIW,CLPSO,1,global_fitness_total,1617.753308,1877.97675,-260.2234416,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,PSO-LDIW,SAEPSO [11],1,global_fitness_total,1617.753308,1500.379355,117.3739532,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-LDIW,SAEPSO* [11],1,global_fitness_total,1617.753308,1572.240595,45.51271358,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,PSO-LDIW,UAPSO [25],1,global_fitness_total,1617.753308,1570.207109,47.5461992,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,FIPS,CLPSO,1,global_fitness_total,1729.077515,1877.97675,-148.8992347,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,FIPS,SAEPSO [11],1,global_fitness_total,1729.077515,1500.379355,228.69816,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,FIPS,SAEPSO* [11],1,global_fitness_total,1729.077515,1572.240595,156.8369204,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,FIPS,UAPSO [25],1,global_fitness_total,1729.077515,1570.207109,158.8704061,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,CLPSO,SAEPSO [11],1,global_fitness_total,1877.97675,1500.379355,377.5973948,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,CLPSO,SAEPSO* [11],1,global_fitness_total,1877.97675,1572.240595,305.7361552,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,CLPSO,UAPSO [25],1,global_fitness_total,1877.97675,1570.207109,307.7696408,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,SAEPSO [11],SAEPSO* [11],1,global_fitness_total,1500.379355,1572.240595,-71.8612396,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,SAEPSO [11],UAPSO [25],1,global_fitness_total,1500.379355,1570.207109,-69.82775399,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,SAEPSO* [11],UAPSO [25],1,global_fitness_total,1572.240595,1570.207109,2.033485616,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1

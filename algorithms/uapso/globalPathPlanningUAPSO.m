@@ -5,10 +5,10 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
 %   through the evolutionary state feedback described in the paper.
 
     if nargin < 12
-        cMax = 4.0;
+        cMax = 2.5;
     end
     if nargin < 11
-        cMin = 0.0;
+        cMin = 0.5;
     end
 
     disp('Starting UAPSO global path planning...');
@@ -80,6 +80,9 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
     avgC1History = zeros(maxIterations, 1);
     avgC2History = zeros(maxIterations, 1);
     avgESHistory = zeros(maxIterations, 1);
+    wSamplesHistory = zeros(maxIterations, popSize);
+    c1SamplesHistory = zeros(maxIterations, popSize);
+    c2SamplesHistory = zeros(maxIterations, popSize);
 
     % Main optimisation loop
     for iter = 1:maxIterations
@@ -155,6 +158,9 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
         avgC1History(iter) = mean(c1Values);
         avgC2History(iter) = mean(c2Values);
         avgESHistory(iter) = mean(esValues);
+        wSamplesHistory(iter, :) = inertiaValues';
+        c1SamplesHistory(iter, :) = c1Values';
+        c2SamplesHistory(iter, :) = c2Values';
 
         if firstFeasibleIteration == -1
             for i = 1:popSize
@@ -193,6 +199,12 @@ function [globalPath, convergenceHistory, parameterHistory, algorithmSpecificSta
     algorithmSpecificStats = addFitnessComponents(algorithmSpecificStats, globalBestFitness, globalBestComponents);
 
     parameterHistory = struct();
+    parameterHistory.w = avgInertiaHistory;
+    parameterHistory.c1 = avgC1History;
+    parameterHistory.c2 = avgC2History;
+    parameterHistory.w_samples = wSamplesHistory;
+    parameterHistory.c1_samples = c1SamplesHistory;
+    parameterHistory.c2_samples = c2SamplesHistory;
     parameterHistory.avgInertia = avgInertiaHistory;
     parameterHistory.avgC1 = avgC1History;
     parameterHistory.avgC2 = avgC2History;

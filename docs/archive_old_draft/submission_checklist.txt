@@ -1,0 +1,27 @@
+SWEVO submission checklist (based on current draft)
+
+Blockers / required before submission
+[ ] Switch to SWEVO/Elsevier template (elsarticle) or confirm free-format is allowed with wlscirep.
+[ ] Replace placeholder author names/affiliations/email.
+[ ] Enable and finalize keywords.
+[ ] Add required end-matter: Declaration of Competing Interest, Data availability, Code availability, Funding, Author contributions.
+
+Story and consistency
+[ ] Remove stale comments (e.g., parameter-granularity note) and align narrative.
+[ ] Reframe granularity as a negative/insight finding rather than a headline improvement.
+[ ] Ensure abstract/contributions/results match the final claims.
+
+Experimental rigor
+[ ] Add statistical tests (e.g., Wilcoxon/Friedman + post-hoc) for key comparisons.
+[ ] Ensure baseline comparisons are apples-to-apples (online vs pretrained; report training + inference cost).
+[ ] Confirm number of runs, seeds, and variance reporting are consistent across tables.
+
+Reproducibility
+[ ] Document hyperparameters, training steps, compute budget, and hardware.
+[ ] Provide dataset/code links or a clear availability statement.
+[ ] Add random seed policy and environment versions.
+
+Final polish
+[ ] Consistent units, axis labels, and table captions.
+[ ] Proofread for tense, grammar, and claim strength tied to statistics.
+[ ] Rebuild PDF and skim references/figures for layout issues.

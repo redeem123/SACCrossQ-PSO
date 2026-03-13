@@ -109,12 +109,6 @@ This directory contains research papers related to the CQSAC-PSO (Advanced Param
 
 ## Reward Design and Optimization
 
-16. **MultiObjective_RL_1809.06364.pdf**
-    - Title: "Generalizing Across Multi-Objective Reward Functions in Deep Reinforcement Learning"
-    - Authors: Pitis, R.
-    - ArXiv: 1809.06364
-    - Key Contribution: Multi-objective reward handling in deep RL (relevant to CQSAC-PSO's 4-component reward)
-
 ## Neural Network Architecture
 
 17. **Transformer_Attention_2017_1706.03762.pdf**

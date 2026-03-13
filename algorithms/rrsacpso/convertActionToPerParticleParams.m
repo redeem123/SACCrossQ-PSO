@@ -189,6 +189,20 @@ function particleParams = convertActionToPerParticleParams(action, config, parti
                 scale = config.residualActionScale;
             end
 
+            contextMask = struct('rank', true, 'velocity', true, 'stagnation', true);
+            if isfield(config, 'rankResidualContextMask')
+                maskOverride = config.rankResidualContextMask;
+                if isfield(maskOverride, 'rank')
+                    contextMask.rank = logical(maskOverride.rank);
+                end
+                if isfield(maskOverride, 'velocity')
+                    contextMask.velocity = logical(maskOverride.velocity);
+                end
+                if isfield(maskOverride, 'stagnation')
+                    contextMask.stagnation = logical(maskOverride.stagnation);
+                end
+            end
+
             rankCentered = zeros(numParticles, 1);
             velCentered = zeros(numParticles, 1);
             stagCentered = zeros(numParticles, 1);
@@ -226,6 +240,16 @@ function particleParams = convertActionToPerParticleParams(action, config, parti
                     stagCounter = particles.stagnationCounter(:);
                     stagCentered = min(stagCounter / 40, 1) - 0.5;
                 end
+            end
+
+            if ~contextMask.rank
+                rankCentered(:) = 0;
+            end
+            if ~contextMask.velocity
+                velCentered(:) = 0;
+            end
+            if ~contextMask.stagnation
+                stagCentered(:) = 0;
             end
 
             deltaW = scale.w * (action(1) + action(2) * rankCentered + action(3) * velCentered);

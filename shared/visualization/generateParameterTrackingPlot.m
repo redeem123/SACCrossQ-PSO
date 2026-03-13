@@ -3,23 +3,21 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     
     % Define which algorithms have parameter adaptation
     adaptiveAlgorithms = {
-        'ActorCriticPSO', 'Actor-Critic PSO (DDPG)';
-        'PGPSO', 'PG-PSO (Policy Gradient)';
-        'PSO_TVAC', 'PSO-TVAC';
-        'SAEPSO', 'SAEPSO (Full Implementation)';
-        'RLAMPSO_Online_5Sub', 'RLAMPSO (5 Subgroup)';
-        'DQN_PSO_Online_Global', 'DQN-PSO (Global)';
-        'RRSACPSO_Online', 'RRSACPSO (Online Learning)';
-        'RRSACPSO', 'RRSACPSO';
-        'SACSAPSO_Paper', 'SAC-SAPSO (Paper)';
+        'RLAMPSO_Online_Global', 'RLAMPSO [36]';
+        'DQN_PSO_Online_Global', 'DQN-PSO [34]';
+        'SACSAPSO_Paper', 'SAC-SAPSO [40]';
         'PPO_PSO_Online_Global', 'PPO-PSO';
+        'MPSORL', 'MPSORL';
+        'RRSACPSO_Online', 'RRSACPSO';
+        'SAEPSO_ParamsOnly', 'SAEPSO* [11]';
+        'UAPSO', 'UAPSO [25]';
     };
     
     % Count how many adaptive algorithms we have data for
     validAlgorithms = {};
     for i = 1:size(adaptiveAlgorithms, 1)
         algFieldName = adaptiveAlgorithms{i, 1};
-        if isfield(results, algFieldName) && hasParameterSeries(results.(algFieldName))
+        if algorithmRequested(algorithms, algFieldName) && isfield(results, algFieldName) && hasParameterSeries(results.(algFieldName))
             validAlgorithms{end+1, 1} = algFieldName;
             validAlgorithms{end, 2} = adaptiveAlgorithms{i, 2};
         end
@@ -72,6 +70,9 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     xlabel('Iteration', 'FontSize', 12, 'FontWeight', 'bold');
     ylabel('Inertia Weight (w)', 'FontSize', 12, 'FontWeight', 'bold');
     % title(sprintf('Scenario %d: Parameter Adaptation - Inertia Weight', scenarioIdx), 'FontSize', 14, 'FontWeight', 'bold');
+    yline(0.1, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    yline(0.9, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    ylim([0.1, 0.9]);
     grid on;
     if ~isempty(plotHandles)
         legend(plotHandles, legendLabels, 'Location', 'best', 'FontSize', 8);
@@ -104,6 +105,9 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     xlabel('Iteration', 'FontSize', 12, 'FontWeight', 'bold');
     ylabel('Cognitive Coefficient (c1)', 'FontSize', 12, 'FontWeight', 'bold');
     % title(sprintf('Scenario %d: Parameter Adaptation - Cognitive Coefficient', scenarioIdx), 'FontSize', 14, 'FontWeight', 'bold');
+    yline(0.5, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    yline(2.5, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    ylim([0.5, 2.5]);
     grid on;
     set(gca, 'FontSize', 10);
     hold off;
@@ -133,6 +137,9 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     xlabel('Iteration', 'FontSize', 12, 'FontWeight', 'bold');
     ylabel('Social Coefficient (c2)', 'FontSize', 12, 'FontWeight', 'bold');
     % title(sprintf('Scenario %d: Parameter Adaptation - Social Coefficient', scenarioIdx), 'FontSize', 14, 'FontWeight', 'bold');
+    yline(0.5, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    yline(2.5, '--', 'Color', [0.4, 0.4, 0.4], 'LineWidth', 1, 'HandleVisibility', 'off');
+    ylim([0.5, 2.5]);
     grid on;
     set(gca, 'FontSize', 10);
     hold off;
@@ -155,14 +162,30 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     fprintf('Parameter tracking plot saved as: %s.pdf\n', filename);
 end
 
+function requested = algorithmRequested(algorithms, fieldName)
+    requested = false;
+    for i = 1:numel(algorithms)
+        if strcmp(algorithms{i}.fieldName, fieldName)
+            requested = true;
+            return;
+        end
+    end
+end
+
 function hasData = hasParameterSeries(algResults)
     hasData = false;
     if isfield(algResults, 'w_history') || isfield(algResults, 'w_samples')
         hasData = true;
         return;
     end
+    if isfield(algResults, 'avgInertiaHistory') || isfield(algResults, 'avgC1History') || isfield(algResults, 'avgC2History')
+        hasData = true;
+        return;
+    end
     if isfield(algResults, 'parameterHistory')
-        if isfield(algResults.parameterHistory, 'w') || isfield(algResults.parameterHistory, 'w_samples')
+        if isfield(algResults.parameterHistory, 'w') || isfield(algResults.parameterHistory, 'w_samples') || ...
+                isfield(algResults.parameterHistory, 'avgInertia') || isfield(algResults.parameterHistory, 'avgC1') || ...
+                isfield(algResults.parameterHistory, 'avgC2')
             hasData = true;
         end
     end
@@ -198,8 +221,20 @@ function [meanSeries, lowerBand, upperBand, hasSamples] = extractSeries(algResul
 
     if isfield(algResults, historyField)
         meanSeries = algResults.(historyField);
+    elseif strcmp(baseName, 'w') && isfield(algResults, 'avgInertiaHistory')
+        meanSeries = algResults.avgInertiaHistory;
+    elseif strcmp(baseName, 'c1') && isfield(algResults, 'avgC1History')
+        meanSeries = algResults.avgC1History;
+    elseif strcmp(baseName, 'c2') && isfield(algResults, 'avgC2History')
+        meanSeries = algResults.avgC2History;
     elseif isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, baseName)
         meanSeries = algResults.parameterHistory.(baseName);
+    elseif strcmp(baseName, 'w') && isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, 'avgInertia')
+        meanSeries = algResults.parameterHistory.avgInertia;
+    elseif strcmp(baseName, 'c1') && isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, 'avgC1')
+        meanSeries = algResults.parameterHistory.avgC1;
+    elseif strcmp(baseName, 'c2') && isfield(algResults, 'parameterHistory') && isfield(algResults.parameterHistory, 'avgC2')
+        meanSeries = algResults.parameterHistory.avgC2;
     end
     meanSeries = meanSeries(:)';
 end

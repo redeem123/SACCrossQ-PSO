@@ -11,10 +11,8 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{tabularx}
-% Manual FloatBarrier definition (placeins package not available)
-\makeatletter
-\newcommand{\FloatBarrier}{\par\vskip\z@\noindent\mbox{}}
-\makeatother
+\usepackage{microtype}
+% \usepackage{svg} % Requires Inkscape for SVG integration
 \newfloat{algorithm}{tbp}{loa}
 \floatname{algorithm}{Algorithm}
 \usepackage{tikz}
@@ -24,13 +22,26 @@
 \definecolor{ElsevierBlue}{RGB}{0,128,176}
 \hypersetup{ colorlinks=true, linkcolor=ElsevierBlue, citecolor=ElsevierBlue, urlcolor=ElsevierBlue
 }
-\hfuzz=2pt
-% ORCID support — renders as a clickable hyperlink in the PDF
-\providecommand{\orcid}[1]{\,\href{https://orcid.org/#1}{\textcolor{ElsevierBlue}{\small[ORCID:\,#1]}}}
-\hbadness=10000
-\setlength{\emergencystretch}{2em}
+% Keep bibliography entries from forcing narrow justified lines.
 \makeatletter
-\pdfstringdefDisableCommands{% \def\fnref#1{}% \def\corref#1{}% \def\@fnmark{}%
+\let\orig@thebibliography\thebibliography
+\let\orig@endthebibliography\endthebibliography
+\renewcommand{\thebibliography}[1]{%
+  \orig@thebibliography{#1}%
+  \raggedright
+}
+\renewcommand{\endthebibliography}{\orig@endthebibliography}
+\makeatother
+% ORCID support — renders as a clickable hyperlink in the PDF
+\providecommand{\orcid}[1]{\texorpdfstring{\,\href{https://orcid.org/#1}{\textcolor{ElsevierBlue}{\small[ORCID:\,#1]}}}{ [ORCID: #1]}}
+\makeatletter
+\pdfstringdefDisableCommands{%
+  \def\fnref#1{}%
+  \def\corref#1{}%
+  \def\@fnmark{}%
+  \def\orcid#1{ [ORCID: #1]}%
+  \def\textcolor#1#2{#2}%
+  \def\small{}%
 }
 \makeatother
 \journal{Swarm and Evolutionary Computation} % --- Symbols used in paper ---
@@ -55,69 +66,92 @@
 \newcommand{\symThetaMin}{\theta_{\min}}
 \newcommand{\symKappaConv}{\kappa_{c}}
 \newcommand{\symEtaCurios}{\eta_{u}}
-\newcommand{\symUtd}{R_{\text{utd}}} % --- Experimental values used in paper ---
-\newcommand{\valPopsize}{40}
-\newcommand{\valMaxIters}{1500}
-% Real values from RRSACPSO_Config.m
-\newcommand{\valWindow}{5}
-\newcommand{\valStateSize}{45}
-\newcommand{\valActionSize}{120}
-\newcommand{\valBatchSize}{256}
-\newcommand{\valBufferSize}{150{,}000}
-\newcommand{\valActorLR}{3{\times}10^{-4}}
-\newcommand{\valAttnHeads}{4}
+\newcommand{\symUtd}{R_{\text{utd}}} 
+% --- Adaptive Control Constants ---
+\newcommand{\symExpInertia}{\kappa_w}
+\newcommand{\symFeatWeightA}{\alpha_{f}}
+\newcommand{\symFeatWeightB}{\beta_{f}}
+\newcommand{\symResWeightW}{\eta_w}
+\newcommand{\symResWeightC}{\eta_c}
+\newcommand{\symWmaxSch}{w_{\max}}
+\newcommand{\symWminSch}{w_{\min}}
+\newcommand{\symCmaxSch}{c_{\max}}
+\newcommand{\symCminSch}{c_{\min}}
+\newcommand{\symWclipMin}{\underline{w}}
+\newcommand{\symWclipMax}{\bar{w}}
+\newcommand{\symCclipMin}{\underline{c}}
+\newcommand{\symCclipMax}{\bar{c}}
+\newcommand{\symThetaTol}{\epsilon_{\theta}}
+\newcommand{\symScaleElite}{\omega_e}
+\newcommand{\symStagMinGlobal}{\tau_{g,\min}}
+\newcommand{\symStagRatioGlobal}{\mu_g}
+\newcommand{\symStagMinPart}{\tau_{p,\min}}
+\newcommand{\symStagRatioPart}{\mu_p}
+\newcommand{\symStagMaxPart}{\tau_{\text{max}}}
 \begin{document}
 \begin{frontmatter}
-\title{Soft Actor‑Critic with Rank-Residual PSO Parameter Adaptation for UAV Path Planning} \author[aff1]{Viet Anh Ngo\orcid{0009-0002-5429-8554}}
+\title{Soft Actor-Critic with Rank-Residual PSO Parameter Adaptation for UAV Path Planning}
+\author[aff1]{Viet Anh Ngo\orcid{0009-0002-5429-8554}}
 \cortext[cor1]{Corresponding author}
 \ead{anh.nv215671@sis.hust.edu.vn}
-\address[aff1]{School of Mechanical Engineering, Hanoi University of Science and Technology, No.~1 Dai Co Viet Road, Hai Ba Trung District, Hanoi, Vietnam} \begin{abstract}
-Particle Swarm Optimization (PSO) has been widely adopted for unmanned aerial vehicle (UAV) path planning due to its conceptual simplicity and fast convergence.
-However, its performance is highly sensitive to the choice of hyperparameters, which remain difficult to tune across heterogeneous environments.
-This paper presents RRSACPSO, a self-adaptive PSO framework driven by a Soft Actor--Critic controller with rank-residual parameterization that learns to regulate PSO parameters directly from swarm-level feedback.
-A compact swarm-statistics state representation summarizes optimization progress, diversity, and stagnation signals without requiring an explicit transformer encoder.
-A simple fitness-improvement reward provides direct learning signals tied to changes in global best fitness.
-Training stability is supported by twin critics, target networks, and automatic entropy tuning.
-The resulting controller emits a low-dimensional latent action that is expanded into particle-wise PSO coefficients through rank-residual control, yielding data-driven adaptation without handcrafted schedules.
-Experiments on three-dimensional terrain navigation benchmarks with no-fly zones show that RRSACPSO attains the best mean fitness in two of three RL scenarios, while online RRSACPSO attains the lowest variance across scenarios in our benchmark.
-Against traditional self-adaptive PSO baselines, RRSACPSO remains competitive in fitness under a matched online evaluation protocol.
-These results indicate that a retained SAC controller with rank-residual PSO adaptation constitutes a stable and practically deployable mechanism for adaptive PSO parameter control in UAV path planning, offering a favorable trade-off between solution quality and computational cost.
-\end{abstract} \begin{keyword}
+\address[aff1]{School of Mechanical Engineering, Hanoi University of Science and Technology, No.~1 Dai Co Viet Road, Hai Ba Trung District, Hanoi, Vietnam}
+\begin{abstract}
+Particle Swarm Optimization (PSO) is attractive for unmanned aerial vehicle (UAV) path planning because of its simplicity and fast convergence, but its performance remains highly sensitive to parameter selection.
+This paper presents RRSACPSO, a self-adaptive PSO framework built around rank-residual control and trained with a Soft Actor--Critic backbone.
+A compact swarm-summary state encodes progress, diversity, and stagnation, while a simple fitness-improvement reward keeps learning aligned with the optimization objective.
+The core mechanism is a 9D latent action that is expanded into particle-wise inertia, cognitive, and social coefficients through rank-residual modulation around a deterministic baseline schedule, yielding structured heterogeneity without direct full per-particle control.
+In a matched four-scenario internal ablation against global, 5-subgroup, and direct per-particle SAC control interfaces, RRSACPSO attains the best mean fitness in all four cases and significantly outperforms the global and 5-subgroup variants on the three fixed-map scenarios.
+Against external RL baselines on the same benchmark, it remains competitive, achieves the lowest variance in the first two fixed-map scenarios, and significantly outperforms RLAMPSO, DQN-PSO, and SAC-SAPSO, although PPO-PSO and MPSORL achieve lower mean fitness in the harder fixed-map cases.
+These results are consistent with the interpretation that RRSACPSO benefits from its structured rank-residual control interface, which combines a scheduled prior with low-dimensional particle-wise adaptation and avoids unconstrained per-particle control.
+
+\end{abstract}
+\begin{keyword}
 Particle Swarm Optimization \sep Soft Actor-Critic \sep UAV Path Planning \sep Adaptive Parameter Control \sep Swarm Intelligence \sep Rank-Residual Control
 \end{keyword}
 \end{frontmatter} \section{Introduction}
-\label{sec:intro} Unmanned Aerial Vehicles (UAVs) support missions ranging from precision agriculture to defense and disaster response \cite{Delavarpour2021A, Fascista2022Toward, Alotaibi2019LSAR}.
-Every mission hinges on path planning to compute safe, constraint-aware trajectories through cluttered three-dimensional environments.
+\label{sec:intro}
+Unmanned Aerial Vehicles (UAVs) support missions ranging from precision agriculture to defense, disaster response \cite{Delavarpour2021A, Fascista2022Toward, Alotaibi2019LSAR}.
+Every mission hinges on path planning to compute safe trajectories through cluttered three-dimensional environments.
 Despite decades of study, planning in large, uncertain airspaces remains challenging because algorithms must simultaneously reason about vehicle dynamics, environmental constraints, and mission-specific trade-offs \cite{AitSaadi2022UAV, Zhou2025A}.
-Recent work on coordinated missions highlights the complexity of multiobjective multi-UAV planning, using evolutionary multitasking with adaptive operator selection and knowledge fusion to balance competing mission goals \cite{Meng2025Multiobjective}. Among the rich ecosystem of planners, Particle Swarm Optimization (PSO) \cite{Kennedy1995Particle} has gained widespread adoption for UAV path planning due to its fast convergence and conceptual simplicity \cite{Cheng2024Research}.
+Recent work on coordinated missions highlights the complexity of multiobjective multi-UAV planning, where competing mission goals must be balanced under severe environmental constraints \cite{Meng2025Multiobjective}.
+
+Among the many available planners, Particle Swarm Optimization (PSO) \cite{Kennedy1995Particle} has gained broad adoption for UAV path planning because of its conceptual simplicity, fast convergence, and natural fit for continuous search spaces \cite{Cheng2024Research}.
 However, PSO's performance critically depends on carefully tuned inertia and acceleration coefficients, which are notoriously problem-dependent and can cause premature convergence when left static \cite{Yang2015Lowdiscrepancy}.
-While adaptive PSO variants address this through fitness-based or time-varying parameter schedules \cite{Bansal2011Inertia, Liu2025A}, these hand-designed rules struggle to generalize across heterogeneous terrains and obstacle densities. Reinforcement learning (RL) offers a principled alternative by treating parameter adaptation as a sequential decision problem.
-Yet existing RL-based PSO controllers exhibit three key limitations: (i) they often rely on instantaneous swarm statistics that ignore temporal dynamics such as stagnation trends and convergence progression, (ii) they usually adapt either a single global coefficient triplet or a discretized parameter set, limiting flexibility, and (iii) they rarely analyze which RL-side design choices materially contribute once the benchmark protocol is matched.
-These gaps motivate the present work. We introduce RRSACPSO, a deep reinforcement learning framework that learns PSO control policies directly from swarm-level feedback.
-Our contributions are threefold:
-\begin{enumerate} \item A retained SAC-based controller with twin critics, automatic entropy tuning, and target networks for stable online parameter adaptation. \item A rank-residual control law that maps a compact latent action into particle-wise PSO coefficients, enabling richer adaptation than a single global coefficient triplet. \item A simple fitness-improvement reward that keeps policy learning aligned with the optimization endpoint throughout training.
-\end{enumerate} Extensive experiments on three-dimensional terrain navigation benchmarks with no-fly zones show that RRSACPSO achieves the best mean fitness in two of three RL scenarios, while RRSACPSO yields the lowest run-to-run variance.
-The method remains competitive with strong self-adaptive PSO variants under a markedly lower wall-clock cost.
+While adaptive PSO variants address this issue through fitness-based or time-varying parameter schedules \cite{Bansal2011Inertia, Liu2025A}, such hand-designed rules often transfer poorly across terrains and obstacle densities and remain insensitive to changing swarm states.
+Reinforcement learning (RL) offers a more principled alternative by treating parameter adaptation as a sequential decision problem.
+
+Despite recent progress, RL-based PSO studies still leave one central question insufficiently resolved: whether performance gains come from the learning backbone itself or from how parameter control is distributed across the swarm.
+Existing methods usually compare end-to-end designs that differ simultaneously in RL algorithm, state representation, reward formulation, and control interface, so the literature still lacks controlled evidence isolating the effect of control-interface granularity under matched learning conditions.
+Under that broader design mismatch, global control may be too coarse to reflect particle-level search status, fixed-subgroup control imposes a predefined swarm structure, and direct per-particle control can greatly enlarge the action space and complicate learning.
+Because prior comparisons usually mix these choices together, they do not support a clear causal account of whether gains come from the RL algorithm or from the control interface itself.
+To address this gap, we propose RRSACPSO, a reinforcement-learning-guided PSO framework centered on rank-residual control.
+The main contribution of this work is a control law that expands a compact latent action into particle-wise inertia, cognitive, and social coefficients using swarm context and particle rank, yielding structured heterogeneity without the action-space cost of direct per-particle control.
+This design aims to preserve particle-wise heterogeneity without incurring the full action-space burden of direct per-particle control.
+
+This central idea is evaluated through a matched internal comparison of global, fixed-subgroup, direct per-particle, and rank-residual SAC control interfaces under a fixed SAC backbone and shared evaluation protocol.
+The online learning setup uses a compact swarm state, a fitness-improvement reward, and a retained SAC agent with twin critics, automatic entropy tuning, and target networks.
+Across a four-scenario benchmark, RRSACPSO achieves the best mean fitness in all four same-backbone ablation scenarios, records the lowest run-to-run variance in the first two fixed-map RL cases, and does not achieve the best mean fitness against the strongest external RL baselines.
+Against self-adaptive PSO variants, the current matched benchmark shows lower mean fitness for SAEPSO in Scenarios 1 and 4 and for SAEPSO* in Scenarios 2 and 3, although it does not support a blanket runtime-speedup claim over the strongest classical baselines.
 The remainder of this paper is organized as follows.
 Section~\ref{sec:background} reviews PSO fundamentals and related adaptive strategies.
 Section~\ref{sec:problem} formalizes the path planning problem.
 Section~\ref{sec:methods} details the RRSACPSO architecture.
 Section~\ref{sec:results} presents experimental results and supplementary training diagnostics.
 Section~\ref{sec:discussion} discusses findings and outlines future directions.
-\section{Background and Related Work}
-\label{sec:background} Path planning for unmanned aerial vehicles (UAVs) has been extensively studied, with methods broadly categorized into classical approaches, sampling-based algorithms, and nature-inspired optimization.
-Classical graph-search algorithms such as A* and Dijkstra's algorithm guarantee optimal paths in discretized environments \cite{Hart1968A}.
-However, their computational complexity scales poorly with environment resolution, making them impractical for high-dimensional 3D terrain with dynamic constraints.
-Potential field methods offer real-time responsiveness but suffer from local minima traps that can strand the UAV in complex obstacle configurations \cite{Mac2016Heuristic}.
-Sampling-based planners, including Rapidly-exploring Random Trees (RRT) and Probabilistic Roadmaps (PRM), efficiently explore high-dimensional configuration spaces without explicit discretization \cite{Karur2021A}.
-These methods provide probabilistic completeness guarantees but produce suboptimal, jerky paths that require post-processing for smooth UAV trajectories.
-Recent hybrid approaches combine sampling with reinforcement learning to improve path quality \cite{Faust2017PRMRL}. Nature-inspired optimization offers an alternative paradigm that directly optimizes path quality metrics.
-Genetic Algorithms (GA) evolve populations of candidate paths through selection, crossover, and mutation operators, effectively handling multi-objective constraints such as path length, obstacle clearance, and fuel consumption \cite{Debnath2024An}.
-Differential Evolution (DE) and Grey Wolf Optimizer (GWO) have shown competitive performance on UAV routing benchmarks \cite{AitSaadi2022UAV}.
-Among swarm intelligence methods, Particle Swarm Optimization (PSO) has emerged as particularly effective for UAV path planning due to its simple implementation, fast convergence, and ability to handle continuous search spaces \cite{Cheng2024Research, Phung2021Safetyenhanced}.
-Advanced ensemble strategies have further improved PSO robustness by combining multiple search behaviors within the same swarm \cite{Lynn2017Ensemble}. Particle Swarm Optimization (PSO) is a population-based stochastic search inspired by flocking and swarming behaviors \cite{Kennedy1995Particle}.
-A swarm of candidate solutions (particles) moves through the search space by updating velocity and position at each iteration.
-Updates combine each particle's own best-found solution (cognitive component) with the swarm's best-found solution (social component), while an inertia term maintains momentum \cite{Clerc2002The}:
+\section{Related Work}
+\label{sec:background} 
+The UAV path planning literature is largely dominated by three paradigms: graph-search, sampling-based approaches, and population-based optimization techniques \cite{AitSaadi2022UAV, Zhou2025A}.
+Classical graph-search methods such as A* and Dijkstra guarantee optimal paths on discretized maps \cite{Hart1968A}, but their cost scales poorly with map resolution and state dimensionality.
+Potential-field methods react quickly online yet remain vulnerable to local minima in cluttered environments \cite{Mac2016Heuristic}.
+Sampling-based planners such as RRT and PRM avoid explicit discretization and provide probabilistic completeness \cite{Karur2021A}, but often require smoothing or post-processing before they produce flyable UAV trajectories.
+Hybrid approaches such as PRM-RL reduce some of these weaknesses by combining sampling with learned local navigation \cite{Faust2017PRMRL}.
+
+Population-based optimization remains attractive when the objective directly couples path length, terrain clearance, altitude, and obstacle avoidance.
+Genetic algorithms, differential evolution, and Grey Wolf Optimizer have all shown competitive UAV-planning performance under such multi-constraint objectives \cite{Debnath2024An, AitSaadi2022UAV}.
+Within this family, PSO is especially popular because it is simple to implement, converges quickly in continuous spaces, and maps naturally to waypoint-based path parameterizations \cite{Cheng2024Research, Phung2021Safetyenhanced}.
+Ensemble and self-adaptive PSO variants further improve robustness by varying search behaviors within the swarm \cite{Lynn2017Ensemble}.
+
+Standard PSO updates particle velocity and position through inertia, cognitive, and social terms \cite{Kennedy1995Particle, Clerc2002The}:
 \begin{equation}
 \left\{
 \begin{aligned}
@@ -126,114 +160,158 @@ x_i^{t+1} &= x_i^{t}+v_i^{t+1}.
 \end{aligned}
 \right.
 \end{equation}
-Here, \(w\) is the inertia weight, \(c_1\) and \(c_2\) are the cognitive and social coefficients, and \(r_1,r_2\) are random vectors.
-PSO performance critically depends on these control parameters. Parameter adaptation methods fall into three categories: time-varying schedules, fitness-based adaptation, and learning-based control.
-Time-varying schedules adjust parameters according to iteration count.
-Linearly decreasing inertia weight (LDIW) encourages initial exploration and later exploitation \cite{Eberhart2000Comparing}.
-Time-varying acceleration coefficients (TVAC) gradually shift emphasis from cognitive to social learning \cite{Ratnaweera2004Selforganizing}.
-Adaptation of inertia weight remains a primary focus, with studies demonstrating that fuzzy-based or oscillating schedules can effectively maintain swarm diversity \cite{Nickabadi2011A}.
-Sinusoidal schedules introduce cyclic transitions between exploratory and exploitative phases \cite{Kentzoglanakis2009Particle, Chen2018A}.
-While intuitive and easy to implement, these schedules cannot react to swarm-specific dynamics such as stagnation or premature convergence. Fitness-based adaptation uses swarm feedback to dynamically adjust parameters.
-Liu et al.\ \cite{Liu2025A} proposed a spherical vector-based adaptive evolutionary PSO (hereafter referred to as SAEPSO) with per-particle adaptation where a fitness adaptation parameter $fap_i^{t}$ normalizes each particle's fitness relative to global and average performance, combined with sinusoidal temporal modulation.
-This approach achieves per-particle heterogeneity---better-performing particles receive different parameters than exploratory ones.
-Isiet and Gadala's UAPSO \cite{Isiet2019Selfadapting} derives parameters directly from an evolutionary-state metric $ES_i^{t}$, using it simultaneously as inertia weight and to switch between exploration-favoring and exploitation-favoring coefficient schedules.
-On benchmark functions, fitness-based methods consistently outperform static schedules \cite{Li2017Particle}.
-Zhan et al.\ \cite{Zhan2009Adaptive} established that adaptively partitioning the swarm into different evolutionary states allows the algorithm to dynamically switch between exploration and exploitation based on real-time convergence metrics.
-However, convergence analysis reveals that adapted parameters often fail to reach stable points or satisfy theoretical convergence criteria \cite{Harrison2018Selfadaptive}, and predicting long-term performance from short-term observations remains challenging. Entropy-based strategies monitor swarm distribution disorder to prevent premature convergence \cite{Han2022Improved}.
-These methods complement fitness-based approaches by providing diversity-aware signals. \subsection{Reinforcement Learning for PSO Parameter Control} Reinforcement learning (RL) offers a principled framework for adaptive parameter control by treating each PSO iteration as a decision point \cite{Sutton2018Reinforcement, Bai2023Evolutionary}.
-The agent observes swarm statistics, outputs parameter values, and receives rewards reflecting optimization progress.
-This subsection categorizes existing RL-PSO methods and identifies gaps addressed by the proposed framework. Value-based methods discretize the parameter space for Q-learning \cite{Watkins1992Qlearning}.
-Meng et al.\ \cite{Meng2023Multistrategy} proposed MPSORL using tabular Q-learning with non-uniform fitness-based state partitioning, achieving multi-strategy selection across exploration-exploitation phases.
-DPQ-PSO \cite{Aoun2024Deep} combines Deep Q-Networks with Hidden Markov Models for evolutionary state classification, enabling discrete parameter selection based on inferred swarm phases.
-Li et al.\ \cite{Li2023Reinforcement} introduced RLNDM-PSO, which uses Q-learning to select among neighborhood differential mutation strategies, demonstrating that RL can effectively manage operator selection in hybrid PSO variants.
-However, discretization necessitates coarse quantization that limits fine-grained control, particularly problematic in continuous parameter spaces where small adjustments can significantly impact convergence behavior. Policy gradient methods enable continuous parameter adaptation without discretization.
-RLAM-PSO \cite{Yin2023RLAMPSO} uses Deep Deterministic Policy Gradient (DDPG) \cite{Lillicrap2016Continuous} to map swarm states directly to continuous $(w, c_1, c_2)$ values, outperforming time-varying baselines on benchmark functions.
-Building on this, Zhang et al.\ \cite{Zhang2024DDPGPSO} proposed DDPGPSO, which dynamically generates PSO parameters through a DDPG agent that monitors the particle swarm solution set in real-time, reducing manual configuration effort while improving convergence speed.
-However, DDPG-based methods often suffer from overestimation bias and function approximation errors in complex landscapes, issues typically addressed in general RL literature through Twin-Delayed algorithms \cite{Fujimoto2018Addressing}.
-SAC-SAPSO \cite{vonEschwege2024Soft} demonstrates that entropy-regularized SAC achieves more stable learning than deterministic policies by encouraging exploration of diverse parameter configurations, addressing the brittleness of DDPG in noisy optimization landscapes.
-Recent work on Hybrid Reinforcement Learning PSO (HRLPSO) \cite{Liu2023HRLPSO} applies RL to optimize initial population distribution, chaotic adaptive weights, and adaptive learning factors simultaneously, achieving nonlinear control of acceleration coefficients.
-Despite these advances, policy-gradient PSO controllers still exhibit three practical limitations in the UAV setting.
-First, they usually encode the swarm state as a single-timestep snapshot, discarding short-horizon temporal cues such as stagnation trends, feasibility shifts, and convergence pressure \cite{Lesort2018State}.
-Second, they typically emit either a single global coefficient triplet or a discretized parameter choice, which restricts particle-differentiated control.
-Third, several hybrid designs rely on additional shaping terms or operator-selection rewards, making it harder to interpret whether policy learning is aligned with the final fitness objective.
-The retained RRSACPSO configuration addresses these gaps through a lightweight temporal summary state, a continuous rank-residual action that expands to particle-wise coefficients, and a direct fitness-improvement reward. Table~\ref{tab:rl_pso_comparison} summarizes the key characteristics of existing RL-PSO methods and highlights how RRSACPSO differs from prior work. \begin{table}[htbp]
+Here, \(w\) denotes inertia, \(c_1\) and \(c_2\) are the cognitive and social coefficients, and \(r_1,r_2\) are random vectors. Because PSO performance is highly sensitive to these control parameters, adaptation is central to practical deployment.
+
+Existing PSO adaptation strategies can be grouped into time-varying schedules, fitness-based adaptation, and learning-based control.
+Time-varying methods such as LDIW, TVAC, and oscillating or sinusoidal schedules are simple and computationally cheap \cite{Eberhart2000Comparing, Ratnaweera2004Selforganizing, Nickabadi2011A, Kentzoglanakis2009Particle, Chen2018A}, but they cannot react explicitly to swarm-specific stagnation or feasibility dynamics.
+Fitness-based methods instead use online swarm feedback.
+SAEPSO \cite{Liu2025A} adapts parameters on a per-particle basis through a normalized fitness-adaptation signal with sinusoidal temporal modulation, while UAPSO \cite{Isiet2019Selfadapting} derives its control parameters from an evolutionary-state metric.
+Adaptive-state strategies such as APSO \cite{Zhan2009Adaptive} and entropy-based diversity control \cite{Han2022Improved} likewise respond to real-time convergence behavior, and fitness-based adjustment has repeatedly outperformed static parameter schedules on benchmark problems \cite{Li2017Particle}.
+However, convergence analyses also show that self-adapted parameters do not automatically satisfy stable convergence conditions \cite{Harrison2018Selfadaptive}, which leaves open the question of how to adapt PSO parameters in a state-aware yet robust manner.
+
+Reinforcement learning (RL) casts PSO parameter control as a sequential decision problem in which the controller observes swarm statistics, chooses parameter updates, and receives rewards tied to optimization progress \cite{Sutton2018Reinforcement, Bai2023Evolutionary}.
+More broadly, RL-based online control has also been studied in other population-based optimizers, including policy-gradient control in differential evolution and PPO-based parameter adaptation in iSOMA \cite{Sun2021Learning, Klein2024Optimizing}.
+
+Existing RL-PSO methods differ mainly along two design axes: how the state is summarized and how control is distributed across the swarm.
+Value-based approaches discretize the action space and typically use RL for strategy selection rather than direct coefficient generation \cite{Watkins1992Qlearning}.
+MPSORL \cite{Meng2023Multistrategy} uses non-uniform fitness-grade states to choose among predefined PSO strategies, DPQ-PSO \cite{Aoun2024Deep} combines DQN with Hidden Markov state inference, and RLNDM-PSO \cite{Li2023Reinforcement} classifies particles into four search states and switches among predefined velocity-generation behaviors.
+In all three cases, RL chooses among discrete behaviors instead of distributing continuous parameters across particles.
+
+Continuous-control approaches replace discrete strategy selection with actor-critic adaptation.
+RLAM-PSO \cite{Yin2023RLAMPSO} uses DDPG with a three-feature snapshot state built from progress, diversity, and no-improvement duration, and emits continuous parameter sets for fixed particle subgroups.
+DDPGPSO \cite{Zhang2024DDPGPSO} likewise uses DDPG for continuous parameter control.
+SAC-SAPSO \cite{vonEschwege2024Soft} adopts entropy-regularized SAC, but still outputs one shared 3D coefficient triplet for the whole swarm from snapshot observations such as particle velocities and global feasibility and stability statistics.
+HRLPSO \cite{Liu2023HRLPSO} extends RL control to a broader hybrid adaptation scheme.
+
+Taken together, this literature shows clear progress in RL backbone choice, but provides much weaker causal evidence about control-interface design.
+Prior studies typically commit to one interface a priori, such as discrete strategy control, fixed-subgroup continuous control, a single global coefficient triplet, or a broader hybrid controller, and then compare end-to-end algorithms that also differ in backbone, state design, and training setup.
+As a result, the literature currently provides little controlled evidence on whether and how control granularity itself affects performance under a matched RL backbone.
+State design and reward specification remain important secondary choices, but the most immediate unresolved issue is that existing comparisons do not cleanly separate the benefit of the RL algorithm from the benefit of the interface through which control is distributed across particles.
+In particular, the literature still does not establish under matched learning conditions whether coarse global control, fixed subgroup structure, or high-dimensional direct particle-wise control is the more effective interface for RL-guided PSO.
+Table~\ref{tab:rl_pso_comparison} summarizes representative RL-PSO methods along these axes and situates RRSACPSO within this design space.
+\begin{table*}[htbp]
 \centering
 \small
-\caption{Comparison of RL-based PSO parameter adaptation methods. RRSACPSO combines a SAC-family controller, rank-residual action expansion, and a direct fitness-improvement reward.}
+\caption{Representative RL-based PSO parameter-control methods, organized by control granularity and state design. The comparison highlights that prior methods usually fix the control interface rather than compare control granularities under a matched RL backbone.}
 \label{tab:rl_pso_comparison}
-\resizebox{\columnwidth}{!}{%
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
 \hline
-Method & RL Algorithm & Action & State Encoder & Reward & Target Net \\
+Method & Control Granularity & RL Backbone & State & Reward & Notes \\
 \hline
-MPSORL \cite{Meng2023Multistrategy} & Q-Learning & Discrete & MLP & Fitness & --- \\
-RLNDM-PSO \cite{Li2023Reinforcement} & Q-Learning & Discrete & MLP & Fitness & --- \\
-DPQ-PSO \cite{Aoun2024Deep} & DQN & Discrete & HMM+MLP & Fitness & Yes \\
-RLAM-PSO \cite{Yin2023RLAMPSO} & DDPG & Continuous & MLP & Fitness & Yes \\
-DDPGPSO \cite{Zhang2024DDPGPSO} & DDPG & Continuous & MLP & Fitness & Yes \\
-HRLPSO \cite{Liu2023HRLPSO} & Policy Grad. & Continuous & MLP & Fitness & Yes \\
-SAC-SAPSO \cite{vonEschwege2024Soft} & SAC & Continuous & MLP & Fitness & Yes \\
+MPSORL \cite{Meng2023Multistrategy} & Discrete strategy & Q-Learning & fitness-grade snapshot & Fitness & strategy-pool selection \\
+RLNDM-PSO \cite{Li2023Reinforcement} & Discrete strategy & Q-Learning & 4-state snapshot & Fitness & operator switching \\
+DPQ-PSO \cite{Aoun2024Deep} & Discrete strategy & DQN & HMM+MLP & Fitness & target network \\
+RLAM-PSO \cite{Yin2023RLAMPSO} & Fixed-subgroup continuous & DDPG & 3-stat snapshot & Fitness & group-specific coefficient triplets \\
+DDPGPSO \cite{Zhang2024DDPGPSO} & Global continuous & DDPG & MLP & Fitness & single coefficient triplet \\
+HRLPSO \cite{Liu2023HRLPSO} & Hybrid continuous & Policy Grad. & MLP & Fitness & broader PSO adaptation \\
+SAC-SAPSO \cite{vonEschwege2024Soft} & Global continuous & SAC & velocities + global stats & Fitness & 3D action shared by swarm \\
 \hline
-RRSACPSO (Ours) & SAC & Continuous & 15D temporal summary & Fitness & Yes \\
+RRSACPSO (Ours) & Rank-residual particle-wise & SAC & 15D temporal summary & Fitness & 9D latent expansion \\
 \hline
 \end{tabular}%
 }
-\end{table} RRSACPSO addresses the retained design goals through a compact swarm-state representation, a twin-critic SAC backbone with target networks, rank-residual parameter expansion, and a direct fitness-improvement reward that keeps the learning objective aligned with the optimization target. \section{Problem Formulation}
-\label{sec:problem} We consider the problem of planning a collision-free trajectory for a UAV operating in a 3D environment.
+\end{table*}
+\section{Problem Formulation}
+\label{sec:problem}
+We consider the problem of planning a collision-free trajectory for a UAV operating in a 3D environment.
 The environment is represented by a digital elevation map (DEM) $\mathcal{E}: \mathbb{R}^2 \to \mathbb{R}$ that returns terrain height for any $(x, y)$ coordinate, augmented with a set of cylindrical no-fly zones $\mathcal{O} = \{(c_j, r_j, h_j)\}_{j=1}^{M}$ representing threat areas.
-The UAV must navigate from a start position $s_{\text{start}} \in \mathbb{R}^3$ to a goal position $s_{\text{goal}} \in \mathbb{R}^3$ while minimizing the fitness function defined in Equation~\ref{eq:fitness}. \begin{figure}[!htb]
+The UAV must navigate from a start position $s_{\text{start}} \in \mathbb{R}^3$ to a goal position $s_{\text{goal}} \in \mathbb{R}^3$ while minimizing the fitness function defined in Equation~\ref{eq:fitness}.
+\begin{figure}[!htb]
 \centering
-\includegraphics[width=\linewidth]{figures/ProblemFormulation.pdf}
+\includegraphics[width=\linewidth]{data/ProblemFormulation.pdf}
 \caption{Geometric definition of UAV path planning parameters}
 \label{fig:problem_formulation}
-\end{figure} A candidate path is encoded as a sequence of $n$ waypoints $P = [p_1, p_2, \ldots, p_n]$ where each $p_i = (x_i, y_i, z_i) \in \mathbb{R}^3$.
+\end{figure}
+A candidate path is encoded as a sequence of $n$ waypoints $P = [p_1, p_2, \ldots, p_n]$ where each $p_i = (x_i, y_i, z_i) \in \mathbb{R}^3$.
 The UAV follows linear segments between consecutive waypoints, yielding total path length:
 \begin{equation}
 L(P) = \sum_{i=1}^{n-1} \|p_{i+1} - p_i\|_2
 \label{eq:path_length}
-\end{equation} Path quality is evaluated through a weighted fitness function that balances competing objectives:
+\end{equation}
+Path quality is evaluated through a weighted fitness function that balances competing objectives:
 \begin{equation}
 \begin{aligned}
 f(P) ={}& \lambda_1 L(P) + \lambda_2 C_{\text{turn}}(P) + \lambda_3 C_{\text{climb}}(P) \\
-&+ \lambda_4 C_{\text{collision}}(P) + \lambda_5 C_{\text{alt}}(P)
+&+ \lambda_4 C_{\text{alt}}(P) + C_{\text{safety}}(P)
 \end{aligned}
 \label{eq:fitness}
-\end{equation} The turn penalty $C_{\text{turn}}$ penalizes sharp directional changes that exceed UAV maneuverability:
-\begin{equation}
-C_{\text{turn}}(P) = \sum_{i=2}^{n-1} \max\left(0, \theta_i - \theta_{\max}\right)^2
 \end{equation}
-where $\theta_i$ is the turn angle at waypoint $i$ and $\theta_{\max}$ is the maximum allowable turn. The climb penalty $C_{\text{climb}}$ penalizes excessive altitude changes:
+The turn penalty $C_{\text{turn}}$ applies a linear penalty for directional changes that exceed a minimal tolerance threshold:
 \begin{equation}
-\begin{aligned}
-C_{\text{climb}}(P) = \sum_{i=1}^{n-1} \max\Bigl(0, &\frac{|z_{i+1} - z_i|}{\|p_{i+1} - p_i\|_{xy}} \\
-&- \gamma_{\max}\Bigr)^2
-\end{aligned}
+C_{\text{turn}}(P) = \sum_{i=2}^{n-1} \max\left(0, \theta_i - \theta_{\max}\right)
 \end{equation}
-where $\gamma_{\max}$ is the maximum climb/descent gradient. The collision penalty $C_{\text{collision}}$ combines terrain and obstacle violations:
+where $\theta_i$ is the turn angle between consecutive segments $i-1$ and $i$, and $\theta_{\max}$ is the maximum zero-penalty turn threshold (set to $\symThetaTol$ rad).
+The climb penalty $C_{\text{climb}}$ penalizes both steep climb adjustments and absolute climb angles:
 \begin{equation}
 \begin{aligned}
-C_{\text{collision}}(P) = \sum_{i=1}^{n} \Bigl[ &\max(0, \mathcal{E}(x_i, y_i) + h_{\min} - z_i) \\
-&+ \sum_{j=1}^{M} \max(0, r_j + d_{\text{safe}} - d_{ij}) \Bigr]
+C_{\text{climb}}(P) = \sum_{i=2}^{n-1} \left( 2|\xi_i - \xi_{i-1}| + |\xi_i| + |\xi_{i-1}| \right)
 \end{aligned}
 \end{equation}
-where $d_{ij}$ is the distance from waypoint $i$ to obstacle $j$. The altitude cost $C_{\text{alt}}$ encourages the UAV to maintain low-level flight for terrain masking and energy efficiency:
+where $\xi_i = \arctan\left(\frac{z_{i+1} - z_i}{\|p_{i+1} - p_i\|_{xy}}\right)$ is the climb angle of the $i$-th segment. The safety penalty $C_{\text{safety}}$ acts as an absolute constraint combining terrain, obstacle, and path feasibility violations (applying infinite or heavy penalties for penetrating restricted boundaries):
+\begin{equation}
+\begin{aligned}
+C_{\text{safety}}(P) = \sum_{i=1}^{n} \Bigl[ &\max(0, \mathcal{E}(x_i, y_i) + h_{\min} - z_i) \\
+&+ \sum_{j=1}^{M} \max(0, r_j - d_{ij}) \Bigr]
+\end{aligned}
+\end{equation}
+where $d_{ij}$ is the distance from waypoint $i$ to obstacle $j$.
+The altitude cost $C_{\text{alt}}$ encourages the UAV to maintain low-level flight for terrain masking and energy efficiency:
 \begin{equation}
 C_{\text{alt}}(P) = \sum_{i=1}^{n} z_i
-\end{equation} The weights $\lambda_1, \ldots, \lambda_5$ balance path efficiency against constraint satisfaction.
-Lower fitness values indicate better paths. \section{Methods}
-\label{sec:methods} The RL-based PSO parameter adaptation problem is formulated as a Markov Decision Process (MDP).
+\end{equation}
+The normalized weights $\lambda_1, \ldots, \lambda_4$ balance efficiency against soft constraints.
+The safety term $C_{\text{safety}}$ dominates the objective to enforce strict feasibility.
+Lower fitness values indicate better paths.
+\section{Methods}
+\label{sec:methods}
+The RL-based PSO parameter adaptation problem is formulated as a Markov Decision Process (MDP).
 In the proposed algorithm, the MDP is defined by the tuple $(\mathcal{S}, \mathcal{A}, \mathcal{R}, \mathcal{T}, \symGamma)$ as illustrated in Figure~\ref{fig:mdp_components}.
 The state space $\mathcal{S}$ encodes compact swarm statistics over a short temporal window.
-The action space $\mathcal{A}$ is a 9D latent control vector which is expanded into particle-wise PSO coefficients through the rank-residual mapping.
+The action space $\mathcal{A}$ is a $\symActiondim$-D latent control vector which is expanded into particle-wise PSO coefficients through the rank-residual mapping.
 The reward function $\mathcal{R}$ provides direct feedback based on whether the swarm improves the current best fitness.
 The transition rules $\mathcal{T}$ describe deterministic updates computed via the standard PSO velocity and position equations, functioning effectively as the environment transition function during learning.
-The discount factor $\symGamma$ determines the temporal preference for cumulative returns. \begin{figure}[!htb] \centering \includegraphics[width=\linewidth]{figures/MDP.pdf} \caption{MDP formulation of RRSACPSO. At each PSO iteration $t$, the SAC agent observes compact swarm statistics $s_t$, outputs a latent action that is expanded into particle-wise PSO parameters, and receives a fitness-improvement reward $r_t$ based on whether the swarm improves the current best path.} \label{fig:mdp_components}
-\end{figure} \subsection{Compact Swarm-State Representation}
-To address the limitations of static state observations used in prior RL-PSO methods, we use a compact swarm-statistics state representation.
-At each iteration, the controller extracts nine normalized swarm-level features: iteration progress, spatial diversity ratio, elite-fitness advantage, global stagnation pressure, feasibility-quality readiness, constraint-pressure intensity, attraction toward the actual global best, velocity alignment toward the global best, and particle-level stagnation pressure.
-These features are buffered over a temporal window of eight iterations.
-In the retained benchmarked configuration, the deployed encoder is intentionally lightweight: it forms a 15D state by concatenating the current 9D feature vector, the first three coordinates of the temporal mean, and the first three coordinates of the one-step trend.
-This keeps the controller online-feasible while still exposing short-horizon temporal context. \subsection{Reward Function} The retained controller uses a direct fitness-improvement reward. Let $\Delta f = f_{\text{gbest}}^{t-1} - f_{\text{gbest}}^{t}$. The reward is defined as:
+The discount factor $\symGamma$ determines the temporal preference for cumulative returns.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\linewidth]{data/MDP.pdf}
+\caption{MDP formulation of RRSACPSO.}
+\label{fig:mdp_components}
+\end{figure} 
+\subsection{Reinforcement Learning Formulation}
+To address the limitations of static state observations used in prior RL-PSO methods, we adopt a compact swarm-statistics state representation. This follows state-representation literature, which treats the state as a compact depiction of observations that preserves the information necessary for control and often benefits from temporal continuity or predictive dynamics \cite{Lesort2018State}.
+At each iteration, the controller extracts nine normalized swarm-level features $f_1, \dots, f_9 \in [0,1]$ summarizing progress, diversity, fitness, constraints, and swarm kinematics. The exact mathematical formulation for each feature is detailed in Table~\ref{tab:state_features}.
+
+These features are buffered over a temporal window of $\symWindowsize$ iterations.
+In the retained benchmarked configuration, the deployed encoder is intentionally lightweight: it forms a $\symStatedim$-D state by concatenating the current nine features, the first three coordinates of the temporal mean, and the first three coordinates of the one-step trend.
+This keeps the controller online-feasible while still exposing short-horizon temporal context.
+To ensure stable critic conditioning, all features are clipped to $[0,1]$.
+In the mathematical formulations detailed in Table~\ref{tab:state_features}, let $x_{i,d}$ and $v_{i}$ denote the position and velocity of particle $i$, $g$ the global best position, $F$ the set of valid particle fitnesses, $\symMaxIters$ the maximum iterations, $\symPopsize$ the swarm size, $D$ the problem dimension, and $\Delta_d = \max_i x_{i,d} - \min_i x_{i,d}$.
+
+\begin{table*}[htbp]
+\centering
+\small
+\caption{Mathematical formulation of the 9 normalized swarm-level features }
+\label{tab:state_features}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{llp{9.2cm}}
+\hline
+\textbf{Feature} & \textbf{Formula} & \textbf{Description} \\
+\hline
+$f_1$ Iteration progress & $t / \symMaxIters$ & Linear fraction of the search budget consumed. \\
+$f_2$ Spatial diversity ratio & $\frac{1}{D} \sum_{d=1}^D \frac{\sigma(x_{\cdot,d})}{\Delta_d + \epsilon}$ & Average ratio of population standard deviation to bounding box span per dimension. \\
+$f_3$ Elite fitness advantage & $\tanh\left(\symScaleElite \frac{\operatorname{median}(F) - \min(F)}{|\operatorname{median}(F)| + \epsilon}\right)$ & Normalized gap between median and best fitness, mapping large gaps asymptotically to 1. \\
+$f_4$ Global stagnation & $\min\left(1, \frac{t - t_{\text{last\_improve}}}{\max(\symStagMinGlobal, \symStagRatioGlobal \symMaxIters)}\right)$ & Normalized iterations since the last global fitness improvement. \\
+$f_5$ Feasibility-quality & $\symFeatWeightA \mu_{\text{feas}} + \symFeatWeightB \frac{1}{1 + \ln(1 + f_{\text{gbest}})}$ & Weighted combination of the feasible-particle ratio ($\mu_{\text{feas}}$) and log-scaled global best fitness. \\
+$f_6$ Constraint-pressure & $\min(1, \mu_{\text{coll}} + P_{\text{terrain}} + P_{\text{danger}} + P_{\text{dup}})$ & Sum of collision ratio and log-scaled penalty averages ($P_k$) for terrain, danger zones, and duplicates. \\
+$f_7$ Global-best attraction & $1 - \tanh\left(\frac{\frac{1}{\symPopsize}\sum_i \|x_i - g\|_2}{\bar{\Delta}\sqrt{D} + \epsilon}\right)$ & Inverse of the average distance to the global best relative to the expected bounding box diagonal. \\
+$f_8$ Velocity alignment & $0.5 + 0.5 \left( \frac{1}{\symPopsize}\sum_i \frac{v_i \cdot (g - x_i)}{\|v_i\|_2 \|g - x_i\|_2 + \epsilon} \right)$ & Average cosine similarity between particle velocities and the direction to the global best. \\
+$f_9$ Particle stagnation & $\frac{1}{\symPopsize} \sum_i \min\left( \frac{s_i}{\max(\symStagMinPart, \symStagRatioPart \symMaxIters)}, 1 \right)$ & Average normalized individual stagnation counter $s_i$ (iterations since personal best improved). \\
+\hline
+\end{tabular}
+\end{table*}
+
+The retained controller uses a direct fitness-improvement reward. Let $\Delta f = f_{\text{gbest}}^{t-1} - f_{\text{gbest}}^{t}$. The reward is defined as:
 \begin{equation}
 r_t =
 \begin{cases}
@@ -242,8 +320,12 @@ r_t =
 \end{cases}
 \label{eq:reward_total}
 \end{equation}
-This design keeps the reinforcement signal aligned with the optimization objective while avoiding extra reward-shaping terms. \subsection{Soft Actor-Critic Backbone} RRSACPSO employs Soft Actor-Critic \cite{Haarnoja2018Soft} for learning the parameter adaptation policy.
-SAC maximizes the entropy-regularized expected return: \begin{equation}
+This design keeps the reinforcement signal aligned with the optimization objective while avoiding auxiliary shaping terms.
+We do not claim that shaping is inherently problematic: potential-based shaping can preserve optimal policies \cite{Ng1999Policy}, but the retained benchmark uses the direct reward to keep the learning signal transparent and easy to attribute.
+
+RRSACPSO employs Soft Actor-Critic \cite{Haarnoja2018Soft} to learn the parameter-adaptation policy.
+The SAC objective is the entropy-regularized expected return:
+\begin{equation}
 J(\pi) = \mathbb{E}_{\tau \sim \pi}\left[\sum_{t=0}^{T} \gamma^t \left(r_t + \alpha \mathcal{H}(\pi(\cdot|\mathbf{s}_t))\right)\right]
 \label{eq:sac_objective}
 \end{equation} where $\alpha$ is the temperature parameter (automatically tuned) and $\mathcal{H}$ is the policy entropy.
@@ -259,340 +341,442 @@ L_Q(\phi_i) = \mathbb{E}_{(\mathbf{s},\mathbf{a},r,\mathbf{s}')} \Bigl[ \bigl(Q_
 \end{equation} Temperature Parameter $\alpha$: Automatically adjusted to match a target entropy $\bar{\mathcal{H}} = -\dim(\mathcal{A}) = -\symActiondim$ via:
 \begin{equation}
 L_\alpha = \mathbb{E}_{\mathbf{s} \sim \mathcal{D}}\left[-\alpha \left(\log \pi_\theta(\mathbf{a}|\mathbf{s}) + \bar{\mathcal{H}}\right)\right]
-\end{equation} In the retained benchmarked configuration, target networks remain enabled, automatic entropy tuning is active, and the critics are standard twin scalar Q-networks; TQC, CrossQ, and critic batch normalization are disabled. \subsection{Algorithm Workflow} The complete integration of the retained SAC agent with the PSO search process is summarized in Algorithm \ref{alg:apexpso}. \begin{algorithm}[H] \caption{RRSACPSO Parameter Adaptation} \label{alg:apexpso} \begin{algorithmic}[1] \State \textbf{Input:} Swarm size $\symPopsize$, Max iterations $\symMaxIters$, Replay buffer $\mathcal{D}$ \State \textbf{Initialize:} Swarm positions $x_i^0$, velocities $v_i^0$, Personal bests $p_i^0$, Global best $g^0$ \State \textbf{Initialize:} Actor $\pi_\theta$, Critics $Q_{\phi_{1,2}}$, Temperature $\alpha$ \For{$t = 1$ to $\symMaxIters$} \State Compute compact swarm statistics $s_t$ \State Sample latent action $\mathbf{a}_t \sim \pi_\theta(\cdot|s_t)$ \State Expand $\mathbf{a}_t$ through rank-residual control to particle-wise PSO coefficients $\{w_{i,t}, c_{1,i,t}, c_{2,i,t}\}_{i=1}^{\symPopsize}$ \For{each particle $i \in \{1 \dots \symPopsize\}$} \State Update velocity $v_i^{t} \leftarrow w_{i,t} v_i^{t-1} + c_{1,i,t} r_1 (p_i^{t-1} - x_i^{t-1}) + c_{2,i,t} r_2 (g^{t-1} - x_i^{t-1})$ \State Update position $x_i^{t} \leftarrow x_i^{t-1} + v_i^{t}$ \EndFor \State Evaluate fitness $f(x_i^t)$ and update $p_i^t$ and $g^t$ \State Compute fitness-improvement reward $r_t$ (Eq. \ref{eq:reward_total}) \State Observe $s_{t+1}$ and store transition $(s_t, \mathbf{a}_t, r_t, s_{t+1})$ in $\mathcal{D}$ \If{training session active} \State Sample minibatch $\mathcal{B} \sim \mathcal{D}$ and update critics, actor, and temperature \EndIf \EndFor \State \Return Optimal path $g^t$ \end{algorithmic}
-\end{algorithm} \section{Results}
-\label{sec:results} \subsection{Experimental Setup} Path quality is measured by global best fitness (Equation \ref{eq:fitness}), which combines path length, turning penalties, climbing penalties, and collision penalties.
-Lower fitness indicates better paths. The main benchmark evaluates the retained RRSACPSO configuration in online rank-residual mode (9D latent action) against RL-based and classical PSO baselines.
-These are compared against a broad range of traditional and adaptive PSO variants, including PSO-LDIW, FIPS, CLPSO, SAEPSO, and UAPSO, as well as reinforcement learning-based methods: RLAM-PSO (DDPG) \cite{Yin2023RLAMPSO}, DQN-PSO \cite{Aoun2024Deep}, SAC-SAPSO \cite{vonEschwege2024Soft}, MPSORL, and PPO-PSO.
-The repository also contains development-stage component experiments, but the benchmark claims in this paper focus on the retained plain-SAC plus rank-residual configuration described in Section~\ref{sec:methods}.
-For each algorithm, we conduct $\symNumruns$ independent runs per scenario and report mean and standard deviation on the same endpoint used for optimization (\texttt{fitnessComponents.totalFitness}).
+\end{equation} In the retained benchmarked configuration, target networks remain enabled, automatic entropy tuning is active, and the critics are standard twin scalar Q-networks; TQC, CrossQ, and critic batch normalization are disabled.
+
+\subsection{Rank-Residual Parameter Expansion}
+The rank-residual parameterization is the core mechanism linking the SAC controller to particle-wise PSO adaptation.
+Like per-particle adaptive PSO schemes such as SAEPSO and UAPSO \cite{Liu2025A, Isiet2019Selfadapting}, the expansion conditions each particle's coefficients on its current search status.
+However, instead of hand-crafting the coefficient rules directly, RRSACPSO learns a shared latent control vector $\mathbf{a}_t = [a_1,\dots,a_9]^\top \in [-1,1]^9$ and converts it into particle-wise residuals around a deterministic baseline schedule. Inspired by Residual Reinforcement Learning \cite{Johannink2019Residual}, which stabilizes learning by superimposing an RL policy over a baseline controller, this approach ensures stable search behavior while allowing fine-grained corrections.
+With normalized progress $\rho_t = \min\!\left(1,\max\!\left(0,\frac{t-1}{T}\right)\right)$, the baseline coefficients are
+\begin{equation}
+\begin{aligned}
+w_t^{\mathrm{base}} &= w_{\max}^{\mathrm{sch}} - \left(w_{\max}^{\mathrm{sch}} - w_{\min}^{\mathrm{sch}}\right)\rho_t^{\symExpInertia}, \\
+c_{1,t}^{\mathrm{base}} &= c_{1,\max}^{\mathrm{sch}} - \left(c_{1,\max}^{\mathrm{sch}} - c_{1,\min}^{\mathrm{sch}}\right)\rho_t, \\
+c_{2,t}^{\mathrm{base}} &= c_{2,\min}^{\mathrm{sch}} + \left(c_{2,\max}^{\mathrm{sch}} - c_{2,\min}^{\mathrm{sch}}\right)\rho_t,
+\end{aligned}
+\label{eq:rank_residual_base}
+\end{equation}
+where the retained benchmark uses $(w_{\max}^{\mathrm{sch}}, w_{\min}^{\mathrm{sch}}) = (\symWmaxSch, \symWminSch)$ and $(c_{1,\max}^{\mathrm{sch}}, c_{1,\min}^{\mathrm{sch}}) = (c_{2,\max}^{\mathrm{sch}}, c_{2,\min}^{\mathrm{sch}}) = (\symCmaxSch, \symCminSch)$.
+
+For particle $i$, three centered context signals are computed:
+\begin{equation}
+\begin{aligned}
+r_{i,t} &= \frac{\operatorname{rank}_{i,t}}{N-1} - 0.5, \\
+u_{i,t} &= \tanh\!\left(\frac{\|v_{i,t}\|_2 - \mu_v}{\sigma_v + 10^{-8}}\right), \\
+s_{i,t} &= \min\!\left(\frac{\operatorname{stag}_{i,t}}{\symStagMaxPart}, 1\right) - 0.5,
+\end{aligned}
+\label{eq:rank_residual_context}
+\end{equation}
+where $\operatorname{rank}_{i,t}$ is assigned from best to worst particle according to personal-best fitness, so the best particle has $r_{i,t}=-0.5$ and the worst particle has $r_{i,t}=0.5$, while $\mu_v$ and $\sigma_v$ are the swarm mean and standard deviation of velocity magnitude.
+
+The latent action is then expanded into residual updates. The retained residual gains are chosen to keep the learned policy in a correction role around the baseline schedule rather than to replace it outright: $\symResWeightW$ keeps inertia perturbations small relative to the admissible interval $[\symWclipMin,\symWclipMax]$, while $\symResWeightC$ allows larger but still bounded shifts of $c_1$ and $c_2$ within $[\symCclipMin,\symCclipMax]$. 
+
+\begin{equation}
+\begin{aligned}
+\Delta w_{i,t} &= \symResWeightW\left(a_1 + a_2 r_{i,t} + a_3 u_{i,t}\right), \\
+\Delta c_{1,i,t} &= \symResWeightC\left(a_4 + a_5 s_{i,t} + a_6 r_{i,t}\right), \\
+\Delta c_{2,i,t} &= \symResWeightC\left(a_7 - a_8 r_{i,t} - a_9 s_{i,t}\right),
+\end{aligned}
+\label{eq:rank_residual_delta}
+\end{equation}
+and the final PSO coefficients are obtained by clipping to the admissible ranges
+\begin{equation}
+\begin{aligned}
+w_{i,t} &= \operatorname{clip}_{[\symWclipMin,\,\symWclipMax]}\!\left(w_t^{\mathrm{base}} + \Delta w_{i,t}\right), \\
+c_{1,i,t} &= \operatorname{clip}_{[\symCclipMin,\,\symCclipMax]}\!\left(c_{1,t}^{\mathrm{base}} + \Delta c_{1,i,t}\right), \\
+c_{2,i,t} &= \operatorname{clip}_{[\symCclipMin,\,\symCclipMax]}\!\left(c_{2,t}^{\mathrm{base}} + \Delta c_{2,i,t}\right).
+\end{aligned}
+\label{eq:rank_residual_final}
+\end{equation}
+This design preserves a low-dimensional RL control problem while still allowing heterogeneous parameter assignments across the swarm.
+Poorly performing or stagnating particles can therefore be pushed toward more exploratory settings, while better-ranked particles remain closer to exploitative coefficients around the current best region.
+The mapping keeps the controller online-feasible and avoids the dimensionality explosion that would arise if the policy directly emitted all $3\symPopsize$ particle parameters independently.
+
+\subsection{Algorithm Workflow}
+The complete integration of the retained SAC agent with the PSO search process is summarized in Algorithm \ref{alg:apexpso}.
+\begin{algorithm}[H]
+\caption{RRSACPSO Parameter Adaptation}
+\label{alg:apexpso}
+\begin{algorithmic}[1]
+\State \textbf{Input:} Swarm size $\symPopsize$, max iterations $\symMaxIters$, replay buffer $\mathcal{D}$
+\State \textbf{Initialize:} Swarm positions $x_i^0$, velocities $v_i^0$, personal bests $p_i^0$, global best $g^0$
+\State \textbf{Initialize:} Actor $\pi_\theta$, critics $Q_{\phi_{1,2}}$, temperature $\alpha$
+\For{$t = 1$ to $\symMaxIters$}
+\State Compute compact swarm statistics $s_t$
+\State Sample latent action $\mathbf{a}_t \sim \pi_\theta(\cdot|s_t)$
+\State Expand $\mathbf{a}_t$ through rank-residual control to particle-wise PSO coefficients $\{w_{i,t}, c_{1,i,t}, c_{2,i,t}\}_{i=1}^{\symPopsize}$
+\For{each particle $i \in \{1, \dots, \symPopsize\}$}
+\State Update velocity $v_i^{t} \leftarrow w_{i,t} v_i^{t-1} + c_{1,i,t} r_1 (p_i^{t-1} - x_i^{t-1}) + c_{2,i,t} r_2 (g^{t-1} - x_i^{t-1})$
+\State Update position $x_i^{t} \leftarrow x_i^{t-1} + v_i^{t}$
+\EndFor
+\State Evaluate fitness $f(x_i^t)$ and update $p_i^t$ and $g^t$
+\State Compute fitness-improvement reward $r_t$ (Eq. \ref{eq:reward_total})
+\State Observe $s_{t+1}$ and store transition $(s_t, \mathbf{a}_t, r_t, s_{t+1})$ in $\mathcal{D}$
+\If{training session active}
+\State Sample minibatch $\mathcal{B} \sim \mathcal{D}$ and update critics, actor, and temperature
+\EndIf
+\EndFor
+\State \Return Optimal path $g^t$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experimental Setup}
+\label{sec:experimental_setup}
+Path quality is measured by global best fitness (Equation \ref{eq:fitness}), which combines path length, turning penalties, climbing penalties, and collision penalties.
+Lower fitness indicates better paths.
+The main benchmark evaluates the retained RRSACPSO configuration in online rank-residual mode (9D latent action) against RL-based and classical PSO baselines.
+These are compared against a broad range of traditional and adaptive PSO variants, including PSO-LDIW, FIPS, CLPSO, SAEPSO, and UAPSO.
+The RL baselines are RLAM-PSO (DDPG) \cite{Yin2023RLAMPSO}, DQN-PSO \cite{Aoun2024Deep}, SAC-SAPSO \cite{vonEschwege2024Soft}, MPSORL, and PPO-PSO.
+The benchmark claims in this paper focus on the retained plain-SAC plus rank-residual configuration described in Section~\ref{sec:methods}.
+For each algorithm, we conduct $\symNumruns$ independent runs per scenario and report mean and standard deviation on the same endpoint used for optimization (the total fitness objective).
 Inferential analysis uses two-sided paired t-tests as the primary test, with two-sided Wilcoxon signed-rank tests as a robustness check.
 Within each scenario, all pairwise p-values are adjusted using Holm--Bonferroni family-wise correction.
-For each pair, we additionally report the paired mean difference with a 95\% confidence interval, Cohen's $d_z$, and rank-biserial correlation. Table~\ref{tab:hyperparams} summarises all hyperparameters used in the experiments. \begin{table}[htbp]
-\centering
-\small
-\caption{RRSACPSO hyperparameters. Values extracted directly from \texttt{RRSACPSO\_Config.m}.}
-\label{tab:hyperparams}
-\begin{tabularx}{\columnwidth}{lXr}
-\hline
-\textbf{Category} & \textbf{Hyperparameter} & \textbf{Value} \\
-\hline
-\multirow{4}{*}{Fitness (Eq.~\ref{eq:fitness})} & Path weight $\lambda_1$ (norm.~factor 150) & 0.25 \\ & Turning weight $\lambda_2$ (norm.~factor 3) & 0.25 \\ & Climbing weight $\lambda_3$ (norm.~factor 3) & 0.25 \\ & Altitude weight $\lambda_4$ (norm.~factor 50) & 0.20 \\
-\hline
-\multirow{1}{*}{RL Reward} & Fitness-improvement signal & $\pm 1$ \\
-\hline
-\multirow{3}{*}{State Encoder} & Temporal window $W$ & 8 iters \\ & State dimension $\mathcal{D}_s$ & 15 \\ & Feature count $N_f$ & 9 \\
-\hline
-\multirow{3}{*}{Actor Network} & Hidden layers $H_a$ & $[256, 256]$ \\ & Action dimension $\mathcal{D}_a$ & 9 \\ & Activation & ReLU \\
-\hline
-\multirow{3}{*}{Critic Network} & Hidden layers $H_b$ & $[256, 256, 128]$ \\ & Number of critics & 2 \\ & Target networks & Enabled \\
-\hline
-\multirow{5}{*}{Training} & Learning rate $\eta$ (actor/critic/$\alpha$) & $3{\times}10^{-4}$ \\ & Batch size $B$ & 128 \\ & Replay buffer $C_{\text{rb}}$ & 10{,}000 (online mode) \\ & Training episodes $E$ & 1 (online mode) \\ & Discount factor $\gamma$ & 0.99 \\
-\hline
-\multirow{3}{*}{PSO} & Default population $N$ & 100 \\ & Default iterations per episode & 1000 \\ & Benchmark budget & 100 particles, 1000 iterations, 30 runs \\
-\hline
-\end{tabularx}
-\end{table} For reproducibility, we used the following protocol:
-\begin{enumerate} \item \textbf{Evaluation environment:} All comparisons use a fixed map size $[100,100,100]$, start point $[10,95,10]$, goal point $[97,2,10]$, and the three \texttt{ChrismasTerrain2} benchmark scenarios with 0, 5, and 10 danger zones. Terrain is loaded from \texttt{data/ChrismasTerrain2.tif}, rescaled to a maximum elevation of 40, and interpolated to a $100\times100$ grid. \item \textbf{Deterministic paired-seed policy:} For run $r$ and scenario $s$, a common base seed $1000r + 100s$ is used across all algorithms, enabling paired statistical comparison under matched stochastic conditions. \item \textbf{Benchmark budget:} All algorithms are evaluated through a single direct global-planning call per run (no replanning), using a benchmark budget of 100 particles, 1000 iterations, 30 runs per scenario, and a 14-worker parallel pool. \item \textbf{Normalized baseline configuration:} Baselines are compared under the same evaluation protocol while preserving each method's core update equations and action/state design. Hyperparameters are fixed before the final evaluation and are not retuned per scenario. \item \textbf{RRSACPSO configuration:} Experiments use online rank-residual mode with a 9D latent action expanded into particle-wise PSO coefficients. The retained controller enables SAC, automatic entropy tuning, target networks, and twin critics, while TQC, critic batch normalization, CrossQ, cross-scale state, SimBa, prioritized replay, and other research branches are disabled. \item \textbf{Statistical reporting:} Each table reports mean and standard deviation over 30 independent runs per scenario on per-run global fitness. Pairwise inference is based on two-sided paired t-tests (primary) and two-sided Wilcoxon signed-rank tests (robustness), with Holm--Bonferroni correction across all pairwise comparisons within each scenario. We report corrected p-values, 95\% CIs for paired mean differences, and effect sizes ($d_z$, rank-biserial $r$).
-\end{enumerate} All results reported in Tables~\ref{tab:rl_comparison} and \ref{tab:others_comparison} follow this fairness protocol. \subsection{Algorithm Comparison Results} 
-\begin{figure*}[htbp]
-\centering
-\begin{subfigure}{0.48\textwidth}
-\centering
-\includegraphics[width=\linewidth]{figures/results/rl_group_3D.pdf}
-\caption{RL Methods 3D Trajectory}
-\end{subfigure}
-\hfill
-\begin{subfigure}{0.48\textwidth}
-\centering
-\includegraphics[width=\linewidth]{figures/results/other_group_3D.pdf}
-\caption{Traditional Methods 3D Trajectory}
-\end{subfigure}
+For each pair, we additionally report the paired mean difference with a 95\% confidence interval, Cohen's $d_z$, and rank-biserial correlation.
 
-\vspace{0.5cm}
+The experimental protocol is as follows:
+\begin{enumerate}
+\item \textbf{Evaluation environment:} The primary fixed-map benchmark uses map size $[100,100,100]$, start point $[10,95,10]$, goal point $[97,2,10]$, and three scenarios with DEM map with 0, 5, and 10 danger zones. The RL comparison additionally reports a fourth cross-terrain scenario on terrainStruct c100 with zero danger zones and the terrain-resolved scenario geometry.
+\item \textbf{Deterministic paired-seed policy:} For run $r$ and scenario $s$, a common base seed $1000r + 100s$ is used across all algorithms, enabling paired statistical comparison under matched stochastic conditions.
+\item \textbf{Benchmark budget:} Each algorithm is evaluated in a single direct global-planning run with 100 particles, 1000 iterations, and 30 runs per scenario.
+\item \textbf{Normalized baseline configuration:} Baselines are compared under the same evaluation protocol while preserving each method's core update equations and state-action design. Hyperparameters are fixed before evaluation and are not retuned per scenario.
+\item \textbf{RRSACPSO setup:} Experiments use online rank-residual mode with a 9D latent action expanded into particle-wise PSO coefficients. The reported setup uses SAC with entropy tuning, target networks, and twin critics.
+\item \textbf{Statistical reporting:} Each table reports mean and standard deviation over 30 independent runs per scenario on per-run global fitness. Pairwise inference uses two-sided paired t-tests (primary) and two-sided Wilcoxon signed-rank tests (robustness), with Holm--Bonferroni correction within each scenario. We also report corrected p-values, 95\% confidence intervals for paired mean differences, and effect sizes ($d_z$, rank-biserial $r$).
+\end{enumerate}
+All results reported in Tables~\ref{tab:rl_comparison} and \ref{tab:others_comparison} follow this fairness protocol.
+
+\section{Results}
+\label{sec:results}
+\subsection{Comparison Against RL-Based Baselines}
+Table~\ref{tab:rl_comparison} summarizes the comparison against RL-based baselines, while Figures~\ref{fig:rl_3d_grid}--\ref{fig:rl_diagnostics} show representative trajectory and diagnostic panels for the four-scenario RL benchmark.
+In the current benchmark, PPO-PSO achieves the lowest mean fitness in Scenarios 1, 2, and 4 (1546.28, 1534.96, and 12299.19), while MPSORL achieves the best mean in Scenario 3 (1516.75).
+RRSACPSO has the second-best mean fitness in Scenario 1 and the second-best mean fitness in the cross-terrain Scenario 4, and it yields the lowest standard deviation in Scenarios 1 and 2, but it does not attain the best mean fitness in the current RL benchmark.
+DQN-PSO deteriorates sharply as scenario complexity increases, producing both the highest mean fitness and the largest variance across scenarios.
+Holm-corrected paired tests show that RRSACPSO significantly outperforms RLAMPSO, DQN-PSO, and SAC-SAPSO in all four scenarios.
+It significantly outperforms MPSORL only in Scenario 1.
+It is statistically indistinguishable from PPO-PSO in Scenarios 1 and 4 and from MPSORL in Scenario 4.
+It is significantly worse than both PPO-PSO and MPSORL in Scenarios 2 and 3.
+PPO-PSO is included as a baseline through our own implementation of a PSO controller with a Proximal Policy Optimization policy network.
+This baseline follows the core actor-critic design principles of Schulman et al.\ \cite{Schulman2017Proximal} for continuous parameter output.
+In the representative convergence plot of Figure~\ref{fig:rl_diagnostics}, PPO-PSO descends fastest and reaches the lowest final fitness, while RRSACPSO converges more gradually and finishes in the same broad band as RLAMPSO and DQN-PSO, below SAC-SAPSO and MPSORL in that plotted run.
+The reward panel shows that PPO-PSO and MPSORL maintain more consistently positive smoothed rewards, whereas RRSACPSO exhibits a more oscillatory trace with a long negative phase early in the run and mixed reward thereafter.
+The parameter-tracking panel provides direct evidence that RRSACPSO uses a wide adaptive range for $w$, $c_1$, and $c_2$, unlike the flatter PPO-PSO trace and the more step-like SAC-SAPSO and MPSORL traces.
+The trajectory panels in Figures~\ref{fig:rl_3d_grid} and \ref{fig:rl_topview_grid} show several distinct feasible route families rather than a single visually dominant path, which is consistent with the table-level result that RRSACPSO is competitive but not uniformly best across the RL benchmark.
+\begin{table*}[!t]
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc ccc ccc ccc}
+\hline
+\multirow{2}{*}{Algorithm} & \multicolumn{3}{c}{Scenario 1} & \multicolumn{3}{c}{Scenario 2} & \multicolumn{3}{c}{Scenario 3} & \multicolumn{3}{c}{Scenario 4} \\
+\cline{2-13}
+ & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest \\
+\hline
+RLAMPSO\cite{Yin2023RLAMPSO} & 1614.80 $\pm$ 71.29 & 67.22 & $\uparrow\uparrow$ & 1684.55 $\pm$ 79.57 & 48.01 & $\uparrow\uparrow$ & 1749.73 $\pm$ 89.63 & 48.65 & $\uparrow\uparrow$ & 12508.81 $\pm$ 155.82 & 253.86 & $\uparrow\uparrow$ \\
+DQN-PSO\cite{Aoun2024Deep} & 1751.48 $\pm$ 185.90 & 111.27 & $\uparrow\uparrow$ & 1795.31 $\pm$ 199.46 & 110.54 & $\uparrow\uparrow$ & 1923.56 $\pm$ 221.25 & 110.87 & $\uparrow\uparrow$ & 12690.61 $\pm$ 270.75 & 370.90 & $\uparrow\uparrow$ \\
+SAC-SAPSO \cite{vonEschwege2024Soft} & 1659.65 $\pm$ 114.53 & 37.12 & $\uparrow\uparrow$ & 1675.37 $\pm$ 78.03 & 36.69 & $\uparrow\uparrow$ & 1720.19 $\pm$ 90.83 & 36.68 & $\uparrow\uparrow$ & 12536.38 $\pm$ 255.57 & 179.40 & $\uparrow\uparrow$ \\
+PPO-PSO & \textbf{1546.28} $\pm$ 85.58 & 65.44 & $\downarrow$ & \textbf{1534.96} $\pm$ 106.58 & 60.03 & $\downarrow\downarrow$ & 1534.75 $\pm$ 134.76 & 61.27 & $\downarrow\downarrow$ & \textbf{12299.19} $\pm$ 135.41 & 225.35 & $\downarrow$ \\
+MPSORL & 1613.14 $\pm$ 74.24 & 33.69 & $\uparrow\uparrow$ & 1551.32 $\pm$ 83.99 & 33.43 & $\downarrow\downarrow$ & \textbf{1516.75} $\pm$ 91.53 & 33.98 & $\downarrow\downarrow$ & 12373.61 $\pm$ 138.23 & 161.13 & $\uparrow$ \\
+RRSACPSO & 1555.05 $\pm$ 47.36 & 88.18 & --- & 1612.86 $\pm$ 69.66 & 79.46 & --- & 1627.99 $\pm$ 107.74 & 80.01 & --- & 12343.88 $\pm$ 170.97 & 291.04 & --- \\
+\hline
+\end{tabular}%
+}
+\caption{Performance comparison of RL-based PSO parameter adaptation algorithms across the four-scenario RL benchmark. Fitness reports Mean $\pm$ Standard Deviation over 30 runs. Time reports mean total planning time per run in seconds. TTest compares each method against RRSACPSO using Holm-corrected paired t-tests, where $\downarrow\downarrow$ = significantly better, $\uparrow\uparrow$ = significantly worse, $\downarrow$ = better but not significant, and $\uparrow$ = worse but not significant.}
+\label{tab:rl_comparison}
+\end{table*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario1_3D.pdf}
+\caption{Scenario 1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario2_3D.pdf}
+\caption{Scenario 2}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario3_3D.pdf}
+\caption{Scenario 3}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario4_3D.pdf}
+\caption{Scenario 4}
+\end{subfigure}
+\caption{RL-based 3D trajectory comparisons across the four benchmark scenarios.}
+\label{fig:rl_3d_grid}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario1_TopView.pdf}
+\caption{Scenario 1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario2_TopView.pdf}
+\caption{Scenario 2}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario3_TopView.pdf}
+\caption{Scenario 3}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/rlbased/Scenario4_TopView.pdf}
+\caption{Scenario 4}
+\end{subfigure}
+\caption{RL-based top-view trajectory comparisons across the four benchmark scenarios.}
+\label{fig:rl_topview_grid}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}{0.32\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{data/rlbased/Convergence_Comparison.pdf}
+\caption{Convergence}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{data/rlbased/Reward_Comparison.pdf}
+\caption{Reward}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.32\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{data/rlbased/Parameter_Tracking.pdf}
+\caption{Parameter tracking}
+\end{subfigure}
+\caption{RL-based convergence, reward, and parameter-tracking diagnostics.}
+\label{fig:rl_diagnostics}
+\end{figure*}
+\subsection{Comparison Against Classical and Adaptive PSO Baselines}
+Table~\ref{tab:others_comparison} summarizes the comparison against classical and adaptive PSO baselines, while Figures~\ref{fig:others_3d_grid}--\ref{fig:others_convergence_tracking} show the corresponding representative trajectory and diagnostic panels for the four-scenario benchmark.
+Within this comparison, SAEPSO achieves the lowest mean fitness in Scenarios 1 and 4, while SAEPSO* is best in Scenarios 2 and 3.
+RRSACPSO attains lower mean fitness than FIPS and CLPSO in all four scenarios, while SAEPSO, SAEPSO*, and PSO-LDIW achieve equal or lower mean fitness in at least one scenario.
+Holm-corrected paired tests show that RRSACPSO is significantly worse than SAEPSO in Scenarios 1 and 4 and worse than SAEPSO* in Scenario 4.
+It remains statistically indistinguishable from PSO-LDIW across all four scenarios and from SAEPSO* in Scenarios 1--3.
+It significantly outperforms CLPSO in all four scenarios, with additional significant gains over FIPS in Scenarios 1, 2, and 4 and over UAPSO in Scenario 4.
+In the representative convergence panel of Figure~\ref{fig:others_convergence_tracking}, SAEPSO and SAEPSO* finish lowest, while RRSACPSO remains in the leading group but does not end below the strongest classical baselines.
+The parameter-tracking panel shows that RRSACPSO follows a markedly more variable coefficient profile than PSO-LDIW and UAPSO, whose schedules are much smoother and more prescribed.
+The 3D and top-view trajectory panels again show multiple feasible route families rather than clear visual dominance by any single method, which matches the quantitative result that RRSACPSO is competitive but not superior to the strongest SAEPSO-family baselines.
+\begin{table*}[!t]
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccc ccc ccc ccc}
+\hline
+\multirow{2}{*}{Algorithm} & \multicolumn{3}{c}{Scenario 1} & \multicolumn{3}{c}{Scenario 2} & \multicolumn{3}{c}{Scenario 3} & \multicolumn{3}{c}{Scenario 4} \\
+\cline{2-13}
+ & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest \\
+\hline
+RRSACPSO & 1556.82 $\pm$ 50.93 & 106.32 & --- & 1609.64 $\pm$ 75.11 & 86.94 & --- & 1639.15 $\pm$ 117.06 & 83.26 & --- & 12372.33 $\pm$ 147.84 & 260.18 & --- \\
+PSO-Standard & 1609.89 $\pm$ 86.08 & 31.37 & $\uparrow$ & 1691.64 $\pm$ 162.63 & 35.39 & $\uparrow$ & 1762.46 $\pm$ 206.05 & 34.73 & $\uparrow$ & 12436.71 $\pm$ 152.57 & 530.01 & $\uparrow$ \\
+PSO-LDIW & 1551.57 $\pm$ 48.97 & 31.11 & $\downarrow$ & 1629.85 $\pm$ 61.31 & 35.32 & $\uparrow$ & 1630.30 $\pm$ 91.62 & 35.09 & $\downarrow$ & 12387.15 $\pm$ 162.16 & 534.31 & $\uparrow$ \\
+FIPS & 1762.81 $\pm$ 45.76 & 30.81 & $\uparrow\uparrow$ & 1722.29 $\pm$ 74.49 & 33.71 & $\uparrow\uparrow$ & 1690.35 $\pm$ 171.71 & 33.63 & $\uparrow$ & 12651.82 $\pm$ 184.67 & 512.49 & $\uparrow\uparrow$ \\
+CLPSO & 1958.73 $\pm$ 77.04 & 30.77 & $\uparrow\uparrow$ & 1986.04 $\pm$ 91.80 & 34.83 & $\uparrow\uparrow$ & 2119.15 $\pm$ 190.23 & 33.19 & $\uparrow\uparrow$ & 13010.93 $\pm$ 93.82 & 694.61 & $\uparrow\uparrow$ \\
+SAEPSO \cite{Liu2025A} & \textbf{1494.91} $\pm$ 39.37 & 80.48 & $\downarrow\downarrow$ & 1599.30 $\pm$ 41.05 & 90.75 & $\downarrow$ & 1590.04 $\pm$ 33.27 & 92.75 & $\downarrow$ & \textbf{12104.13} $\pm$ 9.62 & 183.06 & $\downarrow\downarrow$ \\
+SAEPSO* \cite{Liu2025A} & 1549.99 $\pm$ 56.12 & 30.90 & $\downarrow$ & \textbf{1586.10} $\pm$ 95.02 & 35.10 & $\downarrow$ & \textbf{1538.65} $\pm$ 147.14 & 34.78 & $\downarrow$ & 12214.80 $\pm$ 123.56 & 71.69 & $\downarrow\downarrow$ \\
+UAPSO \cite{Isiet2019Selfadapting} & 1556.21 $\pm$ 99.15 & 248.34 & $\downarrow$ & 1609.88 $\pm$ 152.09 & 223.19 & $\uparrow$ & 1698.39 $\pm$ 409.90 & 207.45 & $\uparrow$ & 12861.33 $\pm$ 150.00 & 1045.87 & $\uparrow\uparrow$ \\
+\hline
+\end{tabular}%
+}
+\caption{Performance comparison of traditional PSO parameter adaptation algorithms across four benchmark scenarios. Fitness reports Mean $\pm$ Standard Deviation over 30 runs. Time reports mean total planning time per run in seconds. TTest compares each method against RRSACPSO using Holm-corrected paired t-tests, where $\downarrow\downarrow$ = significantly better, $\uparrow\uparrow$ = significantly worse, $\downarrow$ = better but not significant, and $\uparrow$ = worse but not significant.}
+\label{tab:others_comparison}
+\end{table*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario1_3D.pdf}
+\caption{Scenario 1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario2_3D.pdf}
+\caption{Scenario 2}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario3_3D.pdf}
+\caption{Scenario 3}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario4_3D.pdf}
+\caption{Scenario 4}
+\end{subfigure}
+\caption{Classical/adaptive-PSO 3D trajectory comparisons across the four benchmark scenarios.}
+\label{fig:others_3d_grid}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario1_TopView.pdf}
+\caption{Scenario 1}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario2_TopView.pdf}
+\caption{Scenario 2}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario3_TopView.pdf}
+\caption{Scenario 3}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{data/others3chrismast/Scenario4_TopView.pdf}
+\caption{Scenario 4}
+\end{subfigure}
+\caption{Classical/adaptive-PSO top-view trajectory comparisons across the four benchmark scenarios.}
+\label{fig:others_topview_grid}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
 \begin{subfigure}{0.48\textwidth}
 \centering
-\includegraphics[width=\linewidth]{figures/results/rl_group_TopView.pdf}
-\caption{RL Methods Top View}
+\includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{data/others3chrismast/Convergence_Comparison.pdf}
+\caption{Convergence}
 \end{subfigure}
 \hfill
 \begin{subfigure}{0.48\textwidth}
 \centering
-\includegraphics[width=\linewidth]{figures/results/other_group_TopView.pdf}
-\caption{Traditional Methods Top View}
+\includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{data/others3chrismast/Parameter_Tracking.pdf}
+\caption{Parameter tracking}
 \end{subfigure}
-\caption{Algorithm comparison for UAV path planning in Scenario 1.}
-\label{fig:scenario1_comparison}
+\caption{Classical/adaptive-PSO convergence and parameter-tracking diagnostics.}
+\label{fig:others_convergence_tracking}
 \end{figure*}
-Table~\ref{tab:rl_comparison} and Table~\ref{tab:others_comparison} compare the proposed RRSACPSO against RL-based and traditional PSO variants, respectively.
-Among RL-based methods, RRSACPSO achieves the lowest mean fitness in Scenarios 1 and 2 (1531.73 and 1581.86), while MPSORL achieves the best mean in Scenario 3 (1543.13).
-RRSACPSO exhibits the most stable dispersion, achieving the lowest standard deviation in all three scenarios (51.25, 87.42, and 69.52).
-DQN-PSO degrades sharply as environment complexity increases, exhibiting the highest mean fitness and variance across all scenarios. Among traditional PSO variants (Table~\ref{tab:others_comparison}), SAEPSO achieves the lowest mean fitness in Scenarios 1 and 3 (1526.78, 1616.99), while SAEPSO* is best in Scenario 2 (1618.68).
-SAEPSO yields the lowest variability in all three scenarios (std 30.92, 54.13, 38.99).
-However, RRSACPSO remains competitively close to SAEPSO while offering a decisive computational advantage: wall-clock runtime requires 11--15 seconds per run versus 72--101 seconds for SAEPSO Full, a 7--8$\times$ speedup.
-This places RRSACPSO on a favorable trade-off curve when both solution quality and deployment speed are objectives: near-SAEPSO fitness at a fraction of the runtime cost.
-PSO-LDIW remains a competitive classical schedule, while FIPS and CLPSO perform poorly in this domain (mean fitness 1859--2566), as their comprehensive learning strategies disperse particles across the search space without sufficient exploitation pressure. PPO-PSO is included as a baseline and represents our own implementation of a PSO controller with a Proximal Policy Optimization policy network, following the foundational architecture principles of Schulman et al.\ \cite{Schulman2017Proximal} for the actor and critic, adapted for continuous parameter output. \begin{table*}[t]
+\subsection{SAC Control Granularity and Rank-Residual Ablation}
+\label{subsec:sac_granularity_ablation_results}
+To probe the role of the control interface, we ran an internal four-mode ablation under the same retained SAC backbone used throughout this paper.
+All four modes use the same 15D temporal-summary state, binary fitness-improvement reward, twin-critic target-network training, and paired-seed protocol, with only the action-to-parameter mapping changed.
+Within this subsection, `SACPSO-Global', `SACPSO-5Subgroup', and `SACPSO-PerParticle' are matched internal baselines and should not be confused with the external SAC-SAPSO method in Table~\ref{tab:rl_comparison}.
+`SACPSO-Global' applies one coefficient triplet to the full swarm, `SACPSO-5Subgroup' assigns one triplet per fixed subgroup, and `SACPSO-PerParticle' outputs direct particle-wise coefficients.
+RRSACPSO retains the same plain-SAC controller but expands a compact 9D latent action into particle-wise coefficients through rank-residual modulation around the deterministic baseline schedule, whereas the three internal baselines map their actions directly to coefficient values.
+For the current 100-particle benchmark, these modes correspond to 3D, 15D, 300D, and 9D latent-action control spaces, respectively.
+
+Table~\ref{tab:sac_granularity_ablation} shows that RRSACPSO achieves the lowest mean fitness in all four scenarios.
+The clearest gains appear in the three first scenarios, where RRSACPSO significantly outperforms all three matched baselines in Scenarios 1 and 3 and remains significantly better than the global and five-subgroup variants in Scenario 2.
+On the cross-terrain c100 scenario, RRSACPSO still has the best mean fitness, but the pairwise differences are not significant after Holm correction, so that fourth-scenario result should be interpreted as directional rather than definitive.
+\begin{table*}[!t]
 \centering
 \small
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabular}{lccc ccc ccc ccc}
 \hline
-Scenario & RLAMPSO\cite{Yin2023RLAMPSO} & DQN-PSO\cite{Aoun2024Deep} & SAC-SAPSO \cite{vonEschwege2024Soft} & PPO-PSO & MPSORL & RRSACPSO\\
+\multirow{2}{*}{Algorithm} & \multicolumn{3}{c}{Scenario 1} & \multicolumn{3}{c}{Scenario 2} & \multicolumn{3}{c}{Scenario 3} & \multicolumn{3}{c}{Scenario 4} \\
+\cline{2-13}
+ & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest & Fitness & Time & TTest \\
 \hline
-Scenario 1& 1646.70 $\pm$ 96.27 & 1906.34 $\pm$ 239.09 & 1737.16 $\pm$ 149.80 & 1614.72 $\pm$ 127.81 & 1678.15 $\pm$ 112.90 & \textbf{1531.73} $\pm$ \textbf{88.63} \\
-Scenario 2& 1706.57 $\pm$ 98.18 & 1949.08 $\pm$ 234.77 & 1732.93 $\pm$ 111.42 & 1643.29 $\pm$ 96.88 & 1639.52 $\pm$ \textbf{88.98} & \textbf{1581.86} $\pm$ 111.43 \\
-Scenario 3& 1745.02 $\pm$ 102.05 & 2105.80 $\pm$ 241.05 & 1765.01 $\pm$ 123.73 & 1609.60 $\pm$ 187.68 & \textbf{1543.13} $\pm$ \textbf{77.23} & 1636.70 $\pm$ 102.37 \\
+RRSACPSO & \textbf{1556.82} $\pm$ 50.93 & 108.20 & --- & \textbf{1609.64} $\pm$ 75.11 & 88.74 & --- & \textbf{1639.15} $\pm$ 117.06 & 83.78 & --- & \textbf{12429.48} $\pm$ 193.67 & 125.37 & --- \\
+SACPSO-Global & 1606.65 $\pm$ 63.78 & 84.89 & $\uparrow\uparrow$ & 1701.27 $\pm$ 69.04 & 89.53 & $\uparrow\uparrow$ & 1707.31 $\pm$ 99.27 & 82.82 & $\uparrow\uparrow$ & 12502.89 $\pm$ 231.92 & 129.29 & $\uparrow$ \\
+SACPSO-5Subgroup & 1630.47 $\pm$ 74.81 & 81.30 & $\uparrow\uparrow$ & 1687.03 $\pm$ 66.44 & 88.40 & $\uparrow\uparrow$ & 1707.88 $\pm$ 63.26 & 82.71 & $\uparrow\uparrow$ & 12543.61 $\pm$ 195.87 & 127.02 & $\uparrow$ \\
+SACPSO-PerParticle & 1623.20 $\pm$ 56.94 & 94.84 & $\uparrow\uparrow$ & 1652.23 $\pm$ 70.03 & 98.69 & $\uparrow$ & 1730.08 $\pm$ 86.95 & 93.98 & $\uparrow\uparrow$ & 12562.00 $\pm$ 204.14 & 139.19 & $\uparrow$ \\
 \hline
-\end{tabular}%
-}
-\caption{Performance comparison of RL-based PSO parameter adaptation algorithms across three scenarios. Results show Mean $\pm$ Standard Deviation of fitness over 30 runs. Bold marks the best per scenario.}
-\label{tab:rl_comparison}
-\end{table*} \begin{table*}[t]
-\centering
-\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
-\hline
-Scenario & RRSACPSO & PSO-Standard & PSO-LDIW & FIPS & CLPSO & SAEPSO \cite{Liu2025A} & SAEPSO* \cite{Liu2025A} & UAPSO \cite{Isiet2019Selfadapting} \\
-\hline
-Scenario 1 & 1859.1 $\pm$ 281.7 & 1746.2 $\pm$ \textbf{140.5} & \textbf{1684.9} $\pm$ 170.4 & 1737.0 $\pm$ 181.9 \\
 \hline
 \end{tabular}%
 }
-\caption{Performance comparison of traditional PSO parameter adaptation algorithms across the benchmark scenarios. Results show Mean $\pm$ Standard Deviation of fitness over 30 runs.}
-\label{tab:others_comparison}
-\end{table*} The supplementary training diagnostics visualized in Figure~\ref{fig:episode_rewards} and Figure~\ref{fig:fitness_convergence} indicate that the retained binary reward provides a usable online learning signal for the SAC controller family, but the primary claims of this paper are based on the matched final benchmark in Tables~\ref{tab:rl_comparison} and \ref{tab:others_comparison}. \subsection{Results Summary} The matched benchmark across RL-based and classical baselines reveals several key findings for adaptive PSO-based UAV path planning: RL Framework Selection. RRSACPSO achieves the lowest mean fitness in two of three scenarios among RL-based controllers, while MPSORL is best in Scenario 3.
-Across runs, RRSACPSO has the lowest standard deviation in all three scenarios.
-RLAMPSO remains competitive, but DQN-PSO degrades sharply with scenario complexity and shows the largest variance.
-The maximum-entropy SAC objective together with the rank-residual parameterization appears to favor stability in the parameter adaptation space. Comparison with Traditional Methods. SAEPSO achieves the lowest mean fitness in Scenarios 1 and 3, while SAEPSO* achieves the best mean in Scenario 2.
-SAEPSO also yields the lowest variability, but RRSACPSO has substantially lower wall-clock runtime in the current benchmark.
-Classical time-varying schedules (PSO-LDIW) remain strong baselines that should not be overlooked. Practitioner Recommendations. For deployment, RRSACPSO provides strong performance when online adaptation overhead is acceptable, while SAEPSO is preferred when the best mean fitness is the priority and compute budget allows.
-PSO-LDIW remains a strong alternative if RL training is not feasible. \section{Discussion}
-\label{sec:discussion} The experimental results demonstrate that RRSACPSO effectively addresses the parameter adaptation challenge in PSO for complex UAV path planning.
-This section interprets key findings, discusses limitations, and situates our contributions within the broader literature. \subsection{Interpretation of Results} The benchmark evidence supports the retained rank-residual controller as the main distinguishing mechanism of the current method.
-Compared to prior RL-PSO methods, RRSACPSO combines a lightweight temporal summary state with particle-wise coefficient expansion, preserving richer adaptation than approaches that emit only a single global coefficient triplet.
-The current repository also contains exploratory critic-side variants, but these are not part of the benchmarked default method and are therefore not claimed here as validated contributions.
-Unlike RLAM-PSO \cite{Yin2023RLAMPSO} which relies on DDPG's deterministic policies, our entropy-regularized approach maintains exploration throughout training.
-DQN-PSO's performance degradation in complex scenarios confirms that discretized parameter spaces fundamentally limit adaptation granularity. \subsection{Limitations} Several limitations warrant acknowledgment.
+\caption{Internal same-backbone ablation of SAC control granularity across the four benchmark scenarios. All methods use the retained plain-SAC controller and the same paired-seed evaluation protocol. Fitness reports Mean $\pm$ Standard Deviation over 30 runs. Time reports mean total planning time per run in seconds. TTest compares each method against RRSACPSO using Holm-corrected paired t-tests, where $\downarrow\downarrow$ = significantly better, $\uparrow\uparrow$ = significantly worse, $\downarrow$ = better but not significant, and $\uparrow$ = worse but not significant.}
+\label{tab:sac_granularity_ablation}
+\end{table*}
+\subsection{Results Summary}
+The matched benchmark across the four-scenario RL comparison and the four-scenario classical comparison yields several main observations.
+Within the internal same-backbone ablation, RRSACPSO outperforms SACPSO-Global, SACPSO-5Subgroup, and SACPSO-PerParticle on mean fitness in all four scenarios, with significant advantages on the three fixed-map cases and only directional gains on the cross-terrain c100 case.
+Among RL-based external controllers, PPO-PSO achieves the best mean fitness in Scenarios 1, 2, and 4, while MPSORL is best in Scenario 3.
+RRSACPSO shows the lowest variance in Scenarios 1 and 2 and is not significantly different from PPO-PSO or MPSORL on the cross-terrain Scenario 4.
+Against classical and adaptive PSO methods, SAEPSO achieves the best mean fitness in Scenarios 1 and 4 while SAEPSO* achieves the best mean fitness in Scenarios 2 and 3, with PSO-LDIW also recording a lower mean than RRSACPSO in Scenario 1.
+RRSACPSO consistently outperforms weaker baselines such as CLPSO and usually improves upon DQN-PSO and SAC-SAPSO, but it does not dominate the stronger PPO-PSO, MPSORL, and SAEPSO-family baselines in the present benchmark.
+Taken together, the tables and representative figures support a narrower conclusion: the maximum-entropy SAC objective combined with the rank-residual parameterization produces visibly richer parameter dynamics, but its current benefit is selective rather than universal.
+
+\section{Discussion}
+\label{sec:discussion}
+The experimental results show that RRSACPSO is a competitive adaptive-control formulation for PSO-based UAV path planning, although it is not the strongest overall method on the current matched benchmark.
+This section interprets the main findings, discusses the principal limitations, and situates the method within the broader literature.
+\subsection{Interpretation of Results}
+The benchmark evidence is consistent with the retained rank-residual controller being the main distinguishing mechanism of the current method.
+This interpretation can be framed in the control-interface design space summarized in Section~\ref{sec:background}, rather than only in terms of the present implementation.
+Prior RL-PSO studies largely choose one control interface in advance: RLAM-PSO uses fixed-subgroup continuous control, SAC-SAPSO uses a single global coefficient triplet, and MPSORL or RLNDM-PSO rely on discrete strategy selection \cite{Yin2023RLAMPSO, vonEschwege2024Soft, Meng2023Multistrategy, Li2023Reinforcement}.
+Under that literature framing, the main result here is not simply that SAC can control PSO parameters, but that a compact latent interface with structured expansion can outperform matched global, subgroup, and direct per-particle interfaces under the same SAC backbone.
+
+This reading is also consistent with broader literature on adaptive parameter control.
+Classical adaptive methods such as APSO, SAEPSO, and UAPSO improve performance by responding to online swarm state rather than relying on static coefficients \cite{Zhan2009Adaptive, Liu2025A, Isiet2019Selfadapting}.
+RRSACPSO fits within that state-aware tradition, but replaces hand-designed adaptation laws with a learned low-dimensional control signal whose output is still constrained by an explicit schedule.
+The resulting behavior in Figure~\ref{fig:rl_diagnostics} and Figure~\ref{fig:others_convergence_tracking} is therefore most naturally interpreted as learned state-aware modulation around a prior, not as unconstrained coefficient generation.
+
+The same-backbone ablation sharpens that point.
+Across the three fixed-map scenarios, the matched global and five-subgroup variants are significantly worse, while the direct per-particle controller increases action dimension without recovering the same behavior.
+That pattern is consistent with the concern in RL control that larger action spaces can worsen credit assignment and sample efficiency \cite{DulacArnold2015Deep, Zhou2020PLAS}.
+In other words, the ablation does not only favor more heterogeneity; it favors a particular way of introducing heterogeneity through structured, low-dimensional control.
+
+At the same time, the external benchmark indicates that PPO-PSO and MPSORL achieve lower mean fitness than RRSACPSO in the harder fixed-map RL scenarios, while the cross-terrain fourth scenario leaves RRSACPSO statistically tied with both.
+This places the present contribution in a narrower literature position.
+The evidence supports rank-residual control as an effective interface within SAC-based PSO adaptation, but not as a universal replacement for all alternative RL controllers or for the strongest hand-crafted adaptive PSO methods.
+\subsection{Limitations}
+Several limitations warrant acknowledgment.
 First, the retained online controller still requires hyperparameter tuning and introduces additional compute during each run, which may not be feasible for rapidly changing mission profiles.
 Second, our evaluation focused on static terrain maps; dynamic obstacles and time-varying threat zones remain untested.
-Third, while the policy generalizes across the three benchmark scenarios, transfer to significantly different terrain types (e.g., urban canyons, open water) was not evaluated.
+Third, while the policy is not significantly different from PPO-PSO or MPSORL on the fourth cross-terrain scenario, transfer to substantially different terrain families (e.g., urban canyons, open water, or dynamic maritime scenes) was not evaluated.
 Fourth, the fitness function weights ($\lambda_1, \ldots, \lambda_5$) were hand-tuned; automatic weight adaptation could further improve performance.
 Fifth, the retained binary reward design is intentionally simple; alternative reward-shaping strategies were not explored in the current repository.
-Finally, the retained SAC-style controller still introduces non-trivial online training overhead within each run, which may pose challenges for embedded UAV systems with limited compute. \subsection{Practical Implications} For practitioners, RRSACPSO offers a strong balance of path quality and computational efficiency when online adaptation cost is acceptable.
-For scenarios where RL training is infeasible, SAEPSO and PSO-LDIW remain strong alternatives.
-The modular architecture also makes it possible to test alternative critic or state-encoding choices without changing the overall PSO evaluation pipeline. \section{Conclusion}
-\label{sec:conclusion} This paper presented RRSACPSO, a deep reinforcement learning framework for adaptive PSO parameter control in UAV path planning.
-The proposed method integrates three key retained elements: (i) a SAC controller with twin critics, automatic entropy tuning, and target networks, (ii) a rank-residual action mapping that expands a compact latent action into particle-wise PSO coefficients, and (iii) a direct fitness-improvement reward that keeps the learning signal aligned with the optimization endpoint. Extensive experiments on 3D terrain navigation benchmarks with no-fly zones demonstrated that RRSACPSO achieves the best mean fitness in two of three RL scenarios, while RRSACPSO provides the lowest run-to-run variance in our RL benchmark.
-Against traditional baselines, RRSACPSO matches or approaches strong self-adaptive PSO variants while running at substantially lower wall-clock cost than SAEPSO Full in the current benchmark.
-This efficiency advantage is practically significant even though the reported configuration still learns online within each run, making the comparison conservative with respect to any future frozen-policy deployment mode.
-Future work should systematically investigate hyperparameter sensitivity for the retained controller, extend the state representation to natively handle dynamic obstacles, and explore ways to reduce online adaptation cost across diverse operational domains. \section*{Declaration of Competing Interests}
-The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper. \section*{CRediT Author Contribution Statement}
-\textbf{Viet Anh Ngo}: Conceptualization, Methodology, Software, Formal analysis, Investigation, Writing -- original draft, Writing -- review \& editing, Visualization. \section*{Data and Code Availability}
-The source code for RRSACPSO, including all algorithm implementations, benchmark configurations, and analysis scripts, is available in the supplementary repository. model weights and raw experimental results are available from the corresponding author upon reasonable request. \begin{figure}[htbp]
-\centering
-\includegraphics[width=\columnwidth]{figures/training/Training_FitnessConvergence_Comparison.pdf}
-\caption{Supplementary training fitness diagnostics for RRSACPSO-family controller variants. These traces illustrate learning behavior during development and are not the primary basis of the final matched benchmark claims.}
-\label{fig:fitness_convergence}
-\end{figure} \begin{figure}[htbp]
-\centering
-\includegraphics[width=\columnwidth]{figures/training/Training_EpisodeRewards_Comparison.pdf}
-\caption{Supplementary episode-reward diagnostics for RRSACPSO-family controller variants under the retained fitness-improvement reward design.}
-\label{fig:episode_rewards}
-\end{figure}
-\begin{thebibliography}{99}
-\bibitem{Delavarpour2021A}
-Delavarpour, N., Koparan, C., Nowatzki, J., Bajwa, S., Sun, X.
-(2021).
-``\href{https://doi.org/10.3390/rs13061204}{A technical study on UAV characteristics for precision agriculture applications and associated practical challenges,}''
-\textit{Remote Sensing}, 13(6), 1204. \bibitem{Fascista2022Toward}
-Fascista, A., Coluccia, A., Ravazzi, C., Magli, E.
-(2022).
-``\href{https://doi.org/10.3390/s22051824}{Toward integrated large-scale environmental monitoring using WSN/UAV/crowdsensing: A review of applications, signal processing, and future perspectives,}''
-\textit{Sensors}, 22(5), 1824. \bibitem{Alotaibi2019LSAR}
-Alotaibi, E.~T., Alqefari, S.~S., Koubaa, A.
-(2019).
-``\href{https://doi.org/10.1109/access.2019.2912306}{LSAR: Multi-UAV collaboration for search and rescue missions,}''
-\textit{IEEE Access}, 7, 55817--55832. \bibitem{AitSaadi2022UAV}
-Ait Saadi, A.; Soukane, A.; Meraihi, Y.; Benmessaoud, G.; Mirjalili, S.
-``\href{https://doi.org/10.1007/s11831-022-09742-7}{UAV Path Planning Using Optimization Approaches: A Survey,}'' \textit{Archives of Computational Methods in Engineering}, vol. 29, pp. 4233--4284, 2022. \bibitem{Zhou2025A}
-Zhou, Y.; Yan, L.; Han, Y.; Xie, H.; Zhao, Y.
-``\href{https://doi.org/10.3390/drones9030194}{A Survey on the Key Technologies of UAV Motion Planning,}'' \textit{Drones}, vol. 9, no. 3, p. 194, 2025. \bibitem{Meng2025Multiobjective}
-Meng, K., Wu, B., Xin, B., Deng, F., Chen, C.
-(2025).
-``\href{https://doi.org/10.1016/j.swevo.2025.102145}{Multiobjective multi-UAV path planning via evolutionary multitasking optimization with adaptive operator selection and knowledge fusion,}''
-\textit{Swarm and Evolutionary Computation}, 99, 102145. \bibitem{Kennedy1995Particle}
-Kennedy, J.; Eberhart, R. \href{https://doi.org/10.1109/ICNN.1995.488968}{Particle swarm optimization}. In Proceedings of the IEEE International Conference Neural Networks, Perth, Australia, 27 November--1 December 1995; pp. 1942--1948. \bibitem{Cheng2024Research}
-Cheng, Q.; Zhang, Z.; Du, Y.; Li, Y.
-``\href{https://doi.org/10.3390/drones8120701}{Research on Particle Swarm Optimization-Based UAV Path Planning Technology in Urban Airspace,}''
-\textit{Drones}, vol. 8, no. 12, p. 701, 2024. \bibitem{Yang2015Lowdiscrepancy}
-C.~Yang, W.~Gao, N.~Liu, and C.~Song,
-``\href{https://doi.org/10.1016/j.asoc.2015.01.004}{Low-discrepancy sequence initialized particle swarm optimization algorithm with high-order nonlinear time-varying inertia weight,}''
-\textit{Applied Soft Computing}, vol.~29, pp.~386--394, 2015. \bibitem{Bansal2011Inertia}
-Bansal, J.~C., et al. (2011).
-``\href{https://doi.org/10.1109/nabic.2011.6089659}{Inertia weight strategies in particle swarm optimization,}''
-\textit{Proceedings of the 2011 Third World Congress on Nature and Biologically Inspired Computing}, pp. 633--640. \bibitem{Liu2025A}
-Liu, Y., Zhang, H., Zheng, H., et al. (2025).
-``\href{https://doi.org/10.1038/s41598-025-85912-4}{A spherical vector-based adaptive evolutionary particle swarm optimization for UAV path planning under threat conditions,}''
-\textit{Scientific Reports}, 15, 2116. \bibitem{Hart1968A}
-Hart, P.~E., Nilsson, N.~J., Raphael, B.
-(1968).
-``\href{https://doi.org/10.1109/tssc.1968.300136}{A formal basis for the heuristic determination of minimum cost paths,}''
-\textit{IEEE Transactions on Systems Science and Cybernetics}, 4(2), 100--107. \bibitem{Mac2016Heuristic}
-Mac, T.~T., Copot, C., Tran, D.~T., De Keyser, R.
-(2016).
-``\href{https://doi.org/10.1016/j.robot.2016.08.001}{Heuristic approaches in robot path planning: A survey,}''
-\textit{Robotics and Autonomous Systems}, 86, 13--28. \bibitem{Karur2021A}
-Karur, K., Sharma, N., Dharmatti, C., Siegel, J.~E.
-(2021).
-``\href{https://doi.org/10.3390/vehicles3030027}{A survey of path planning algorithms for mobile robots,}''
-\textit{Vehicles}, 3(3), 448--468. \bibitem{Faust2017PRMRL}
-Faust, A., Ramirez, O., Fiser, M., Oslund, K., Francis, A., Davidson, J., Tapia, L.
-(2018).
-``\href{https://doi.org/10.1109/ICRA.2018.8461096}{PRM-RL: Long-range robotic navigation tasks by combining reinforcement learning and sampling-based planning,}''
-\textit{Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)}, pp.~5113--5120. \bibitem{Debnath2024An}
-Debnath, D.; Vanegas, F.; Boiteau, S.; Gonzalez, F.
-"\href{https://doi.org/10.3390/drones8070302}{An Integrated Geometric Obstacle Avoidance and Genetic Algorithm TSP Model for UAV Path Planning,}" \textit{Drones}, vol. 8, no. 7, p. 302, 2024. \bibitem{Phung2021Safetyenhanced}
-Phung, M.~D., Ha, Q.~P.
-(2021).
-``\href{https://doi.org/10.1016/j.asoc.2021.107376}{Safety-enhanced UAV Path Planning with Spherical Vector-based Particle Swarm Optimization,}''
-\textit{Applied Soft Computing}, 109, 107376. \bibitem{Lynn2017Ensemble}
-Lynn, N., Suganthan, P.~N.
-(2017).
-``\href{https://doi.org/10.1016/j.asoc.2017.02.007}{Ensemble Particle Swarm Optimizer,}''
-\textit{Applied Soft Computing}, 55, 533--548. \bibitem{Clerc2002The}
-Clerc, M., Kennedy, J.
-(2002).
-``\href{https://doi.org/10.1109/4235.985692}{The particle swarm---explosion, stability, and convergence in a multidimensional complex space,}''
-\textit{IEEE Transactions on Evolutionary Computation}, 6(1), 58--73. \bibitem{Eberhart2000Comparing}
-Eberhart, R.~C., Shi, Y.
-(2000).
-``\href{https://doi.org/10.1109/CEC.2000.870279}{Comparing inertia weights and constriction factors in particle swarm optimization,}''
-\textit{Proceedings of the IEEE Congress on Evolutionary Computation}, vol. 1, pp. 84--88. \bibitem{Ratnaweera2004Selforganizing}
-Ratnaweera, A., Halgamuge, S.~K., Watson, H.~C.
-(2004).
-``\href{https://doi.org/10.1109/tevc.2004.826071}{Self-organizing hierarchical particle swarm optimizer with time-varying acceleration coefficients,}''
-\textit{IEEE Transactions on Evolutionary Computation}, 8(3), 240--255. \bibitem{Nickabadi2011A}
-Nickabadi, A., Ebadzadeh, M.~M., Safabakhsh, R.
-(2011).
-``\href{https://doi.org/10.1016/j.asoc.2011.01.037}{A novel particle swarm optimization algorithm with adaptive inertia weight,}''
-\textit{Applied Soft Computing}, 11(8), 3658--3670. \bibitem{Kentzoglanakis2009Particle}
-Kentzoglanakis, K., Poole, M.
-(2009).
-``\href{https://doi.org/10.1145/1569901.1570140}{Particle swarm optimization with an oscillating inertia weight,}''
-In: \emph{Proceedings of GECCO '09}, pp. 1749--1750, ACM. \bibitem{Chen2018A}
-Chen, K., Zhou, F., Yin, L., Wang, S., Wang, Y., Wan, F.
-(2018).
-``\href{https://doi.org/10.1016/j.ins.2017.09.015}{A hybrid particle swarm optimizer with sine cosine acceleration coefficients,}''
-\textit{Information Sciences}, 422, 218--241. \bibitem{Isiet2019Selfadapting}
-Isiet, M., Gadala, M.
-(2019).
-``\href{https://doi.org/10.1016/j.asoc.2019.105653}{Self-adapting control parameters in particle swarm optimization,}''
-\textit{Applied Soft Computing}, 83, 105653. \bibitem{Li2017Particle}
-Li, S.-F., Cheng, C.-Y.
-(2017).
-``\href{https://doi.org/10.1016/j.cie.2017.06.006}{Particle swarm optimization with fitness adjustment parameters,}''
-\textit{Computers \& Industrial Engineering}, 113, 831--841. \bibitem{Zhan2009Adaptive}
-Zhan, Z.-H., Zhang, J., Li, Y., Chung, H.~S.-H.
-(2009).
-``\href{https://doi.org/10.1109/tsmcb.2009.2015956}{Adaptive Particle Swarm Optimization,}''
-\textit{IEEE Transactions on Systems, Man, and Cybernetics, Part B (Cybernetics)}, 39(6), 1362--1381. \bibitem{Harrison2018Selfadaptive}
-Harrison, K.~R., Engelbrecht, A.~P., and Ombuki-Berman, B.~M.
-(2018).
-\href{https://doi.org/10.1007/s11721-017-0150-9}{\emph{Self-adaptive particle swarm optimization: a review and analysis of convergence}},
-Swarm Intelligence,
-vol. 12, no. 3, pp. 187--226, \bibitem{Han2022Improved}
-Han, Z., Zhang, J., Zhai, Y., Lu, J.
-(2022).
-``\href{https://doi.org/10.3390/e24010048}{Improved Particle Swarm Optimization Based on Entropy and Its Application in Implicit Generalized Predictive Control,}''
-\textit{Entropy}, 24(1), 46. \bibitem{Sutton2018Reinforcement}
-Sutton, R.~S., Barto, A.~G.
-(2018).
-``\href{http://incompleteideas.net/book/the-book-2nd.html}{Reinforcement Learning: An Introduction,}''
-\textit{MIT Press}, 2nd ed. \bibitem{Bai2023Evolutionary}
-Bai, H., Cheng, R., Jin, Y.
-(2023).
-``\href{https://arxiv.org/abs/2108.11863}{Evolutionary reinforcement learning: A survey,}''
-\textit{arXiv preprint arXiv:2108.11863}. \bibitem{Watkins1992Qlearning}
-Watkins, C.~J.~C.~H., Dayan, P.
-(1992).
-``\href{https://doi.org/10.1007/bf00992698}{Q-learning,}''
-\textit{Machine Learning}, 8(3--4), 279--292. \bibitem{Meng2023Multistrategy}
-Meng, X., Li, H., and Chen, A.
-(2023).
-\href{https://doi.org/10.3934/mbe.2023373}{\emph{Multi-strategy self-learning particle swarm optimization algorithm based on reinforcement learning}},
-Mathematical Biosciences and Engineering,
-vol. 20, no. 5, pp. 8498--8530, \bibitem{Aoun2024Deep}
-Aoun, O.
-(2024).
-``\href{https://doi.org/10.3390/modelling5040089}{Deep Q-Network-Enhanced Self-Tuning Control of Particle Swarm Optimization,}''
-\textit{Modelling}, 5(4), 1709-1728, \bibitem{Li2023Reinforcement}
-Li, W., Liang, P., Sun, B., Sun, Y., Huang, Y.
-(2023).
-``\href{https://doi.org/10.1016/j.swevo.2023.101274}{Reinforcement learning-based particle swarm optimization with neighborhood differential mutation strategy,}''
-\textit{Swarm and Evolutionary Computation}, 78, 101295. \bibitem{Yin2023RLAMPSO}
-Yin, J., Wang, N.
-(2023).
-``\href{https://doi.org/10.1007/s40747-023-01012-8}{RLAM-PSO: A reinforcement learning-based adaptive matching particle swarm optimization,}''
-\textit{Complex \& Intelligent Systems}, 9, 5305--5319. \bibitem{Lillicrap2016Continuous}
-Lillicrap, T.~P., Hunt, J.~J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., Silver, D., Wierstra, D.
-(2016).
-``\href{https://arxiv.org/abs/1509.02971}{Continuous control with deep reinforcement learning,}''
-\textit{International Conference on Learning Representations (ICLR)}. \bibitem{Zhang2024DDPGPSO}
-Zhang, Y., Liu, H., Wang, X.
-(2024).
-``\href{https://doi.org/10.1016/j.swevo.2024.101458}{Particle swarm optimization algorithm based on deep deterministic policy gradient,}''
-\textit{Swarm and Evolutionary Computation}, 85, 101458. \bibitem{Fujimoto2018Addressing}
-Fujimoto, S., van Hoof, H., Meger, D.
-(2018).
-``\href{https://arxiv.org/abs/1802.09477}{Addressing function approximation error in actor-critic methods,}''
-\textit{Proceedings of the 35th International Conference on Machine Learning}, pp. 1587--1596. \bibitem{vonEschwege2024Soft}
-von Eschwege, D., and Engelbrecht, A.
-(2024).
-\href{https://doi.org/10.3390/math12223481}{\emph{Soft Actor-Critic Approach to Self-Adaptive Particle Swarm Optimisation}},
-Mathematics,
-vol. 12, no. 22, pp. 3481, \bibitem{Liu2023HRLPSO}
-Liu, Y., Zhang, J., Chen, W.
-(2023).
-``\href{https://doi.org/10.3390/math11194089}{Hybrid reinforcement learning particle swarm optimization with chaotic adaptive weight and adaptive learning factors,}''
-\textit{Mathematics}, 11(19), 4089. \bibitem{Lange2024Evolution}
-Lange, R.~T., Schaul, T., Chen, Y., Zahavy, T., Dalibard, V., Lu, C., Singh, S., Flennerhag, S.
-(2024).
-``\href{https://arxiv.org/abs/2403.02985}{Evolution Transformer: In-context evolutionary optimization,}''
-\textit{arXiv:2403.02985}. \bibitem{Cenikj2024TransOptAS}
-Cenikj, G., Lang, R., Engelbrecht, A.~P., Doerr, C., Korosec, P., Eftimov, T.
-(2024).
-``\href{https://doi.org/10.1145/3638529.3654027}{TransOptAS: Transformer-based algorithm selection for single-objective optimization,}''
-\textit{Proceedings of GECCO '24}, pp. 719--727. \bibitem{AlRifaie2017Swarmic}
-al-Rifaie, M.~M., Bishop, J.~M.
-(2017).
-``\href{https://doi.org/10.1007/978-3-319-55849-3_6}{Swarmic sketches and attention mechanisms,}''
-In: \emph{Computational Intelligence in Music, Sound, Art and Design}, pp. 85--100, Springer. \bibitem{Chen2021Decision}
-Chen, L., Lu, K., Rajeswaran, A., Lee, K., Grover, A., Laskin, M., Abbeel, P., Srinivas, A., Mordatch, I.
-(2021).
-``\href{https://arxiv.org/abs/2106.01345}{Decision Transformer: Reinforcement Learning via Sequence Modeling,}''
-\textit{Advances in Neural Information Processing Systems}, 34, 15084--15097. \bibitem{Lesort2018State}
-Lesort, T.; D{\'\i}az-Rodr{\'\i}guez, N.; Goudou, J. F.; Filliat, D. \href{https://doi.org/10.1016/j.neunet.2018.07.006}{State representation learning for control: An overview}. Neural Networks 2018, 108, 379-392. \bibitem{Mnih2015Humanlevel}
-Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.~A., Veness, J., Bellemare, M.~G., Graves, A., Riedmiller, M., Fidjeland, A.~K., Ostrovski, G., et al. (2015).
-``\href{https://doi.org/10.1038/nature14236}{Human-level control through deep reinforcement learning,}''
-\textit{Nature}, 518(7540), 529--533. \bibitem{Schulman2017Proximal}
-Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.
-(2017).
-``\href{https://arxiv.org/abs/1707.06347}{Proximal policy optimization algorithms,}''
-\textit{arXiv preprint arXiv:1707.06347}. \bibitem{Bhatt2024CrossQ}
-Bhatt, A., Palenicek, D., Belousov, B., Argus, M., Amiranashvili, A., Brox, T., Peters, J.
-(2024).
-``\href{https://doi.org/10.48550/arXiv.1902.05605}{CrossQ: Batch normalization in deep reinforcement learning for greater sample efficiency and simplicity,}''
-\textit{arXiv:1902.05605}. \bibitem{Haarnoja2018Soft}
-Haarnoja, T., Zhou, A., Abbeel, P., Levine, S.
-(2018).
-``\href{https://proceedings.mlr.press/v80/haarnoja18b.html}{Soft actor-critic: Off-policy maximum entropy deep reinforcement learning with a stochastic actor,}''
-\textit{Proceedings of the 35th International Conference on Machine Learning}, pp. 1861--1870. \bibitem{Ioffe2015Batch}
-Ioffe, S., Szegedy, C.
-(2015).
-``\href{https://proceedings.mlr.press/v37/ioffe15.html}{Batch normalization: Accelerating deep network training by reducing internal covariate shift,}''
-\textit{Proceedings of the 32nd International Conference on Machine Learning}, pp. 448--456. \bibitem{Vaswani2017Attention}
-Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.~N., Kaiser, L., Polosukhin, I.
-(2017).
-``\href{https://arxiv.org/abs/1706.03762}{Attention is all you need,}''
-\textit{Advances in Neural Information Processing Systems}, 30, 5998--6008. \end{thebibliography} \end{document}
+Finally, the retained SAC-style controller still introduces non-trivial online training overhead within each run, and the present benchmark does not show a consistent wall-clock advantage over the strongest hand-crafted adaptive baselines.
+\subsection{Control Granularity and Rank-Residual Ablation}
+Table~\ref{tab:sac_granularity_ablation} clarifies the same-backbone story.
+Across the three first scenarios, RRSACPSO achieves the best mean fitness in all three comparisons, and the strongest ablation signal comes from SACPSO-Global and SACPSO-5Subgroup, both of which are significantly worse in every fixed-map case.
+SACPSO-PerParticle narrows the gap in Scenario 2, but even there it remains directionally worse after Holm correction, so simply increasing the control dimension from a structured 9D latent action to direct 300D control does not recover the behavior of rank-residual control.
+
+Among these variants, SACPSO-Global is the most interpretable internal baseline because it keeps the retained plain-SAC backbone but replaces the rank-residual scheduled interface with one directly controlled global coefficient triplet.
+Its consistent degradation on Scenarios 1--3, together with its directional degradation on Scenario 4, is the strongest evidence that the main retained contribution is not SAC alone but the structured mapping from a compact 9D latent action to particle-wise PSO coefficients around a scheduled prior.
+
+SACPSO-5Subgroup and SACPSO-PerParticle show that heterogeneity by itself is not sufficient unless it is well structured.
+The five-subgroup variant remains worse than RRSACPSO on every scenario, which suggests that fixed partitions are too coarse to track each particle's evolving search role.
+The fully per-particle controller is more expressive, but it is also the slowest variant in all four scenarios and still underperforms RRSACPSO on mean fitness, consistent with harder credit assignment in a much larger continuous action space \cite{DulacArnold2015Deep, Zhou2020PLAS}.
+Because these internal baselines directly emit coefficient values while RRSACPSO applies residual corrections around a deterministic schedule, this ablation should be read as evidence for the overall control-interface design rather than as a pure granularity-only test.
+On the cross-terrain c100 case, RRSACPSO again has the best mean fitness, but the differences are not significant, so the cross-terrain evidence should be read as supportive rather than conclusive.
+
+\section{Conclusion}
+\label{sec:conclusion}
+This paper presented RRSACPSO, a rank-residual RL framework for adaptive PSO parameter control in UAV path planning.
+The method combines a compact swarm-summary state, a direct fitness-improvement reward, and a retained SAC backbone with a control law that expands a 9D latent action into particle-wise inertia, cognitive, and social coefficients.
+The main validated result is not universal benchmark leadership, but that structured low-dimensional rank-residual control performs better than matched global, fixed-subgroup, or direct per-particle SAC control under the same backbone.
+In the internal four-mode ablation, RRSACPSO achieves the best mean fitness in all four scenarios, with significant gains on the three fixed-map cases.
+Against external RL baselines, it records the lowest variance in the first two fixed-map scenarios but does not achieve the best mean fitness against PPO-PSO or MPSORL in the harder RL cases, and against strong classical baselines it does not establish a consistent wall-clock advantage.
+Within the broader RL-PSO literature, these results support RRSACPSO as evidence that control-interface design matters alongside RL-backbone choice, especially when particle-wise heterogeneity is desired without paying the full action-space cost of direct per-particle control.
+Future work should systematically investigate hyperparameter sensitivity for the retained controller, extend the state representation to natively handle dynamic obstacles, and reduce online adaptation cost across broader operational domains.
+\section*{Declaration of Competing Interests}
+The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{CRediT Author Contribution Statement}
+\textbf{Viet Anh Ngo}: Conceptualization, Methodology, Software, Formal analysis, Investigation, Writing -- original draft, Writing -- review \& editing, Visualization.
+
+\section*{Data and Code Availability}
+Code and model artifacts associated with this study are available from the corresponding author upon reasonable request.
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+\end{document}

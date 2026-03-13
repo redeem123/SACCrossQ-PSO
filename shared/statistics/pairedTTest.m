@@ -25,8 +25,13 @@ function [tStat, pValue, df] = pairedTTest(sample1, sample2)
     df = n - 1;
 
     if stdDiff == 0
-        tStat = 0;
-        pValue = 1;
+        if meanDiff == 0
+            tStat = 0;
+            pValue = 1;
+        else
+            tStat = sign(meanDiff) * Inf;
+            pValue = 0;
+        end
     else
         tStat = meanDiff / (stdDiff / sqrt(n));
 

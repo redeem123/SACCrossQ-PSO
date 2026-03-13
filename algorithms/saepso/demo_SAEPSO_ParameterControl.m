@@ -15,7 +15,7 @@ dims = 2;               % Problem dimensions
 % SAEPSO parameter bounds (from config)
 c_min = 0.5;
 c_max = 2.5;
-w_min = 0.2;
+w_min = 0.1;
 w_max = 0.9;
 
 % Simple optimization problem: Sphere function

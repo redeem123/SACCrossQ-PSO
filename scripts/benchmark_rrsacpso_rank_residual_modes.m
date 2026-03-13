@@ -20,19 +20,21 @@ function benchmark_rrsacpso_rank_residual_modes(numRuns, maxIterations, popSize,
     if nargin < 3 || isempty(popSize)
         popSize = 40;
     end
-    if nargin < 4 || isempty(scenarios)
-        scenarios = [0; 5; 10];
-    end
-    if nargin < 5 || isempty(numWorkers)
-        numWorkers = 0;
-    end
-
     repoRoot = fileparts(fileparts(mfilename('fullpath')));
+    dataDir = fullfile(repoRoot, 'data');
+
     addpath(repoRoot);
     addpath(genpath(fullfile(repoRoot, 'algorithms')));
     addpath(genpath(fullfile(repoRoot, 'scripts')));
     addpath(genpath(fullfile(repoRoot, 'shared')));
-    addpath(fullfile(repoRoot, 'data'));
+    addpath(dataDir);
+
+    if nargin < 4 || isempty(scenarios)
+        scenarios = buildDefaultScenarioSet(dataDir);
+    end
+    if nargin < 5 || isempty(numWorkers)
+        numWorkers = 0;
+    end
 
     useParallel = numWorkers > 1;
     oldParpoolWorkers = getenv('VIETANH_PARPOOL_WORKERS');
@@ -57,7 +59,8 @@ function benchmark_rrsacpso_rank_residual_modes(numRuns, maxIterations, popSize,
     quietCleanup = onCleanup(@() setenv('APEXPSO_CONFIG_QUIET', oldQuiet));
     setenv('APEXPSO_CONFIG_QUIET', '1');
 
-    environment = resolveTerrainEnvironment(defaultEnvironment());
+    baseEnvironment = defaultEnvironment(dataDir);
+    scenarioSet = normalizeScenarioSet(scenarios, dataDir);
     variants = buildVariants();
     baseOverrides = buildBaseOverrides(popSize);
 
@@ -68,32 +71,37 @@ function benchmark_rrsacpso_rank_residual_modes(numRuns, maxIterations, popSize,
     fprintf('Max iterations: %d\n', maxIterations);
     fprintf('Population size: %d\n', popSize);
     fprintf('Workers: %d\n', max(1, numWorkers));
-    fprintf('Scenarios: %s\n', mat2str(scenarios(:)'));
+    fprintf('Scenarios: %s\n', formatScenarioSummary(scenarioSet));
     fprintf('Results: %s\n\n', outputDir);
 
     overviewRows = {};
-    for scenarioIdx = 1:numel(scenarios)
-        numDangerZones = scenarios(scenarioIdx);
+    for scenarioIdx = 1:numel(scenarioSet)
+        [scenarioDefinition, scenarioEnvironment] = resolveScenarioDefinition( ...
+            scenarioSet, scenarioIdx, baseEnvironment);
+        numDangerZones = scenarioDefinition.numDangerZones;
         fprintf('\n============================================================\n');
-        fprintf('Scenario %d (%d danger zones)\n', scenarioIdx, numDangerZones);
+        fprintf('Scenario %d: %s\n', scenarioIdx, scenarioDefinition.label);
+        fprintf('Danger zones: %d\n', numDangerZones);
+        fprintf('Terrain: %s\n', scenarioDefinition.terrainFile);
         fprintf('============================================================\n');
 
         [terrainGrid, terrainX, terrainY] = generateFixedTerrain( ...
-            environment.mapSize, scenarioIdx, environment.terrainFile);
-        dangerZones = generateDangerZones(numDangerZones, environment.mapSize, terrainGrid, terrainX, terrainY);
+            scenarioEnvironment.mapSize, scenarioIdx, scenarioEnvironment.terrainFile);
+        dangerZones = generateDangerZones(numDangerZones, scenarioEnvironment.mapSize, terrainGrid, terrainX, terrainY);
 
-        runResults = executeScenarioRuns(numRuns, variants, environment, dangerZones, ...
+        runResults = executeScenarioRuns(numRuns, variants, scenarioEnvironment, dangerZones, ...
             terrainGrid, terrainX, terrainY, maxIterations, baseOverrides, scenarioIdx, useParallel);
 
         performTTest(runResults, variants, scenarioIdx);
         generateReports(runResults, variants, scenarioIdx);
 
         save(fullfile(outputDir, sprintf('scenario%d_run_results.mat', scenarioIdx)), ...
-            'runResults', 'scenarioIdx', 'numDangerZones', 'variants', 'numRuns', 'maxIterations', 'popSize');
+            'runResults', 'scenarioIdx', 'scenarioDefinition', 'scenarioEnvironment', ...
+            'numDangerZones', 'variants', 'numRuns', 'maxIterations', 'popSize');
 
         scenarioResults = load(fullfile(resultsDir, sprintf('TTest_Results_Scenario%d.mat', scenarioIdx)));
-        writeScenarioMarkdown(outputDir, scenarioIdx, numDangerZones, scenarioResults);
-        overviewRows = [overviewRows; extractOverviewRows(scenarioIdx, numDangerZones, scenarioResults)]; %#ok<AGROW>
+        writeScenarioMarkdown(outputDir, scenarioIdx, scenarioDefinition, scenarioResults);
+        overviewRows = [overviewRows; extractOverviewRows(scenarioIdx, scenarioDefinition, scenarioResults)]; %#ok<AGROW>
     end
 
     writeOverviewCSV(outputDir, overviewRows);
@@ -102,20 +110,20 @@ function benchmark_rrsacpso_rank_residual_modes(numRuns, maxIterations, popSize,
     clear resultsCleanup quietCleanup parpoolCleanup;
 end
 
-function environment = defaultEnvironment()
+function environment = defaultEnvironment(dataDir)
     environment = struct( ...
         'mapSize', [100, 100, 100], ...
         'startPoint', [10, 95, 10], ...
         'goalPoint', [97, 2, 10], ...
-        'terrainFile', '');
+        'terrainFile', fullfile(dataDir, 'ChrismasTerrain2.tif'));
 end
 
 function variants = buildVariants()
     variants = {
-        makeVariant('RRSACPSO (RankResidualControl)', 'RRSACPSO_RankResidual', 'rank-residual', 1)
-        makeVariant('RRSACPSO (Global)', 'RRSACPSO_Global', 'global', 2)
-        makeVariant('RRSACPSO (5-Subgroup)', 'RRSACPSO_5Subgroup', '5subgroup', 3)
-        makeVariant('RRSACPSO (Per-Particle)', 'RRSACPSO_PerParticle', 'per-particle', 4)
+        makeVariant('RRSACPSO', 'RRSACPSO', 'rank-residual', 1)
+        makeVariant('SACPSO-Global', 'SACPSO_Global', 'global', 2)
+        makeVariant('SACPSO-5Subgroup', 'SACPSO_5Subgroup', '5subgroup', 3)
+        makeVariant('SACPSO-PerParticle', 'SACPSO_PerParticle', 'per-particle', 4)
     };
 end
 
@@ -133,6 +141,10 @@ end
 function overrides = buildBaseOverrides(popSize)
     overrides = struct();
     overrides.popSize = popSize;
+    overrides.stateSize = 15;
+    overrides.useAttention = false;
+    overrides.useSAC = true;
+    overrides.useTargetNetworks = true;
     overrides.useTQCCritic = false;
     overrides.useCrossQCritic = false;
     overrides.useREDQCritic = false;
@@ -142,6 +154,18 @@ function overrides = buildBaseOverrides(popSize)
     overrides.useCrossScaleBranching = false;
     overrides.useCrossScaleGatedFusion = false;
     overrides.useSimBaBackbone = false;
+    overrides.useObservationNormalization = false;
+    overrides.usePrioritizedReplay = false;
+    overrides.useResidualCriticDecomposition = false;
+    overrides.usePilarReturns = false;
+    overrides.useDelayedPolicyUpdates = false;
+    overrides.useCriticBatchNorm = false;
+    overrides.useActorBatchNorm = false;
+    overrides.useJointCriticBatchForBN = false;
+    overrides.useWeightNormCritic = false;
+    overrides.numCritics = 2;
+    overrides.utdRatio = 1;
+    overrides.gradientStepsPerTraining = 1;
     overrides.disableVisualization = true;
 end
 
@@ -198,6 +222,9 @@ function metrics = buildMetrics(globalPath, algorithmSpecificStats, executionTim
     metrics = struct();
     metrics.algorithmName = displayName;
     metrics.executionTime = executionTime;
+    metrics.globalPlanTimes = 0;
+    metrics.globalPlanDurations = executionTime;
+    metrics.numGlobalPlans = 1;
     metrics.pathLength = calculatePathLength(globalPath);
     metrics.finalGlobalPath = globalPath;
 
@@ -227,23 +254,23 @@ function metrics = buildMetrics(globalPath, algorithmSpecificStats, executionTim
     end
 end
 
-function rows = extractOverviewRows(scenarioIdx, numDangerZones, scenarioResults)
+function rows = extractOverviewRows(scenarioIdx, scenarioDefinition, scenarioResults)
     rows = {};
     names = scenarioResults.algorithmNames;
     pairwise = scenarioResults.pairwiseResults;
-    rrIdx = find(strcmp(names, 'RRSACPSO (RankResidualControl)'), 1);
+    rrIdx = find(strcmp(names, 'RRSACPSO'), 1);
     if isempty(rrIdx)
         return;
     end
 
     for idx = 1:numel(pairwise)
         row = pairwise(idx);
-        if strcmp(row.algorithm_1, 'RRSACPSO (RankResidualControl)')
+        if strcmp(row.algorithm_1, 'RRSACPSO')
             opponent = row.algorithm_2;
             rrMean = row.mean_1;
             oppMean = row.mean_2;
             meanDiff = row.mean_diff;
-        elseif strcmp(row.algorithm_2, 'RRSACPSO (RankResidualControl)')
+        elseif strcmp(row.algorithm_2, 'RRSACPSO')
             opponent = row.algorithm_1;
             rrMean = row.mean_2;
             oppMean = row.mean_1;
@@ -254,7 +281,8 @@ function rows = extractOverviewRows(scenarioIdx, numDangerZones, scenarioResults
 
         rows(end + 1, :) = { ... %#ok<AGROW>
             scenarioIdx, ...
-            numDangerZones, ...
+            scenarioDefinition.label, ...
+            scenarioDefinition.numDangerZones, ...
             opponent, ...
             rrMean, ...
             oppMean, ...
@@ -276,18 +304,18 @@ function writeOverviewCSV(outputDir, rows)
     end
     cleanup = onCleanup(@() fclose(fid));
 
-    fprintf(fid, ['scenario_id,num_danger_zones,opponent,mean_rank_residual,mean_opponent,', ...
+    fprintf(fid, ['scenario_id,scenario_label,num_danger_zones,opponent,mean_rank_residual,mean_opponent,', ...
         'mean_diff_rank_minus_opponent,p_raw_t,p_holm_t,p_raw_wilcoxon,p_holm_wilcoxon,rank_biserial_r\n']);
     for idx = 1:size(rows, 1)
         row = rows(idx, :);
-        fprintf(fid, '%d,%d,%s,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g\n', ...
-            row{1}, row{2}, csvSafe(row{3}), row{4}, row{5}, row{6}, row{7}, row{8}, row{9}, row{10}, row{11});
+        fprintf(fid, '%d,%s,%d,%s,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g\n', ...
+            row{1}, csvSafe(row{2}), row{3}, csvSafe(row{4}), row{5}, row{6}, row{7}, row{8}, row{9}, row{10}, row{11}, row{12});
     end
 
     clear cleanup;
 end
 
-function writeScenarioMarkdown(outputDir, scenarioIdx, numDangerZones, scenarioResults)
+function writeScenarioMarkdown(outputDir, scenarioIdx, scenarioDefinition, scenarioResults)
     summary = scenarioResults.summaryResults;
     pairwise = scenarioResults.pairwiseResults;
     filename = fullfile(outputDir, sprintf('scenario%d_summary.md', scenarioIdx));
@@ -298,7 +326,9 @@ function writeScenarioMarkdown(outputDir, scenarioIdx, numDangerZones, scenarioR
     cleanup = onCleanup(@() fclose(fid));
 
     fprintf(fid, '# Scenario %d\n\n', scenarioIdx);
-    fprintf(fid, '- Danger zones: %d\n', numDangerZones);
+    fprintf(fid, '- Label: %s\n', scenarioDefinition.label);
+    fprintf(fid, '- Terrain: %s\n', scenarioDefinition.terrainFile);
+    fprintf(fid, '- Danger zones: %d\n', scenarioDefinition.numDangerZones);
     fprintf(fid, '- Metric: %s\n\n', scenarioResults.metricName);
 
     fprintf(fid, '## Means\n\n');
@@ -314,10 +344,10 @@ function writeScenarioMarkdown(outputDir, scenarioIdx, numDangerZones, scenarioR
     fprintf(fid, '|---|---:|---:|---:|---:|\n');
     for idx = 1:numel(pairwise)
         row = pairwise(idx);
-        if strcmp(row.algorithm_1, 'RRSACPSO (RankResidualControl)')
+        if strcmp(row.algorithm_1, 'RRSACPSO')
             opponent = row.algorithm_2;
             meanDiff = row.mean_diff;
-        elseif strcmp(row.algorithm_2, 'RRSACPSO (RankResidualControl)')
+        elseif strcmp(row.algorithm_2, 'RRSACPSO')
             opponent = row.algorithm_1;
             meanDiff = -row.mean_diff;
         else
@@ -336,4 +366,79 @@ function textOut = csvSafe(textIn)
         return;
     end
     textOut = strrep(textIn, ',', ' ');
+end
+
+function scenarioSet = normalizeScenarioSet(scenarios, dataDir)
+    if isstruct(scenarios)
+        scenarioSet = scenarios(:);
+        return;
+    end
+
+    chrismasTerrainFile = fullfile(dataDir, 'ChrismasTerrain2.tif');
+    scenarioSet = repmat(struct( ...
+        'label', '', ...
+        'terrainFile', chrismasTerrainFile, ...
+        'numDangerZones', 0, ...
+        'startPoint', [], ...
+        'goalPoint', []), numel(scenarios), 1);
+
+    for idx = 1:numel(scenarios)
+        scenarioSet(idx).label = sprintf('ChrismasTerrain2 - Scenario %d', idx);
+        scenarioSet(idx).numDangerZones = scenarios(idx);
+    end
+end
+
+function summary = formatScenarioSummary(scenarios)
+    labels = cell(numel(scenarios), 1);
+    for idx = 1:numel(scenarios)
+        labels{idx} = sprintf('%d:%s (%d DZ)', idx, scenarios(idx).label, scenarios(idx).numDangerZones);
+    end
+    summary = strjoin(labels, '; ');
+end
+
+function [scenarioDefinition, scenarioEnvironment] = resolveScenarioDefinition(scenarios, scenarioIdx, baseEnvironment)
+    scenarioDefinition = scenarios(scenarioIdx);
+    scenarioEnvironment = baseEnvironment;
+
+    if isfield(scenarioDefinition, 'terrainFile') && ~isempty(scenarioDefinition.terrainFile)
+        if shouldResetTerrainAnchors(baseEnvironment, scenarioDefinition.terrainFile)
+            scenarioEnvironment = clearTerrainAnchors(scenarioEnvironment);
+        end
+        scenarioEnvironment.terrainFile = scenarioDefinition.terrainFile;
+    end
+
+    scenarioEnvironment = resolveTerrainEnvironment(scenarioEnvironment);
+    scenarioEnvironment = applyPointOverrides(scenarioEnvironment, scenarioDefinition);
+
+    if ~isfield(scenarioDefinition, 'label') || isempty(scenarioDefinition.label)
+        scenarioDefinition.label = sprintf('Scenario %d', scenarioIdx);
+    end
+end
+
+function tf = shouldResetTerrainAnchors(baseEnvironment, scenarioTerrainFile)
+    tf = true;
+    if isfield(baseEnvironment, 'terrainFile') && ~isempty(baseEnvironment.terrainFile)
+        tf = ~strcmpi(char(string(baseEnvironment.terrainFile)), char(string(scenarioTerrainFile)));
+    end
+end
+
+function environment = clearTerrainAnchors(environment)
+    if isfield(environment, 'mapSize')
+        environment.mapSize = [];
+    end
+    if isfield(environment, 'startPoint')
+        environment.startPoint = [];
+    end
+    if isfield(environment, 'goalPoint')
+        environment.goalPoint = [];
+    end
+end
+
+function environment = applyPointOverrides(environment, scenarioDefinition)
+    if isfield(scenarioDefinition, 'startPoint') && ~isempty(scenarioDefinition.startPoint)
+        environment.startPoint = double(reshape(scenarioDefinition.startPoint, 1, 3));
+    end
+    if isfield(scenarioDefinition, 'goalPoint') && ~isempty(scenarioDefinition.goalPoint)
+        environment.goalPoint = double(reshape(scenarioDefinition.goalPoint, 1, 3));
+    end
 end

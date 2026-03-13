@@ -1,82 +1,141 @@
-function saveTTestResults(pathLengths, algorithmNames, pValueMatrix, tStatMatrix, ...
-                        scenarioIdx)
-    % Save T-test results to files (.mat and .csv)
-    % MERGED: Combines writeTTestPairwiseCSV + writeTTestSummaryCSV for cleaner code
+function saveTTestResults(results, scenarioIdx)
+    % Persist scenario-level inferential statistics artifacts.
+    % Outputs:
+    %   - TTest_Pairwise_Scenario<id>.csv
+    %   - TTest_Summary_Scenario<id>.csv
+    %   - TTest_Results_Scenario<id>.mat
 
-    % Calculate means for saving
-    % means = mean(pathLengths, 1);
-    % stds = std(pathLengths, 0, 1);
+    if nargin < 2 || isempty(scenarioIdx)
+        scenarioIdx = results.scenarioIdx;
+    end
 
-    % resultsDir = getResultsDir();
+    resultsDir = getResultsDir();
 
-    % % Save .mat file
-    % matFilename = fullfile(resultsDir, sprintf('TTest_Results_Scenario%d.mat', scenarioIdx));
-    % save(matFilename, 'pathLengths', 'algorithmNames', 'pValueMatrix', 'tStatMatrix', ...
-    %      'means', 'stds', 'scenarioIdx');
+    pairwiseFilename = fullfile(resultsDir, sprintf('TTest_Pairwise_Scenario%d.csv', scenarioIdx));
+    summaryFilename = fullfile(resultsDir, sprintf('TTest_Summary_Scenario%d.csv', scenarioIdx));
+    matFilename = fullfile(resultsDir, sprintf('TTest_Results_Scenario%d.mat', scenarioIdx));
 
-    % % === PAIRWISE CSV (inline) ===
-    % csvFilename = fullfile(resultsDir, sprintf('TTest_Pairwise_Scenario%d.csv', scenarioIdx));
-    % fid = fopen(csvFilename, 'w');
-    % if fid ~= -1
-    %     numAlgorithms = length(algorithmNames);
+    writePairwiseCSV(pairwiseFilename, results.pairwiseResults);
+    writeSummaryCSV(summaryFilename, results.summaryResults);
 
-    %     % Header
-    %     fprintf(fid, 'Algorithm1,Algorithm2,Mean1,Mean2,MeanDifference,t_statistic,p_value,Significant,Effect_Size\n');
+    metricMatrix = results.metricMatrix;
+    metricSourceMatrix = results.metricSourceMatrix;
+    algorithmNames = results.algorithmNames;
+    pairIndices = results.pairIndices;
+    pairwiseResults = results.pairwiseResults;
+    summaryResults = results.summaryResults;
+    holm = results.holm;
+    friedman = results.friedman;
+    metricName = results.metricName;
+    sourceCounts = results.sourceCounts;
 
-    %     % Data for each pairwise comparison
-    %     for i = 1:numAlgorithms
-    %         for j = i+1:numAlgorithms
-    %             meanDiff = means(i) - means(j);
-    %             tStat = tStatMatrix(i, j);
-    %             pValue = pValueMatrix(i, j);
+    save(matFilename, ...
+        'scenarioIdx', ...
+        'metricName', ...
+        'algorithmNames', ...
+        'metricMatrix', ...
+        'metricSourceMatrix', ...
+        'sourceCounts', ...
+        'pairIndices', ...
+        'pairwiseResults', ...
+        'summaryResults', ...
+        'holm', ...
+        'friedman');
 
-    %             % Determine significance
-    %             if pValue < 0.001
-    %                 significance = 'p<0.001';
-    %             elseif pValue < 0.01
-    %                 significance = 'p<0.01';
-    %             elseif pValue < 0.05
-    %                 significance = 'p<0.05';
-    %             else
-    %                 significance = 'not_significant';
-    %             end
+    fprintf('\nStatistical artifacts saved for Scenario %d:\n', scenarioIdx);
+    fprintf('  Pairwise CSV: %s\n', pairwiseFilename);
+    fprintf('  Summary CSV:  %s\n', summaryFilename);
+    fprintf('  MAT file:     %s\n', matFilename);
+end
 
-    %             % Calculate effect size (simplified Cohen's d approximation)
-    %             effectSize = abs(meanDiff) / sqrt((std(means))^2);
+function writePairwiseCSV(filename, pairwiseResults)
+    fid = fopen(filename, 'w');
+    if fid == -1
+        error('Could not open pairwise CSV for writing: %s', filename);
+    end
 
-    %             fprintf(fid, '%s,%s,%.4f,%.4f,%.4f,%.4f,%.6f,%s,%.3f\n', ...
-    %                 algorithmNames{i}, algorithmNames{j}, means(i), means(j), ...
-    %                 meanDiff, tStat, pValue, significance, effectSize);
-    %         end
-    %     end
-    %     fclose(fid);
-    % else
-    %     warning('Could not open pairwise CSV file for writing: %s', csvFilename);
-    % end
+    cleanup = onCleanup(@() fclose(fid));
 
-    % % === SUMMARY CSV (inline) ===
-    % summaryFilename = fullfile(resultsDir, sprintf('TTest_Summary_Scenario%d.csv', scenarioIdx));
-    % fid = fopen(summaryFilename, 'w');
-    % if fid ~= -1
-    %     % Header
-    %     fprintf(fid, 'Algorithm,Mean_GlobalFitness,Std_GlobalFitness,Rank\n');
+    fprintf(fid, ['scenario_id,algorithm_1,algorithm_2,n_pairs,metric_name,mean_1,mean_2,', ...
+        'mean_diff,ci95_low,ci95_high,t_stat,p_raw_t,p_holm_t,sig_holm_t,cohen_dz,', ...
+        'wilcoxon_W,p_raw_wilcoxon,p_holm_wilcoxon,sig_holm_wilcoxon,rank_biserial_r\n']);
 
-    %     % Sort algorithms by mean fitness (lower is better)
-    %     [sortedMeans, rankIdx] = sort(means);
+    for idx = 1:numel(pairwiseResults)
+        row = pairwiseResults(idx);
+        fprintf(fid, '%d,%s,%s,%d,%s,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%d,%.10g,%.10g,%.10g,%.10g,%d,%.10g\n', ...
+            row.scenario_id, ...
+            csvSafe(row.algorithm_1), ...
+            csvSafe(row.algorithm_2), ...
+            row.n_pairs, ...
+            csvSafe(row.metric_name), ...
+            row.mean_1, ...
+            row.mean_2, ...
+            row.mean_diff, ...
+            row.ci95_low, ...
+            row.ci95_high, ...
+            row.t_stat, ...
+            row.p_raw_t, ...
+            row.p_holm_t, ...
+            logicalToInt(row.sig_holm_t), ...
+            row.cohen_dz, ...
+            row.wilcoxon_W, ...
+            row.p_raw_wilcoxon, ...
+            row.p_holm_wilcoxon, ...
+            logicalToInt(row.sig_holm_wilcoxon), ...
+            row.rank_biserial_r);
+    end
 
-    %     % Data
-    %     for i = 1:length(algorithmNames)
-    %         algIdx = rankIdx(i);
-    %         fprintf(fid, '%s,%.4f,%.4f,%d\n', ...
-    %             algorithmNames{algIdx}, sortedMeans(i), stds(algIdx), i);
-    %     end
-    %     fclose(fid);
-    % else
-    %     warning('Could not open summary CSV file for writing: %s', summaryFilename);
-    % end
+    clear cleanup;
+end
 
-    % fprintf('\nT-test results saved to:\n');
-    % fprintf('  MAT file: %s\n', matFilename);
-    % fprintf('  Pairwise CSV: %s\n', csvFilename);
-    % fprintf('  Summary CSV: %s\n', summaryFilename);
+function writeSummaryCSV(filename, summaryResults)
+    fid = fopen(filename, 'w');
+    if fid == -1
+        error('Could not open summary CSV for writing: %s', filename);
+    end
+
+    cleanup = onCleanup(@() fclose(fid));
+
+    fprintf(fid, ['scenario_id,metric_name,algorithm,n_valid,mean,std,median,min,max,', ...
+        'average_rank,significant_wins_holm_t,friedman_chi_square,friedman_df,', ...
+        'friedman_p,n_friedman_runs\n']);
+
+    for idx = 1:numel(summaryResults)
+        row = summaryResults(idx);
+        fprintf(fid, '%d,%s,%s,%d,%.10g,%.10g,%.10g,%.10g,%.10g,%.10g,%d,%.10g,%d,%.10g,%d\n', ...
+            row.scenario_id, ...
+            csvSafe(row.metric_name), ...
+            csvSafe(row.algorithm), ...
+            row.n_valid, ...
+            row.mean, ...
+            row.std, ...
+            row.median, ...
+            row.min, ...
+            row.max, ...
+            row.average_rank, ...
+            row.significant_wins_holm_t, ...
+            row.friedman_chi_square, ...
+            row.friedman_df, ...
+            row.friedman_p, ...
+            row.n_friedman_runs);
+    end
+
+    clear cleanup;
+end
+
+function textOut = csvSafe(textIn)
+    if isempty(textIn)
+        textOut = '';
+        return;
+    end
+
+    textOut = strrep(textIn, ',', ' ');
+end
+
+function value = logicalToInt(flag)
+    if flag
+        value = 1;
+    else
+        value = 0;
+    end
 end

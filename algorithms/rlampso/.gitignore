@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.egg-info/
+*.egg
+
+# MATLAB
+*.asv
+*.m~
+
+# Training outputs (created during runtime)
+/logs/
+/models/
+/*/logs/
+/*/models/
+*/pretrained_networks/
+
+# OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# IDE
+*.code-workspace

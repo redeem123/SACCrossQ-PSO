@@ -1,0 +1,154 @@
+[2026-03-11 12:08:28] Running rlbased_s1
+WARNING: package sun.awt.X11 not in java.desktop
+WARNING: package sun.awt.X11 not in java.desktop
+[Warning: Name is nonexistent or not a directory:
+/Users/hust-hwashin621m/Desktop/vietanhpaper-2/config] 
+[> In path (line 109)
+In addpath>doPathAddition (line 126)
+In addpath (line 90)
+In run_comparison (line 8)
+In run (line 112)] 
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+Execution mode: parallel
+Independent runs: 1
+Logging to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_12-08-35.log
+
+Initialising parallel pool (parallel mode)...
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+
+==========================================================
+Scenario 1: ChrismasTerrain2 - Simple
+Terrain: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/data/ChrismasTerrain2.tif
+Danger Zones: 0
+==========================================================
+Executing 1 runs for 6 parallel-safe algorithms...
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.0840, 0.6622, -0.3497], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5088, c1=1.2660, c2=1.4826 | fitness=1577.28
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1577.28, currFit=1577.28)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.3084, 0.5797, 0.1480], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4868, c1=1.6443, c2=1.7038 | fitness=1567.46
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0037 → Reward: +1.0000 (prevFit=1567.46, currFit=1567.45)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.4482, 0.8640, -0.3211], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5173, c1=1.2433, c2=1.6764 | fitness=1567.19
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0293 → Reward: +1.0000 (prevFit=1567.19, currFit=1567.16)
+[ACTION DEBUG iter 400] Raw action[1:3]: [-0.6433, 0.8599, 0.1016], noise: 0.0500
+[ACTION DEBUG iter 400] WARNING: 1/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 400] w=0.4471, c1=0.9803, c2=1.3386 | fitness=1567.11
+[REWARD DEBUG iter 400] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1567.11, currFit=1567.11)
+[ACTION DEBUG iter 500] Raw action[1:3]: [0.2502, 0.9859, 0.0302], noise: 0.0500
+[ACTION DEBUG iter 500] WARNING: 7/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 500] w=0.5544, c1=1.3000, c2=1.3000 | fitness=1567.11
+[REWARD DEBUG iter 500] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1567.11, currFit=1567.11)
+[ACTION DEBUG iter 600] Raw action[1:3]: [-0.9033, 0.9963, -0.8841], noise: 0.0500
+[ACTION DEBUG iter 600] WARNING: 7/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 600] w=0.4312, c1=0.9000, c2=1.3000 | fitness=1567.11
+[REWARD DEBUG iter 600] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1567.11, currFit=1567.11)
+
+========== Planning Complete ==========
+Algorithm: RLAMPSO
+Execution time: 46.2078 seconds
+Path length: 153.4881 units
+Waypoints: 7
+Best fitness: 1567.1096
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: DQN_PSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Warning: DQN-PSO (paper) is homogeneous; forcing paramMode to global.
+> In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('globalPathPlanningDQNPSO', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m', 15)" style="font-weight:bold">globalPathPlanningDQNPSO</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m',15,0)">line 15</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('callGlobalPlanningAlgorithm', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m', 230)" style="font-weight:bold">callGlobalPlanningAlgorithm</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m',230,0)">line 230</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('directGlobalPlanning', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m', 59)" style="font-weight:bold">directGlobalPlanning</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m',59,0)">line 59</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison>@(varargin)directGlobalPlanning(varargin{:})', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/run_comparison.m', 274)" style="font-weight:bold">run_comparison>@(varargin)directGlobalPlanning(varargin{:})</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/run_comparison.m',274,0)">line 274</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('compare_algorithms>runAlgorithmBatch', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/compare_algorithms.m', 139)" style="font-weight:bold">compare_algorithms>runAlgorithmBatch</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/compare_algorithms.m',139,0)">line 139</a>)
+Starting DQN-PSO (HMM + DQN) - Mode: global
+DQN-PSO iter 50/1000 | Fitness: 1704.53 | w=0.419 c1=2.250 c2=0.750
+DQN-PSO iter 100/1000 | Fitness: 1669.58 | w=0.100 c1=2.250 c2=0.700
+DQN-PSO iter 150/1000 | Fitness: 1665.44 | w=0.100 c1=2.400 c2=0.600

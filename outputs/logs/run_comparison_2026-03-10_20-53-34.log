@@ -1,0 +1,1200 @@
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+Execution mode: parallel
+Independent runs: 30
+Logging to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-10_20-53-34.log
+
+Initialising parallel pool (parallel mode)...
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (all available cores)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+
+==========================================================
+Scenario 1: ChrismasTerrain2 - Simple
+Terrain: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/data/ChrismasTerrain2.tif
+Danger Zones: 0
+==========================================================
+Executing 30 runs for 6 parallel-safe algorithms...
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.0363, -0.1986, -0.5338], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.4794, c1=2.3394, c2=2.1027 | fitness=1824.78
+[REWARD DEBUG iter 100] FitnessImprovement: 5.7445 → Reward: +1.0000 (prevFit=1824.78, currFit=1819.04)
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.2682, 0.1735, -0.2536], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5071, c1=2.0792, c2=1.8194 | fitness=1741.42
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1741.42, currFit=1741.42)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.4934, 0.0782, 0.3019], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.3873, c1=1.9385, c2=2.1774 | fitness=1824.37
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1824.37, currFit=1824.37)
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.3973, 0.2479, -0.0781], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5607, c1=1.8428, c2=1.5556 | fitness=1566.19
+[REWARD DEBUG iter 100] FitnessImprovement: 0.1788 → Reward: +1.0000 (prevFit=1566.19, currFit=1566.01)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.3513, -0.0777, 0.0368], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.4563, c1=1.8965, c2=1.8987 | fitness=1661.86
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.1910, -0.0865, -0.2070], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5269, c1=2.2719, c2=1.8253 | fitness=2016.17
+[REWARD DEBUG iter 100] FitnessImprovement: 0.1992 → Reward: +1.0000 (prevFit=2016.17, currFit=2015.97)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.3033, -0.0747, 0.0307], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.4992, c1=2.0170, c2=1.7932 | fitness=1626.66
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0139 → Reward: +1.0000 (prevFit=1626.66, currFit=1626.65)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.2721, 0.6988, -0.0455], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5623, c1=1.4599, c2=1.5046 | fitness=1798.61
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0169 → Reward: +1.0000 (prevFit=1798.61, currFit=1798.60)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.3265, 0.1629, -0.1078], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.4689, c1=1.9873, c2=1.9396 | fitness=1633.23
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.1885, -0.4035, -0.5093], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5496, c1=1.6471, c2=2.2711 | fitness=1675.69
+[REWARD DEBUG iter 100] FitnessImprovement: 2.3686 → Reward: +1.0000 (prevFit=1675.69, currFit=1673.33)
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0123 → Reward: +1.0000 (prevFit=1661.86, currFit=1661.85)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.1904, 0.5824, -0.0429], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5000, c1=1.4786, c2=1.6230 | fitness=1646.27
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.3630, -0.0517, 0.1456], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.3937, c1=1.5459, c2=2.0158 | fitness=1672.33
+[REWARD DEBUG iter 100] FitnessImprovement: 0.7612 → Reward: +1.0000 (prevFit=1672.33, currFit=1671.57)
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1633.23, currFit=1633.23)
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.3228, 0.4557, -0.6233], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.4206, c1=2.0734, c2=1.8318 | fitness=1632.27
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1632.27, currFit=1632.27)
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.0928, 0.4058, 0.4230], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5676, c1=1.7896, c2=2.0997 | fitness=1741.92
+[REWARD DEBUG iter 100] FitnessImprovement: 0.0157 → Reward: +1.0000 (prevFit=1741.92, currFit=1741.91)
+[REWARD DEBUG iter 100] FitnessImprovement: 1.0367 → Reward: +1.0000 (prevFit=1646.27, currFit=1645.23)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.0148, -0.1324, -0.6400], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.5309, c1=2.1774, c2=1.5584 | fitness=1722.14
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0366 → Reward: +1.0000 (prevFit=1722.14, currFit=1722.10)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.5744, -0.7913, -0.2730], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4698, c1=1.8231, c2=1.5361 | fitness=1852.63
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0407 → Reward: +1.0000 (prevFit=1852.63, currFit=1852.59)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.2057, -0.1018, -0.0499], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4581, c1=1.9733, c2=2.0544 | fitness=1789.01
+[REWARD DEBUG iter 200] FitnessImprovement: 0.3379 → Reward: +1.0000 (prevFit=1789.01, currFit=1788.67)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.1446, -0.4309, -0.2942], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4404, c1=2.0025, c2=2.0296 | fitness=1783.96
+[REWARD DEBUG iter 200] FitnessImprovement: 0.2907 → Reward: +1.0000 (prevFit=1783.96, currFit=1783.67)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.0615, 0.3505, 0.2360], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.5739, c1=1.8265, c2=1.8548 | fitness=1559.87
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1559.87, currFit=1559.87)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.5632, -0.1731, 0.2211], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4391, c1=2.3297, c2=2.2820 | fitness=1661.29
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0280 → Reward: +1.0000 (prevFit=1661.29, currFit=1661.27)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.0381, -0.5094, -0.7468], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.3903, c1=2.0762, c2=2.1000 | fitness=1627.19
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0656 → Reward: +1.0000 (prevFit=1627.19, currFit=1627.13)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.3303, 0.5137, 0.3056], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.6630, c1=1.5489, c2=1.6689 | fitness=1789.64
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0083 → Reward: +1.0000 (prevFit=1789.64, currFit=1789.63)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.1527, 0.0403, -0.2714], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.5635, c1=2.1270, c2=1.6550 | fitness=1621.19
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0065 → Reward: +1.0000 (prevFit=1621.19, currFit=1621.18)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.2714, 0.5413, 0.6588], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.5767, c1=1.7818, c2=2.1655 | fitness=1733.76
+[REWARD DEBUG iter 200] FitnessImprovement: 1.3249 → Reward: +1.0000 (prevFit=1733.76, currFit=1732.43)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.4102, 0.7888, -0.3034], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4741, c1=1.3457, c2=1.6419 | fitness=1631.09
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1631.09, currFit=1631.09)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.2810, 0.2825, -0.2918], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4283, c1=1.2120, c2=1.4632 | fitness=1656.66
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1656.66, currFit=1656.66)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.5174, 0.0133, 0.3214], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4572, c1=2.1084, c2=1.6592 | fitness=1600.05
+[REWARD DEBUG iter 200] FitnessImprovement: 0.1743 → Reward: +1.0000 (prevFit=1600.05, currFit=1599.87)
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.0713, -0.3455, -0.6444], noise: 0.0500
+[ACTION DEBUG iter 200] WARNING: 1/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 200] w=0.5614, c1=1.6800, c2=2.0988 | fitness=1607.10
+[REWARD DEBUG iter 200] FitnessImprovement: 0.1227 → Reward: +1.0000 (prevFit=1607.10, currFit=1606.97)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.4597, -0.4918, -0.0244], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4169, c1=1.8740, c2=2.0074 | fitness=1638.60
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0014 → Reward: +1.0000 (prevFit=1638.60, currFit=1638.60)
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.8212, -0.3991, -0.5274], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5977, c1=2.0317, c2=1.6477 | fitness=1720.38
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0063 → Reward: +1.0000 (prevFit=1720.38, currFit=1720.38)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.4085, 0.4073, -0.2616], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5524, c1=2.2666, c2=1.1348 | fitness=1839.61
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1839.61, currFit=1839.61)
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.3846, 0.4586, -0.3652], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5093, c1=1.8634, c2=1.5000 | fitness=1774.37
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.8116, -0.5977, 0.0560], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5378, c1=1.3340, c2=1.1498 | fitness=1550.55
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.6402, 0.3702, 0.3457], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.3553, c1=2.3075, c2=1.8996 | fitness=1785.70
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0004 → Reward: +1.0000 (prevFit=1785.70, currFit=1785.70)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.6899, 0.0477, -0.4742], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4289, c1=2.0872, c2=1.6864 | fitness=1620.95
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0487 → Reward: +1.0000 (prevFit=1774.37, currFit=1774.32)
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1550.55, currFit=1550.55)
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1620.95, currFit=1620.95)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.2676, -0.0800, -0.5246], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.3953, c1=1.4260, c2=2.0224 | fitness=1624.25
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0274 → Reward: +1.0000 (prevFit=1624.25, currFit=1624.23)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.3519, 0.6977, -0.3362], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.6353, c1=1.4656, c2=1.5878 | fitness=1772.25
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0407 → Reward: +1.0000 (prevFit=1772.25, currFit=1772.21)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.2334, 0.1149, 0.1041], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4477, c1=1.4082, c2=1.3000 | fitness=1639.34
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0809 → Reward: +1.0000 (prevFit=1639.34, currFit=1639.26)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.1652, 0.2722, 0.2584], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4739, c1=1.7899, c2=1.7496 | fitness=1595.04
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1595.04, currFit=1595.04)
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.7092, 0.3534, 0.4970], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.5780, c1=1.7365, c2=1.7162 | fitness=1665.01
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1665.01, currFit=1665.01)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.0646, 0.6553, -0.6852], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4932, c1=1.4768, c2=1.3715 | fitness=1630.92
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1630.92, currFit=1630.92)
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.1824, -0.5924, -0.8442], noise: 0.0500
+[ACTION DEBUG iter 300] WARNING: 1/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 300] w=0.6229, c1=1.8395, c2=2.0288 | fitness=1596.31
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1596.31, currFit=1596.31)

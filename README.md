@@ -9,10 +9,12 @@ The current trustworthy story of this repo is narrower than some legacy filename
 
 ## Start Here
 
-- Main comparison entry point: `run_comparison.m`
+- Main benchmark entry point: `run_comparison.m`
 - Proposed algorithm: `algorithms/rrsacpso/`
-- Shared infrastructure: `shared/`
+- Shared MATLAB infrastructure: `shared/`
 - Experiment and analysis helpers: `scripts/`
+- Current manuscript workspace: `paper/`
+- Notes and archived material: `docs/`
 
 ## Repository Map
 
@@ -21,12 +23,11 @@ The current trustworthy story of this repo is narrower than some legacy filename
 ├── algorithms/    MATLAB implementations of RRSACPSO and baselines
 ├── shared/        Environment, evaluation, statistics, utilities, plotting
 ├── scripts/       Experiment runners, analysis scripts, figure generation
-├── docs/          Notes, references, archived paper material
-├── paper/         Archived Elsevier-era paper assets and submission metadata
-├── sage_latex_template_4_unzipped/
-│                  Active SAGE manuscript directory
+├── paper/         Current manuscript workspace and paper-side figures
+├── docs/          Notes, references, and archived draft material
 ├── data/          Terrain and scenario assets
 ├── validation/    External / deployment-side validation assets
+├── results/       Generated benchmark/result bundles
 ├── outputs/       Local runtime outputs (git-ignored)
 └── models/        Local checkpoints and logs (git-ignored)
 ```
@@ -34,9 +35,9 @@ The current trustworthy story of this repo is narrower than some legacy filename
 ## What Is Current
 
 - `algorithms/rrsacpso/` is the active development target.
-- `sage_latex_template_4_unzipped/` is the active manuscript source.
-- `paper/` should be treated as archived submission material unless explicitly revived.
+- `paper/` is the manuscript directory currently present in this workspace.
 - `docs/archive_old_draft/` is historical only.
+- `docs/notes/` holds working notes such as the SOTA summary, retraining guide, and paper change log.
 
 ## Common Commands
 
@@ -51,16 +52,17 @@ run('algorithms/rrsacpso/test_rrsacpso_components.m')
 ## Benchmark Entry Point
 
 - Use only `run_comparison.m` for benchmark execution.
-- There is no second benchmark launcher anymore; scenario and group selection should be driven through `run_comparison.m` configuration and environment overrides.
+- Treat `scripts/` helpers as internal support tooling around that entry point.
 
 ## Artifact Policy
 
 These directories are local working data, not source of truth:
 - `outputs/`
 - `models/`
+- `results/`
 - `docs/references/`
 
-Keep code reviews focused on `algorithms/`, `shared/`, `scripts/`, and the active manuscript.
+Keep code reviews focused on `algorithms/`, `shared/`, `scripts/`, and `paper/`.
 
 ## Naming Note
 

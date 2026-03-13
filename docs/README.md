@@ -1,7 +1,17 @@
-# Documentation index
+# docs/
 
-- `APEXPSO_METHODOLOGY.txt` – detailed notes on the proposed method and training settings.
-- `RLAMPSO.pdf` / `s41598-025-85912-4.pdf` – reference papers kept for offline reading.
-- `notes/` – project retrospectives and troubleshooting guides (advanced mode bugs, retraining, etc.).
+Supporting documentation, working notes, and archived material.
 
-All run artefacts now land in `outputs/`, keeping the repository root tidy.
+## Contents
+
+| Directory | Purpose |
+|---|---|
+| `notes/` | Working notes, SOTA summary, retraining guide, change logs |
+| `references/` | Local paper PDFs and reading material |
+| `archive_old_draft/` | Historical draft and retired assets |
+
+## Current Status
+
+- The manuscript directory currently in use is `paper/`.
+- `docs/notes/` contains the live supporting notes for this workspace.
+- `docs/archive_old_draft/` is history, not an active manuscript.

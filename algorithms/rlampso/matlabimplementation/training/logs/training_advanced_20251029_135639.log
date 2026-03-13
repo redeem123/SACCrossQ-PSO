@@ -1,0 +1,413 @@
+═══════════════════════════════════════════════════════════════
+TRAINING SESSION LOG
+Started: 29-Oct-2025 13:56:39
+Log file: C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\training\logs\training_advanced_20251029_135639.log
+═══════════════════════════════════════════════════════════════
+
+Creating RLAMPSO configuration...
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: advanced
+
+--- Features Enabled ---
+  Transformer State: ON (state: 64D)
+  TD3:               ON
+  PER:               ON
+  Curriculum:        ON
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          1000
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00001
+  Critic LR:         0.00010
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+⚠ No GPU detected - using CPU (slower)
+  Batch Size (CPU): 256
+
+════════ Training Configuration (from RLAMPSO_Config) ════════
+Mode: advanced
+
+  Features Enabled:
+    Transformer: ON
+    TD3: ON
+    PER: ON
+    GPU: OFF
+    Parallel: OFF (disabled for dlnetwork)
+
+  Training Parameters:
+    Episodes: 1000
+    PSO Population: 40
+    Max PSO Iterations: 600
+    Batch Size: 256 (GPU-optimized)
+    Actor LR: 0.000010
+    Critic LR: 0.000100
+═══════════════════════════════════════════════════════════════
+
+Estimated Time (CPU): ~83.3 hours (1000 episodes)
+
+Start UAV training? (y/n): y
+
+╔════════════════════════════════════════════════════════════════╗
+║            UAV PATH PLANNING TRAINING                         ║
+║                  (1000 episodes)                                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+Training Configuration:
+  Episodes: 1000
+  Actor LR: 0.000010
+  Critic LR: 0.000100
+  Tau: 0.001000
+
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO GPU-Optimized Sequential Training          ║
+╚════════════════════════════════════════════════════════╝
+
+ℹ Running in CPU mode
+
+=== Training Configuration ===
+Episodes: 1000
+Population: 40
+Max Iterations: 600
+Batch Size: 256
+===============================
+
+Initializing new agent from scratch...
+✓ Agent initialized
+
+Initializing Curriculum Manager...
+Curriculum Manager Initialized:
+  Starting Level: 1 (Easy)
+  Success Threshold: 80.0%
+  Evaluation Window: 20 episodes
+✓ Curriculum Manager initialized
+
+Starting GPU-optimized sequential training...
+
+  → Initializing Transformer state encoder (64D)
+Transformer State Encoder Initialized:
+  Input Feature Dim: 34
+  Hidden Dim: 64
+  Number of Heads: 4
+  Head Dim: 16
+  Total Parameters: 47936
+[REWARD DEBUG] Improvement: 132.0152 → Reward: +1.0000
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[ACTION DEBUG iter 100] Raw action[1:3]: [0.0000, 0.0000, 0.0000], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.7118, c1=1.6769, c2=1.5199 | fitness=1998.38
+[REWARD DEBUG iter 100] FitnessImprovement: 2.8854 → Reward: +0.2947 (prevFit=1998.38, currFit=1995.50)
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0706 → Reward: +0.0148
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0077 → Reward: +0.0017
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0661 → Reward: +0.0139
+[ACTION DEBUG iter 200] Raw action[1:3]: [0.0000, 0.0000, 0.0000], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.7333, c1=1.4444, c2=1.4862 | fitness=1988.07
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0000 → Reward: +0.0000 (prevFit=1988.07, currFit=1988.07)
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0175 → Reward: +0.0038
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0681 → Reward: +0.0143
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0200 → Reward: +0.0043
+[ACTION DEBUG iter 300] Raw action[1:3]: [0.0000, 0.0000, 0.0000], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.6823, c1=1.4049, c2=1.4578 | fitness=1985.96
+[REWARD DEBUG iter 300] FitnessImprovement: 0.0081 → Reward: +0.0018 (prevFit=1985.96, currFit=1985.95)
+[REWARD DEBUG] Improvement: 0.0549 → Reward: +0.0116
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[ACTION DEBUG iter 400] Raw action[1:3]: [-0.0016, 0.0003, 0.0057], noise: 0.0500
+[RLAMPSO DEBUG iter 400] w=0.6807, c1=1.4262, c2=1.5355 | fitness=1912.79
+[REWARD DEBUG iter 400] FitnessImprovement: 0.0072 → Reward: +0.0015 (prevFit=1912.79, currFit=1912.78)
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0002 → Reward: +0.0000
+[ACTION DEBUG iter 500] Raw action[1:3]: [-0.0023, 0.0015, 0.0191], noise: 0.0500
+[RLAMPSO DEBUG iter 500] w=0.6959, c1=1.5760, c2=1.4147 | fitness=1911.90
+[REWARD DEBUG iter 500] FitnessImprovement: 0.0000 → Reward: +0.0000 (prevFit=1911.90, currFit=1911.90)
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Stagnation (normal): 0.0000 → Reward: 0.0
+[REWARD DEBUG] Improvement: 0.0010 → Reward: +0.0002
+{Operation terminated by user during <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('dlarray/times', 'C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\@dlarray\times.m', 39)" style="font-weight:bold"> .* </a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\@dlarray\times.m',39,0)">line 39</a>)
+
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('trainDLToolboxTD3>criticLossFunction', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\dl_toolbox\trainDLToolboxTD3.m', 220)" style="font-weight:bold">trainDLToolboxTD3>criticLossFunction</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\dl_toolbox\trainDLToolboxTD3.m',220,0)">line 220</a>)
+    weightedErrors = tdErrors.^2 .* isWeights;
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('deep.internal.dlfeval', 'C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\+deep\+internal\dlfeval.m', 17)" style="font-weight:bold">deep.internal.dlfeval</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\+deep\+internal\dlfeval.m',17,0)">line 17</a>)
+[varargout{1:nargout}] = fun(x{:});
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('deep.internal.dlfevalWithNestingCheck', 'C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\+deep\+internal\dlfevalWithNestingCheck.m', 19)" style="font-weight:bold">deep.internal.dlfevalWithNestingCheck</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\+deep\+internal\dlfevalWithNestingCheck.m',19,0)">line 19</a>)
+    [varargout{1:nargout}] = deep.internal.dlfeval(fun,varargin{:});
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('dlfeval', 'C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\dlfeval.m', 31)" style="font-weight:bold">dlfeval</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2024a\toolbox\nnet\deep\dlfeval.m',31,0)">line 31</a>)
+[varargout{1:nargout}] = deep.internal.dlfevalWithNestingCheck(fun,varargin{:});
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('trainDLToolboxTD3', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\dl_toolbox\trainDLToolboxTD3.m', 141)" style="font-weight:bold">trainDLToolboxTD3</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\dl_toolbox\trainDLToolboxTD3.m',141,0)">line 141</a>)
+    [critic2Loss, critic2Grads] = dlfeval(@criticLossFunction, ...
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('updateAgentAuto', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\updateAgentAuto.m', 50)" style="font-weight:bold">updateAgentAuto</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\neural_networks\updateAgentAuto.m',50,0)">line 50</a>)
+                agent = trainDLToolboxTD3(agent);
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('globalPathPlanningRLAMPSO', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\globalPathPlanningRLAMPSO.m', 237)" style="font-weight:bold">globalPathPlanningRLAMPSO</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\globalPathPlanningRLAMPSO.m',237,0)">line 237</a>)
+                rlamAgent = updateAgentAuto(rlamAgent, previousNextState, [], previousReward);
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('trainRLAMPSO_Parallel', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\training\trainRLAMPSO_Parallel.m', 164)" style="font-weight:bold">trainRLAMPSO_Parallel</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\training\trainRLAMPSO_Parallel.m',164,0)">line 164</a>)
+        [~, convergenceHistory, ~, algorithmStats] = globalPathPlanningRLAMPSO(...
+
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('train_advanced', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\training\train_advanced.m', 183)" style="font-weight:bold">train_advanced</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\algorithms\rlampso\matlabimplementation\training\train_advanced.m',183,0)">line 183</a>)
+    [trainedAgent, trainingStats] = trainRLAMPSO_Parallel(config);
+} 
+run_comparison
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+  ✓ Results directory exists
+
+========================================
+Study Mode: COMPARISON
+========================================
+
+Starting PSO Comparison with Multiple Scenarios and Friedman Statistical Test...
+Initializing parallel pool with 6 workers...
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to parallel pool with 6 workers.
+Parallel pool initialized successfully with 6 workers.
+Number of independent runs per algorithm: 12
+
+==========================================================
+RUNNING SCENARIO 1: 0 Trees, 0 Obstacles
+==========================================================
+Executing 12 independent runs in parallel...
+  Worker processing Run 4/12
+  Worker processing Run 1/12
+  Worker processing Run 5/12
+  Worker processing Run 3/12
+  Worker processing Run 2/12
+  Worker processing Run 6/12
+  1. @(varargin)onlineAdaptiveRLAMPSO(varargin{:}) (line 121)
+  2. compare_algorithms (line 111)
+  3. run_comparison (line 58)
+{Error using <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison>@(varargin)onlineAdaptiveRLAMPSO(varargin{:})', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m', 121)" style="font-weight:bold">run_comparison>@(varargin)onlineAdaptiveRLAMPSO(varargin{:})</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m',121,0)">line 121</a>)
+Too many input arguments.
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('compare_algorithms', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\scripts\compare_algorithms.m', 111)" style="font-weight:bold">compare_algorithms</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\scripts\compare_algorithms.m',111,0)">line 111</a>)
+        parfor run = 1:numRuns
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m', 58)" style="font-weight:bold">run_comparison</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m',58,0)">line 58</a>)
+    compare_algorithms(algorithms, numRuns, mapSize, startPoint, goalPoint, ...
+} 
+run_comparison
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+  ✓ Results directory exists
+
+========================================
+Study Mode: COMPARISON
+========================================
+
+Starting PSO Comparison with Multiple Scenarios and Friedman Statistical Test...
+Parallel pool already active with 6 workers.
+Number of independent runs per algorithm: 12
+
+==========================================================
+RUNNING SCENARIO 1: 0 Trees, 0 Obstacles
+==========================================================
+Executing 12 independent runs in parallel...
+  Worker processing Run 1/12
+  Worker processing Run 5/12
+  Worker processing Run 6/12
+  Worker processing Run 4/12
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+  Worker processing Run 3/12
+  Worker processing Run 2/12
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║  RLAM-PSO Online Adaptation Configuration              ║
+╚════════════════════════════════════════════════════════╝
+
+State Size: 7 (fitness, progress, improvement, momentum, w, c1, c2)
+Action Size: 3 (delta_w, delta_c1, delta_c2)
+Training: Every 5 iterations, 2 gradient steps per call
+Learning Rates: Actor=0.0010, Critic=0.0100
+Exploration Noise: 0.10 → 0.01 (decay=0.990 per step)
+Reward: fitness_delta (scale=1.0, clip=[-10.0, 10.0])
+PSO: pop=40, iters=600, w=[0.1,0.9], c1=[0.0,3.0], c2=[0.0,3.0]
+
+════════════════════════════════════════════════════════
+
+✓ Online adaptation agent initialized
+  State size: 7, Action size: 3
+  Actor LR: 0.0010, Critic LR: 0.0100
+  GPU: No
+
+
+╔════════════════════════════════════════════════════════╗
+║  Online Adaptive RLAM-PSO (Per-Problem Adaptation)   ║
+╚════════════════════════════════════════════════════════╝
+
+✓ Online adaptation agent initialized
+  State size: 7, Action size: 3
+  Actor LR: 0.0010, Critic LR: 0.0100
+  GPU: No
+
+
+╔════════════════════════════════════════════════════════╗
+║  Online Adaptive RLAM-PSO (Per-Problem Adaptation)   ║
+╚════════════════════════════════════════════════════════╝
+
+✓ Online adaptation agent initialized
+  State size: 7, Action size: 3
+  Actor LR: 0.0010, Critic LR: 0.0100
+  GPU: No
+
+
+╔════════════════════════════════════════════════════════╗
+║  Online Adaptive RLAM-PSO (Per-Problem Adaptation)   ║
+╚════════════════════════════════════════════════════════╝
+
+✓ Online adaptation agent initialized
+  State size: 7, Action size: 3
+  Actor LR: 0.0010, Critic LR: 0.0100
+  GPU: No
+
+
+╔════════════════════════════════════════════════════════╗
+║  Online Adaptive RLAM-PSO (Per-Problem Adaptation)   ║
+╚════════════════════════════════════════════════════════╝
+
+  1. onlineAdaptiveRLAMPSO (line 262)
+  2. @(varargin)onlineAdaptiveRLAMPSO(varargin{:}) (line 121)
+  3. compare_algorithms (line 111)
+  4. run_comparison (line 58)
+{Error using <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison>onlineAdaptiveRLAMPSO', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m', 262)" style="font-weight:bold">run_comparison>onlineAdaptiveRLAMPSO</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m',262,0)">line 262</a>)
+Arrays have incompatible sizes for this operation.
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison>@(varargin)onlineAdaptiveRLAMPSO(varargin{:})', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m', 121)" style="font-weight:bold">run_comparison>@(varargin)onlineAdaptiveRLAMPSO(varargin{:})</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m',121,0)">line 121</a>)
+        struct('function', @(varargin) onlineAdaptiveRLAMPSO(varargin{:}), ...
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('compare_algorithms', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\scripts\compare_algorithms.m', 111)" style="font-weight:bold">compare_algorithms</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\scripts\compare_algorithms.m',111,0)">line 111</a>)
+        parfor run = 1:numRuns
+
+Error in <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison', 'C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m', 58)" style="font-weight:bold">run_comparison</a> (<a href="matlab: opentoline('C:\Users\Thuan\Desktop\Copy_of_New Folder - Copy\run_comparison.m',58,0)">line 58</a>)
+    compare_algorithms(algorithms, numRuns, mapSize, startPoint, goalPoint, ...
+
+<a href="matlab:helpview('matlab','error_sizeDimensionsMustMatch')" style="font-weight:bold">Related documentation</a>
+} 

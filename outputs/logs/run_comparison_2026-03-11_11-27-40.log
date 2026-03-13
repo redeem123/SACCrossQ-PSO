@@ -1,0 +1,560 @@
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+Execution mode: parallel
+Independent runs: 1
+Logging to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_11-27-40.log
+
+Initialising parallel pool (parallel mode)...
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+
+==========================================================
+Scenario 1: ChrismasTerrain2 - Medium
+Terrain: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/data/ChrismasTerrain2.tif
+Danger Zones: 5
+==========================================================
+Executing 1 runs for 6 parallel-safe algorithms...
+
+========== Direct Global Planning ==========
+Algorithm: RLAMPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+
+╔════════════════════════════════════════════════════════╗
+║     RLAM-PSO Configuration (GPU-Optimized)            ║
+╚════════════════════════════════════════════════════════╝
+
+Mode: baseline
+
+--- Features Enabled ---
+  Transformer State: OFF (state: 15D)
+  TD3:               OFF
+  PER:               OFF
+  Curriculum:        OFF
+
+--- Compute Configuration ---
+  Mode:              GPU-Optimized Sequential
+  GPU:               OFF (CPU fallback)
+  Parallel:          OFF (disabled for dlnetwork compatibility)
+
+--- Training Parameters ---
+  Episodes:          100
+  Population:        40
+  Max Iterations:    600
+  Batch Size:        256 (GPU-optimized)
+  Actor LR:          0.00010
+  Critic LR:         0.00100
+
+--- GPU Optimization (2025) ---
+  Gradient Steps/Call:  1
+  Train Every:          1 iterations
+  Mid-Episode Training: ON
+  Estimated UTD Ratio:  ~600.0
+
+════════════════════════════════════════════════════════
+
+[ACTION DEBUG iter 100] Raw action[1:3]: [-0.1114, 0.7097, -0.3255], noise: 0.0500
+[RLAMPSO DEBUG iter 100] w=0.5141, c1=1.1473, c2=1.3835 | fitness=1851.89
+[REWARD DEBUG iter 100] FitnessImprovement: 11.3444 → Reward: +1.0000 (prevFit=1851.89, currFit=1840.55)
+[ACTION DEBUG iter 200] Raw action[1:3]: [-0.3876, 0.5941, 0.1132], noise: 0.0500
+[RLAMPSO DEBUG iter 200] w=0.4830, c1=1.4497, c2=1.5417 | fitness=1757.95
+[REWARD DEBUG iter 200] FitnessImprovement: 0.0182 → Reward: +1.0000 (prevFit=1757.95, currFit=1757.94)
+[ACTION DEBUG iter 300] Raw action[1:3]: [-0.5781, 0.8748, -0.2140], noise: 0.0500
+[RLAMPSO DEBUG iter 300] w=0.4976, c1=1.0695, c2=1.5006 | fitness=1737.77
+[REWARD DEBUG iter 300] FitnessImprovement: 0.3484 → Reward: +1.0000 (prevFit=1737.77, currFit=1737.42)
+[ACTION DEBUG iter 400] Raw action[1:3]: [-0.7835, 0.8967, -0.2677], noise: 0.0500
+[ACTION DEBUG iter 400] WARNING: 1/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 400] w=0.5098, c1=1.1071, c2=1.3000 | fitness=1722.48
+[REWARD DEBUG iter 400] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1722.48, currFit=1722.48)
+[ACTION DEBUG iter 500] Raw action[1:3]: [-0.9243, 0.9866, 0.1639], noise: 0.0500
+[ACTION DEBUG iter 500] WARNING: 5/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 500] w=0.5538, c1=0.9000, c2=1.0244 | fitness=1720.34
+[REWARD DEBUG iter 500] FitnessImprovement: 0.0000 → Reward: +1.0000 (prevFit=1720.34, currFit=1720.34)
+[ACTION DEBUG iter 600] Raw action[1:3]: [-0.9776, 0.9758, -0.0907], noise: 0.0500
+[ACTION DEBUG iter 600] WARNING: 6/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 600] w=0.5174, c1=0.9340, c2=0.9273 | fitness=1720.31
+[REWARD DEBUG iter 600] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1720.31, currFit=1720.31)
+[ACTION DEBUG iter 700] Raw action[1:3]: [-0.9904, 0.9407, 0.7129], noise: 0.0500
+[ACTION DEBUG iter 700] WARNING: 6/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 700] w=0.4283, c1=0.9000, c2=1.3000 | fitness=1720.28
+[REWARD DEBUG iter 700] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1720.28, currFit=1720.28)
+[ACTION DEBUG iter 800] Raw action[1:3]: [-0.9264, -0.6879, -0.1559], noise: 0.0500
+[ACTION DEBUG iter 800] WARNING: 5/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 800] w=0.4490, c1=0.9000, c2=1.1447 | fitness=1718.97
+[REWARD DEBUG iter 800] FitnessImprovement: 0.0631 → Reward: +1.0000 (prevFit=1718.97, currFit=1718.90)
+[ACTION DEBUG iter 900] Raw action[1:3]: [-0.9591, -0.8726, -0.3117], noise: 0.0500
+[ACTION DEBUG iter 900] WARNING: 4/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 900] w=0.4256, c1=0.9000, c2=0.9000 | fitness=1710.26
+[REWARD DEBUG iter 900] FitnessImprovement: 0.0001 → Reward: +1.0000 (prevFit=1710.26, currFit=1710.26)
+[ACTION DEBUG iter 1000] Raw action[1:3]: [0.9163, -0.9622, -0.4655], noise: 0.0500
+[ACTION DEBUG iter 1000] WARNING: 4/20 actions clipped (network saturating)
+[RLAMPSO DEBUG iter 1000] w=0.5602, c1=0.9000, c2=1.0692 | fitness=1710.22
+[REWARD DEBUG iter 1000] FitnessImprovement: 0.0000 → Reward: -1.0000 (prevFit=1710.22, currFit=1710.22)
+
+========== Planning Complete ==========
+Algorithm: RLAMPSO
+Execution time: 92.8324 seconds
+Path length: 151.8397 units
+Waypoints: 7
+Best fitness: 1710.2229
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: DQN_PSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Warning: DQN-PSO (paper) is homogeneous; forcing paramMode to global.
+> In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('globalPathPlanningDQNPSO', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m', 15)" style="font-weight:bold">globalPathPlanningDQNPSO</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/dqn_pso/globalPathPlanningDQNPSO.m',15,0)">line 15</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('callGlobalPlanningAlgorithm', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m', 230)" style="font-weight:bold">callGlobalPlanningAlgorithm</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/callGlobalPlanningAlgorithm.m',230,0)">line 230</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('directGlobalPlanning', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m', 59)" style="font-weight:bold">directGlobalPlanning</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/shared/path_planning/directGlobalPlanning.m',59,0)">line 59</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('run_comparison>@(varargin)directGlobalPlanning(varargin{:})', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/run_comparison.m', 274)" style="font-weight:bold">run_comparison>@(varargin)directGlobalPlanning(varargin{:})</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/run_comparison.m',274,0)">line 274</a>)
+In <a href="matlab:matlab.lang.internal.introspective.errorDocCallback('compare_algorithms>runAlgorithmBatch', '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/compare_algorithms.m', 139)" style="font-weight:bold">compare_algorithms>runAlgorithmBatch</a> (<a href="matlab: opentoline('/Users/hust-hwashin621m/Desktop/vietanhpaper-2/scripts/compare_algorithms.m',139,0)">line 139</a>)
+Starting DQN-PSO (HMM + DQN) - Mode: global
+DQN-PSO iter 50/1000 | Fitness: 1839.93 | w=0.413 c1=2.400 c2=0.550
+DQN-PSO iter 100/1000 | Fitness: 1720.42 | w=0.100 c1=2.400 c2=0.600
+DQN-PSO iter 150/1000 | Fitness: 1694.95 | w=0.900 c1=2.500 c2=0.500
+DQN-PSO iter 200/1000 | Fitness: 1675.11 | w=0.313 c1=2.500 c2=0.500
+DQN-PSO iter 250/1000 | Fitness: 1661.46 | w=0.100 c1=2.400 c2=0.600
+DQN-PSO iter 300/1000 | Fitness: 1643.50 | w=0.100 c1=2.400 c2=0.600
+DQN-PSO iter 350/1000 | Fitness: 1633.72 | w=0.900 c1=2.350 c2=0.500
+DQN-PSO iter 400/1000 | Fitness: 1625.95 | w=0.900 c1=2.500 c2=0.500
+DQN-PSO iter 450/1000 | Fitness: 1623.74 | w=0.599 c1=2.500 c2=0.500
+DQN-PSO iter 500/1000 | Fitness: 1622.55 | w=0.169 c1=2.500 c2=0.500
+DQN-PSO iter 550/1000 | Fitness: 1622.45 | w=0.900 c1=2.500 c2=0.500
+DQN-PSO iter 600/1000 | Fitness: 1622.27 | w=0.100 c1=2.300 c2=0.700
+DQN-PSO iter 650/1000 | Fitness: 1617.02 | w=0.900 c1=2.500 c2=0.500
+DQN-PSO iter 700/1000 | Fitness: 1606.11 | w=0.900 c1=2.500 c2=0.500
+DQN-PSO iter 750/1000 | Fitness: 1603.23 | w=0.363 c1=2.500 c2=0.500
+DQN-PSO iter 800/1000 | Fitness: 1602.87 | w=0.100 c1=2.400 c2=0.600
+DQN-PSO iter 850/1000 | Fitness: 1602.85 | w=0.227 c1=2.500 c2=0.500
+DQN-PSO iter 900/1000 | Fitness: 1602.78 | w=0.711 c1=2.500 c2=0.500
+DQN-PSO iter 950/1000 | Fitness: 1602.71 | w=0.900 c1=2.400 c2=0.500
+DQN-PSO iter 1000/1000 | Fitness: 1602.55 | w=0.148 c1=2.500 c2=0.500
+DQN-PSO completed with final fitness: 1602.5502
+
+========== Planning Complete ==========
+Algorithm: DQN_PSO
+Execution time: 154.3694 seconds
+Path length: 194.4218 units
+Waypoints: 7
+Best fitness: 1602.5502
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: SAC-SAPSO (Paper)
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+============================================
+SAC-SAPSO (Paper) Global Path Planning
+============================================
+
+  [Iter  50/1000] Best: 1699.9980
+  [Iter 100/1000] Best: 1697.2210
+  [Iter 150/1000] Best: 1697.1395
+  [Iter 200/1000] Best: 1697.1003
+  [Iter 250/1000] Best: 1697.0359
+  [Iter 300/1000] Best: 1696.1188
+  [Iter 350/1000] Best: 1689.2369
+  [Iter 400/1000] Best: 1689.1014
+  [Iter 450/1000] Best: 1689.1014
+  [Iter 500/1000] Best: 1689.1014
+  [Iter 550/1000] Best: 1689.1014
+  [Iter 600/1000] Best: 1689.0854
+  [Iter 650/1000] Best: 1689.0854
+  [Iter 700/1000] Best: 1689.0854
+  [Iter 750/1000] Best: 1689.0854
+  [Iter 800/1000] Best: 1689.0854
+  [Iter 850/1000] Best: 1689.0854
+  [Iter 900/1000] Best: 1689.0854
+  [Iter 950/1000] Best: 1689.0854
+  [Iter 1000/1000] Best: 1689.0854
+
+========== Planning Complete ==========
+Algorithm: SAC-SAPSO (Paper)
+Execution time: 48.0613 seconds
+Path length: 157.9287 units
+Waypoints: 7
+Best fitness: 1689.0854
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PPO-PSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+============================================
+PPO-PSO Global Path Planning
+============================================
+
+  [Iter  50/1000] Best: 1426.2843
+  [Iter 100/1000] Best: 1403.5611
+  [Iter 150/1000] Best: 1402.8955
+  [Iter 200/1000] Best: 1402.8532
+  [Iter 250/1000] Best: 1402.8481
+  [Iter 300/1000] Best: 1402.8113
+  [Iter 350/1000] Best: 1402.7584
+  [Iter 400/1000] Best: 1402.7282
+  [Iter 450/1000] Best: 1402.7263
+  [Iter 500/1000] Best: 1402.7240
+  [Iter 550/1000] Best: 1402.7226
+  [Iter 600/1000] Best: 1402.7224
+  [Iter 650/1000] Best: 1402.7223
+  [Iter 700/1000] Best: 1402.7223
+  [Iter 750/1000] Best: 1402.7223
+  [Iter 800/1000] Best: 1402.7223
+  [Iter 850/1000] Best: 1402.7223
+  [Iter 900/1000] Best: 1402.7223
+  [Iter 950/1000] Best: 1402.7222
+  [Iter 1000/1000] Best: 1402.7222
+
+========== Planning Complete ==========
+Algorithm: PPO-PSO
+Execution time: 74.7914 seconds
+Path length: 198.0721 units
+Waypoints: 7
+Best fitness: 1402.7222
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: MPSORL
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+Starting MPSORL (Multi-Strategy Self-Learning PSO) path planning...
+MPSORL iteration: 50/1000 - Best fitness: 2175.8732
+MPSORL iteration: 100/1000 - Best fitness: 1991.4337
+MPSORL iteration: 150/1000 - Best fitness: 1674.2294
+MPSORL iteration: 200/1000 - Best fitness: 1654.1269
+MPSORL iteration: 250/1000 - Best fitness: 1564.5686
+MPSORL iteration: 300/1000 - Best fitness: 1525.3014
+MPSORL iteration: 350/1000 - Best fitness: 1514.3059
+MPSORL iteration: 400/1000 - Best fitness: 1488.2107
+MPSORL iteration: 450/1000 - Best fitness: 1479.1999
+MPSORL iteration: 500/1000 - Best fitness: 1477.4973
+MPSORL iteration: 550/1000 - Best fitness: 1477.259
+MPSORL iteration: 600/1000 - Best fitness: 1465.7549
+MPSORL iteration: 650/1000 - Best fitness: 1465.1584
+MPSORL iteration: 700/1000 - Best fitness: 1465.1291
+MPSORL iteration: 750/1000 - Best fitness: 1464.3042
+MPSORL iteration: 800/1000 - Best fitness: 1464.1737
+MPSORL iteration: 850/1000 - Best fitness: 1464.1383
+MPSORL iteration: 900/1000 - Best fitness: 1464.1062
+MPSORL iteration: 950/1000 - Best fitness: 1463.622
+MPSORL iteration: 1000/1000 - Best fitness: 1463.5383
+MPSORL completed with final fitness: 1463.5383
+
+========== Planning Complete ==========
+Algorithm: MPSORL
+Execution time: 39.0455 seconds
+Path length: 187.6555 units
+Waypoints: 7
+Best fitness: 1463.5383
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [10.0, 95.0, 10.0]
+Goal:  [97.0, 2.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+      [Iter  50] Action stats: mean=0.2470±0.7558 [-0.7940-0.9922]
+  [Iter  50/1000] Best: 2002.6762 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.1046±0.6973 [-0.9852-0.9265]
+      [Iter 100] Fitness: current=1873.0188, best=1873.0188, diversity=10.756236
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 1873.0188 | Alpha: 0.2000
+      [Iter 150] Action stats: mean=-0.1155±0.6056 [-0.8318-0.7996]
+  [Iter 150/1000] Best: 1775.7370 | Alpha: 0.1986
+      [Iter 200] Action stats: mean=0.3838±0.5348 [-0.7492-0.9322]
+      [Iter 200] Fitness: current=1762.3943, best=1762.3943, diversity=5.732974
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 1762.3943 | Alpha: 0.1957
+      [Iter 250] Action stats: mean=0.0260±0.7064 [-0.9751-0.8826]
+  [Iter 250/1000] Best: 1753.3621 | Alpha: 0.1928
+      [Iter 300] Action stats: mean=-0.0085±0.7638 [-0.9474-0.9286]
+      [Iter 300] Fitness: current=1693.2668, best=1693.2668, diversity=3.412248
+      [Iter 300] Reward: 1.0000
+  [Iter 300/1000] Best: 1693.2668 | Alpha: 0.1899
+      [Iter 350] Action stats: mean=0.1732±0.7128 [-0.9109-0.9370]
+  [Iter 350/1000] Best: 1687.5315 | Alpha: 0.1871
+      [Iter 400] Action stats: mean=-0.0845±0.4237 [-0.7989-0.4610]
+      [Iter 400] Fitness: current=1681.3914, best=1681.3914, diversity=2.470689
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 1681.3914 | Alpha: 0.1843
+      [Iter 450] Action stats: mean=-0.2367±0.5421 [-0.9478-0.5446]
+  [Iter 450/1000] Best: 1634.9942 | Alpha: 0.1815
+      [Iter 500] Action stats: mean=-0.3294±0.7495 [-0.9552-0.8618]
+      [Iter 500] Fitness: current=1629.6670, best=1629.6670, diversity=1.557979
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 1629.6670 | Alpha: 0.1788
+      [Iter 550] Action stats: mean=-0.1472±0.6295 [-0.7332-0.8722]
+  [Iter 550/1000] Best: 1628.7437 | Alpha: 0.1762
+      [Iter 600] Action stats: mean=-0.2012±0.7149 [-0.9048-0.9544]
+      [Iter 600] Fitness: current=1627.4936, best=1627.4936, diversity=0.566193
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 1627.4936 | Alpha: 0.1735
+      [Iter 650] Action stats: mean=0.1613±0.5006 [-0.7185-0.9107]
+  [Iter 650/1000] Best: 1626.3728 | Alpha: 0.1710
+      [Iter 700] Action stats: mean=-0.0093±0.5447 [-0.7601-0.9903]
+      [Iter 700] Fitness: current=1626.3174, best=1626.3174, diversity=0.438571
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 1626.3174 | Alpha: 0.1684
+      [Iter 750] Action stats: mean=0.1480±0.7445 [-0.9420-0.9800]
+  [Iter 750/1000] Best: 1626.2461 | Alpha: 0.1659
+      [Iter 800] Action stats: mean=0.1536±0.6279 [-0.8395-0.9186]
+      [Iter 800] Fitness: current=1626.1730, best=1626.1730, diversity=0.275538
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 1626.1730 | Alpha: 0.1634
+      [Iter 850] Action stats: mean=-0.0423±0.6825 [-0.9637-0.9125]
+  [Iter 850/1000] Best: 1623.6678 | Alpha: 0.1611
+      [Iter 900] Action stats: mean=-0.0084±0.6928 [-0.9539-0.9500]
+      [Iter 900] Fitness: current=1622.3470, best=1622.3470, diversity=0.295263
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 1622.3470 | Alpha: 0.1591
+      [Iter 950] Action stats: mean=-0.0963±0.7135 [-0.9504-0.9366]
+  [Iter 950/1000] Best: 1622.1128 | Alpha: 0.1572
+      [Iter 1000] Action stats: mean=-0.0107±0.6646 [-0.8941-0.8869]
+      [Iter 1000] Fitness: current=1621.6807, best=1621.6807, diversity=0.103092
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 1621.6807 | Alpha: 0.1553
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      1621.6807
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 109.4481 seconds
+Path length: 157.3287 units
+Waypoints: 7
+Best fitness: 1621.6807
+========================================
+
+All runs completed. Performing statistical analysis...
+
+=== STATISTICAL ANALYSIS FOR SCENARIO 1 ===
+Metric tested: global_fitness_total
+Runs available: 1
+
+=== DESCRIPTIVE STATISTICS (global_fitness_total) ===
+Algorithm                 | N       | Mean       | Std        | Median    
+------------------------------------------------------------------------
+RLAMPSO [36]              |       1 |  1710.2229 |        NaN |  1710.2229
+DQN-PSO [34]              |       1 |  1602.5502 |        NaN |  1602.5502
+SAC-SAPSO [40]            |       1 |  1689.0854 |        NaN |  1689.0854
+PPO-PSO                   |       1 |  1402.7222 |        NaN |  1402.7222
+MPSORL                    |       1 |  1463.5383 |        NaN |  1463.5383
+RRSACPSO                  |       1 |  1621.6807 |        NaN |  1621.6807
+
+=== PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
+Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
+-------------------------------------------------------------------------------------------
+RLAMPSO [36]              vs DQN-PSO [34]              |  1 | 107.6728 | 1.000000 | 1.000000
+RLAMPSO [36]              vs SAC-SAPSO [40]            |  1 |  21.1376 | 1.000000 | 1.000000
+RLAMPSO [36]              vs PPO-PSO                   |  1 | 307.5007 | 1.000000 | 1.000000
+RLAMPSO [36]              vs MPSORL                    |  1 | 246.6847 | 1.000000 | 1.000000
+RLAMPSO [36]              vs RRSACPSO                  |  1 |  88.5423 | 1.000000 | 1.000000
+DQN-PSO [34]              vs SAC-SAPSO [40]            |  1 | -86.5352 | 1.000000 | 1.000000
+DQN-PSO [34]              vs PPO-PSO                   |  1 | 199.8280 | 1.000000 | 1.000000
+DQN-PSO [34]              vs MPSORL                    |  1 | 139.0119 | 1.000000 | 1.000000
+DQN-PSO [34]              vs RRSACPSO                  |  1 | -19.1305 | 1.000000 | 1.000000
+SAC-SAPSO [40]            vs PPO-PSO                   |  1 | 286.3631 | 1.000000 | 1.000000
+SAC-SAPSO [40]            vs MPSORL                    |  1 | 225.5471 | 1.000000 | 1.000000
+SAC-SAPSO [40]            vs RRSACPSO                  |  1 |  67.4047 | 1.000000 | 1.000000
+PPO-PSO                   vs MPSORL                    |  1 | -60.8161 | 1.000000 | 1.000000
+PPO-PSO                   vs RRSACPSO                  |  1 | -218.9585 | 1.000000 | 1.000000
+MPSORL                    vs RRSACPSO                  |  1 | -158.1424 | 1.000000 | 1.000000
+
+=== HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
+Significant pairs (Holm-corrected, paired t-test): 0/15
+Significant pairs (Holm-corrected, Wilcoxon):      0/15
+
+=== OVERALL RANKING (MEAN METRIC + HOLM T-TEST WINS) ===
+Rank | Algorithm                 | Mean | Holm Wins
+---------------------------------------------------------------
+1    | PPO-PSO                   |  1402.7222 |         0
+2    | MPSORL                    |  1463.5383 |         0
+3    | DQN-PSO [34]              |  1602.5502 |         0
+4    | RRSACPSO                  |  1621.6807 |         0
+5    | SAC-SAPSO [40]            |  1689.0854 |         0
+6    | RLAMPSO [36]              |  1710.2229 |         0
+
+Friedman omnibus skipped: insufficient complete run blocks.
+
+Statistical artifacts saved for Scenario 1:
+  Pairwise CSV: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_Pairwise_Scenario1.csv
+  Summary CSV:  /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_Summary_Scenario1.csv
+  MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_Results_Scenario1.mat
+Generating diagnostic visualisations...
+==== PSO Debug Information ====
+Algorithm RLAMPSO [36] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 92.8297 to 92.8297
+  pathLengths: 1 data points
+    Range: 151.8397 to 151.8397
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for RLAMPSO [36]
+-------------------
+Algorithm DQN-PSO [34] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 154.3688 to 154.3688
+  pathLengths: 1 data points
+    Range: 194.4218 to 194.4218
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for DQN-PSO [34]
+-------------------
+Algorithm SAC-SAPSO [40] is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 48.0606 to 48.0606
+  pathLengths: 1 data points
+    Range: 157.9287 to 157.9287
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for SAC-SAPSO [40]
+-------------------
+Algorithm PPO-PSO is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 74.7904 to 74.7904
+  pathLengths: 1 data points
+    Range: 198.0721 to 198.0721
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for PPO-PSO
+-------------------
+Algorithm MPSORL is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 39.0443 to 39.0443
+  pathLengths: 1 data points
+    Range: 187.6555 to 187.6555
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for MPSORL
+-------------------
+Algorithm RRSACPSO is present
+  globalPlanTimes: 1 data points
+    Range: 0 to 0
+  globalPlanDurations: 1 data points
+    Range: 109.4477 to 109.4477
+  pathLengths: 1 data points
+    Range: 157.3287 to 157.3287
+  pathWaypoints: 1 data points
+    Range: 7 to 7
+  ERROR: obstacleDistances is missing for RRSACPSO
+-------------------
+
+=== ALGORITHM COMPARISON SUMMARY ===
+RLAMPSO [36]: Path=151.84, Time=92.8297s, Safety=N/A (direct planning)
+DQN-PSO [34]: Path=194.42, Time=154.3688s, Safety=N/A (direct planning)
+SAC-SAPSO [40]: Path=157.93, Time=48.0606s, Safety=N/A (direct planning)
+PPO-PSO: Path=198.07, Time=74.7904s, Safety=N/A (direct planning)
+MPSORL: Path=187.66, Time=39.0443s, Safety=N/A (direct planning)
+RRSACPSO: Path=157.33, Time=109.4477s, Safety=N/A (direct planning)
+PSO comparison figures saved successfully!
+Generating trajectory and convergence figures...
+
+=== Algorithm Comparison Complete for Scenario 1 ===
+3D view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/plot_Algorithm_Comparison_Scenario1_3D.pdf
+Top view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/plot_Algorithm_Comparison_Scenario1_TopView.pdf
+
+=== Path Length Comparison ===
+RLAMPSO [36]: 151.84 units
+DQN-PSO [34]: 194.42 units
+SAC-SAPSO [40]: 157.93 units
+PPO-PSO: 198.07 units
+MPSORL: 187.66 units
+RRSACPSO: 157.33 units
+Convergence plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/Convergence_Comparison_Scenario1.pdf
+Parameter tracking plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/Parameter_Tracking_Scenario1.pdf
+Reward plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/Reward_Comparison_Scenario1.pdf
+Critic loss plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/Critic_Loss_Scenario1.pdf
+All runs data written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_AllRuns_Scenario1_2026-03-11_11-37-16.csv
+Summary statistics written to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_AlgorithmSummary_Scenario1_2026-03-11_11-37-16.csv
+Reports generated:
+  All runs data: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_AllRuns_Scenario1_2026-03-11_11-37-16.csv
+  Algorithm summary: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s2/TTest_AlgorithmSummary_Scenario1_2026-03-11_11-37-16.csv
+Scenario 1 complete.
+All scenarios completed successfully!
+
+Comparison complete! Log file saved to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_11-27-40.log

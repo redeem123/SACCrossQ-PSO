@@ -1,0 +1,2692 @@
+========================================
+  PSO Algorithm Comparison Launcher
+========================================
+
+Execution mode: parallel
+Independent runs: 30
+Logging to: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/logs/run_comparison_2026-03-11_12-12-36.log
+
+Initialising parallel pool (parallel mode)...
+Running in PARALLEL mode
+Cleaning up 1 stale local cluster job(s) before parpool.
+Initializing parallel pool with 14 workers (from VIETANH_PARPOOL_WORKERS)...
+Starting parallel pool (parpool) using the 'Processes' profile ...
+Connected to parallel pool with 14 workers.
+Parallel pool initialized successfully with 14 workers.
+
+==========================================================
+Scenario 1: terrainStruct_c_100 - Simple
+Terrain: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/data/terrainStruct_c_100.mat
+Danger Zones: 0
+==========================================================
+Executing 30 runs for 8 parallel-safe algorithms...
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+========== Direct Global Planning ==========
+Algorithm: RRSACPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+
+╔══════════════════════════════════════════════════════════╗
+║              RRSACPSO Global Path Planning              ║
+╚══════════════════════════════════════════════════════════╝
+
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+
+[Episode 1/1] Starting training...
+  Config: mode=online, episodes=1, iterations=1000, popSize=100
+      [Iter  50] Action stats: mean=0.0935±0.7056 [-0.9132-0.9880]
+      [Iter  50] Action stats: mean=-0.0671±0.7726 [-0.9614-0.7484]
+      [Iter  50] Action stats: mean=0.1406±0.5755 [-0.8214-0.9808]
+  [Iter  50/1000] Best: 13491.0996 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12728.9326 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=0.3880±0.5838 [-0.6973-0.9973]
+      [Iter  50] Action stats: mean=-0.1489±0.6841 [-0.9848-0.5739]
+  [Iter  50/1000] Best: 12783.7925 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=0.0887±0.7908 [-0.9536-0.9886]
+      [Iter  50] Action stats: mean=-0.0871±0.6913 [-0.9619-0.9896]
+      [Iter  50] Action stats: mean=-0.2148±0.6099 [-0.8277-0.7990]
+  [Iter  50/1000] Best: 12683.7635 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=0.3772±0.6112 [-0.9268-0.9508]
+      [Iter  50] Action stats: mean=-0.1920±0.6457 [-0.8755-0.9382]
+      [Iter  50] Action stats: mean=-0.0979±0.6648 [-0.9748-0.7571]
+  [Iter  50/1000] Best: 12933.8750 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12750.6741 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12811.8475 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=-0.0716±0.7564 [-0.9880-0.9431]
+  [Iter  50/1000] Best: 12665.9026 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12755.2662 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12801.9432 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=0.0616±0.7101 [-0.9945-0.8734]
+  [Iter  50/1000] Best: 12807.6705 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12958.6329 | Alpha: 0.2000
+  [Iter  50/1000] Best: 12932.1955 | Alpha: 0.2000
+      [Iter  50] Action stats: mean=0.0773±0.6734 [-0.8886-0.9822]
+  [Iter  50/1000] Best: 12896.5013 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=0.2841±0.5754 [-0.9600-0.8297]
+      [Iter 100] Fitness: current=13303.4437, best=13303.4437, diversity=11.362958
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 13303.4437 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.2073±0.5589 [-0.7540-0.7676]
+      [Iter 100] Action stats: mean=-0.0958±0.8388 [-0.9784-0.9883]
+      [Iter 100] Action stats: mean=0.1333±0.4340 [-0.5085-0.7404]
+      [Iter 100] Fitness: current=12642.8940, best=12642.8940, diversity=13.782659
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12642.8940 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12493.8217, best=12493.8217, diversity=10.060647
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12493.8217 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12739.7242, best=12739.7242, diversity=9.960601
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12739.7242 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=0.1786±0.5418 [-0.5130-0.9203]
+      [Iter 100] Fitness: current=12811.8475, best=12811.8475, diversity=12.155560
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12811.8475 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=0.0130±0.6492 [-0.9397-0.8301]
+      [Iter 100] Action stats: mean=-0.1360±0.5940 [-0.8603-0.6519]
+      [Iter 100] Action stats: mean=-0.1785±0.6619 [-0.9712-0.9521]
+      [Iter 100] Action stats: mean=-0.3008±0.6309 [-0.9744-0.9261]
+      [Iter 100] Action stats: mean=-0.0556±0.6795 [-0.9425-0.9613]
+      [Iter 100] Fitness: current=12700.8495, best=12700.8495, diversity=8.672426
+      [Iter 100] Reward: 1.0000
+  [Iter 100/1000] Best: 12700.8495 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12633.7104, best=12633.7104, diversity=6.896834
+      [Iter 100] Reward: 1.0000
+  [Iter 100/1000] Best: 12633.7104 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12514.3209, best=12514.3209, diversity=9.719022
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12514.3209 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.0259±0.8118 [-0.9448-0.9684]
+      [Iter 100] Action stats: mean=-0.0238±0.4433 [-0.8626-0.4940]
+      [Iter 100] Fitness: current=12676.5525, best=12676.5525, diversity=16.347851
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12676.5525 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.0386±0.7490 [-0.8991-0.9878]
+      [Iter 100] Fitness: current=12597.0609, best=12597.0609, diversity=10.334611
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12597.0609 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12786.7528, best=12786.7528, diversity=10.497284
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12786.7528 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12686.0494, best=12686.0494, diversity=10.976826
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12686.0494 | Alpha: 0.2000
+      [Iter 100] Fitness: current=12837.5149, best=12837.5149, diversity=11.546292
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12837.5149 | Alpha: 0.2000
+      [Iter 100] Action stats: mean=-0.1636±0.8332 [-0.8644-0.9485]
+      [Iter 100] Fitness: current=12631.4617, best=12631.4617, diversity=12.314188
+      [Iter 100] Reward: -1.0000
+  [Iter 100/1000] Best: 12631.4617 | Alpha: 0.2000
+      [Iter 150] Action stats: mean=-0.1084±0.7532 [-0.9206-0.9269]
+  [Iter 150/1000] Best: 13131.2697 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.0682±0.5754 [-0.7594-0.8772]
+      [Iter 150] Action stats: mean=-0.1617±0.5919 [-0.9827-0.8463]
+      [Iter 150] Action stats: mean=0.3474±0.5379 [-0.6010-0.9308]
+  [Iter 150/1000] Best: 12414.7246 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.1942±0.6660 [-0.8570-0.9470]
+      [Iter 150] Action stats: mean=-0.3697±0.5746 [-0.9001-0.6506]
+  [Iter 150/1000] Best: 12622.7401 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.0937±0.7389 [-0.9913-0.9973]
+      [Iter 150] Action stats: mean=0.0149±0.7698 [-0.9560-0.9352]
+  [Iter 150/1000] Best: 12782.6871 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=-0.1546±0.5510 [-0.9731-0.7904]
+  [Iter 150/1000] Best: 12631.9497 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.1482±0.7035 [-0.9597-0.9385]
+  [Iter 150/1000] Best: 12624.5784 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.2328±0.5716 [-0.7339-0.9915]
+  [Iter 150/1000] Best: 12643.5892 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=0.1902±0.6002 [-0.8870-0.9567]
+  [Iter 150/1000] Best: 12453.5659 | Alpha: 0.1986
+      [Iter 150] Action stats: mean=-0.0621±0.6151 [-0.8489-0.9831]
+      [Iter 150] Action stats: mean=-0.0431±0.5841 [-0.8224-0.8763]
+  [Iter 150/1000] Best: 12738.4585 | Alpha: 0.1986
+  [Iter 150/1000] Best: 12676.5017 | Alpha: 0.1986
+  [Iter 150/1000] Best: 12585.8037 | Alpha: 0.1986
+  [Iter 150/1000] Best: 12455.9285 | Alpha: 0.1986
+  [Iter 150/1000] Best: 12745.0724 | Alpha: 0.1986
+  [Iter 150/1000] Best: 12516.9631 | Alpha: 0.1986
+      [Iter 200] Action stats: mean=-0.0619±0.6601 [-0.8139-0.8936]
+      [Iter 200] Fitness: current=12763.4179, best=12763.4179, diversity=7.606008
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12763.4179 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=0.0672±0.5910 [-0.7343-0.8741]
+      [Iter 200] Action stats: mean=0.4649±0.3951 [-0.2654-0.9763]
+      [Iter 200] Fitness: current=12403.0600, best=12403.0600, diversity=8.309762
+      [Iter 200] Reward: -1.0000
+      [Iter 200] Fitness: current=12620.1904, best=12620.1904, diversity=5.587235
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12620.1904 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=0.2289±0.6496 [-0.7389-0.9716]
+      [Iter 200] Action stats: mean=0.1409±0.5269 [-0.7975-0.8119]
+  [Iter 200/1000] Best: 12403.0600 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=-0.2058±0.5010 [-0.9316-0.5266]
+      [Iter 200] Fitness: current=12566.2925, best=12566.2925, diversity=6.390304
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12566.2925 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=-0.0326±0.5479 [-0.9937-0.6019]
+      [Iter 200] Fitness: current=12700.8764, best=12700.8764, diversity=9.783980
+      [Iter 200] Reward: 1.0000
+      [Iter 200] Fitness: current=12309.8388, best=12309.8388, diversity=9.947168
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12309.8388 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=-0.3194±0.4434 [-0.6836-0.6535]
+      [Iter 200] Fitness: current=12672.4220, best=12672.4220, diversity=7.220570
+      [Iter 200] Reward: 1.0000
+      [Iter 200] Action stats: mean=0.0167±0.8100 [-0.9546-0.9855]
+      [Iter 200] Action stats: mean=0.1448±0.5611 [-0.4893-0.9580]
+  [Iter 200/1000] Best: 12700.8764 | Alpha: 0.1957
+  [Iter 200/1000] Best: 12672.4220 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=0.5551±0.5450 [-0.8281-0.9801]
+      [Iter 200] Action stats: mean=0.1324±0.6043 [-0.9771-0.6939]
+      [Iter 200] Action stats: mean=-0.0481±0.7416 [-0.9963-0.8793]
+      [Iter 200] Fitness: current=12516.9631, best=12516.9631, diversity=9.308725
+      [Iter 200] Reward: -1.0000
+      [Iter 200] Fitness: current=12536.0650, best=12536.0650, diversity=7.910215
+      [Iter 200] Reward: -1.0000
+      [Iter 200] Fitness: current=12710.7142, best=12710.7142, diversity=9.948676
+      [Iter 200] Reward: -1.0000
+      [Iter 200] Fitness: current=12631.9497, best=12631.9497, diversity=8.026719
+      [Iter 200] Reward: -1.0000
+      [Iter 200] Fitness: current=12331.1461, best=12331.1461, diversity=8.157126
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12331.1461 | Alpha: 0.1957
+      [Iter 200] Fitness: current=12745.0724, best=12745.0724, diversity=10.357755
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12516.9631 | Alpha: 0.1957
+  [Iter 200/1000] Best: 12536.0650 | Alpha: 0.1957
+      [Iter 200] Action stats: mean=-0.2599±0.6153 [-0.9831-0.9110]
+  [Iter 200/1000] Best: 12710.7142 | Alpha: 0.1957
+  [Iter 200/1000] Best: 12631.9497 | Alpha: 0.1957
+  [Iter 200/1000] Best: 12745.0724 | Alpha: 0.1957
+      [Iter 200] Fitness: current=12372.5390, best=12372.5390, diversity=10.557668
+      [Iter 200] Reward: -1.0000
+  [Iter 200/1000] Best: 12372.5390 | Alpha: 0.1957
+      [Iter 250] Action stats: mean=0.3223±0.5508 [-0.7927-0.8878]
+  [Iter 250/1000] Best: 12707.7765 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=-0.0594±0.6892 [-0.9499-0.8947]
+      [Iter 250] Action stats: mean=-0.1991±0.7377 [-0.9308-0.9631]
+      [Iter 250] Action stats: mean=0.2322±0.8119 [-0.9532-0.9908]
+      [Iter 250] Action stats: mean=0.1102±0.5860 [-0.6997-0.7898]
+      [Iter 250] Action stats: mean=-0.1891±0.7867 [-0.9443-0.9119]
+  [Iter 250/1000] Best: 12619.1476 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12550.0185 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12664.6696 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=0.4443±0.8069 [-0.9391-0.9890]
+      [Iter 250] Action stats: mean=0.1585±0.7748 [-0.9637-0.9713]
+      [Iter 250] Action stats: mean=-0.2986±0.5788 [-0.9647-0.7920]
+  [Iter 250/1000] Best: 12269.2187 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12313.4383 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=0.1696±0.6870 [-0.7494-0.9555]
+  [Iter 250/1000] Best: 12672.2798 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=-0.2906±0.5626 [-0.9617-0.7850]
+  [Iter 250/1000] Best: 12325.6116 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12688.8179 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=0.1464±0.6977 [-0.6726-0.9976]
+      [Iter 250] Action stats: mean=0.0498±0.5531 [-0.8750-0.6224]
+  [Iter 250/1000] Best: 12596.9181 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12545.4898 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12503.7304 | Alpha: 0.1928
+  [Iter 250/1000] Best: 12493.6074 | Alpha: 0.1928
+      [Iter 250] Action stats: mean=-0.1029±0.7478 [-0.9978-0.9447]
+  [Iter 250/1000] Best: 12350.2223 | Alpha: 0.1928
+      [Iter 300] Action stats: mean=-0.5684±0.6361 [-0.9916-0.9363]
+      [Iter 300] Fitness: current=12546.3669, best=12546.3669, diversity=3.694725
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12546.3669 | Alpha: 0.1899
+      [Iter 300] Action stats: mean=-0.0365±0.7047 [-0.9502-0.7661]
+      [Iter 300] Action stats: mean=-0.2016±0.6134 [-0.9728-0.7005]
+      [Iter 300] Action stats: mean=-0.2103±0.6951 [-0.9149-0.8151]
+      [Iter 300] Fitness: current=12675.6857, best=12675.6857, diversity=3.817011
+      [Iter 300] Reward: -1.0000
+      [Iter 300] Action stats: mean=-0.2673±0.4360 [-0.9750-0.3583]
+      [Iter 300] Fitness: current=12615.5017, best=12615.5017, diversity=3.544893
+      [Iter 300] Reward: 1.0000
+      [Iter 300] Fitness: current=12254.3272, best=12254.3272, diversity=8.947899
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12675.6857 | Alpha: 0.1899
+      [Iter 300] Fitness: current=12647.4811, best=12647.4811, diversity=7.845983
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12647.4811 | Alpha: 0.1899
+  [Iter 300/1000] Best: 12615.5017 | Alpha: 0.1899
+  [Iter 300/1000] Best: 12254.3272 | Alpha: 0.1899
+      [Iter 300] Action stats: mean=-0.1394±0.4708 [-0.6372-0.9484]
+      [Iter 300] Fitness: current=12197.6242, best=12197.6242, diversity=5.991488
+      [Iter 300] Reward: 1.0000
+      [Iter 300] Action stats: mean=0.1724±0.5157 [-0.5980-0.8233]
+      [Iter 300] Action stats: mean=-0.4581±0.6235 [-0.9464-0.9850]
+      [Iter 300] Fitness: current=12622.8611, best=12622.8611, diversity=6.628379
+      [Iter 300] Reward: 1.0000
+  [Iter 300/1000] Best: 12197.6242 | Alpha: 0.1899
+      [Iter 300] Fitness: current=12554.0391, best=12554.0391, diversity=7.011124
+      [Iter 300] Reward: 1.0000
+      [Iter 300] Action stats: mean=0.3151±0.6761 [-0.8892-0.9782]
+  [Iter 300/1000] Best: 12622.8611 | Alpha: 0.1899
+      [Iter 300] Action stats: mean=0.3804±0.7451 [-0.9234-0.9626]
+  [Iter 300/1000] Best: 12554.0391 | Alpha: 0.1899
+      [Iter 300] Action stats: mean=-0.2416±0.7636 [-0.9535-0.9993]
+      [Iter 300] Action stats: mean=-0.2593±0.3715 [-0.7176-0.2342]
+      [Iter 300] Fitness: current=12487.0764, best=12487.0764, diversity=7.379648
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12487.0764 | Alpha: 0.1899
+      [Iter 300] Fitness: current=12672.2798, best=12672.2798, diversity=4.867183
+      [Iter 300] Reward: 1.0000
+      [Iter 300] Fitness: current=12514.7115, best=12514.7115, diversity=5.747467
+      [Iter 300] Reward: 1.0000
+  [Iter 300/1000] Best: 12514.7115 | Alpha: 0.1899
+      [Iter 300] Fitness: current=12318.5174, best=12318.5174, diversity=6.668677
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12318.5174 | Alpha: 0.1899
+  [Iter 300/1000] Best: 12672.2798 | Alpha: 0.1899
+      [Iter 300] Action stats: mean=0.3249±0.5918 [-0.8656-0.8608]
+      [Iter 300] Action stats: mean=0.0236±0.6500 [-0.8198-0.8976]
+      [Iter 300] Fitness: current=12347.8726, best=12347.8726, diversity=7.400910
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12347.8726 | Alpha: 0.1899
+      [Iter 300] Fitness: current=12442.8283, best=12442.8283, diversity=8.215044
+      [Iter 300] Reward: -1.0000
+  [Iter 300/1000] Best: 12442.8283 | Alpha: 0.1899
+      [Iter 350] Action stats: mean=0.1209±0.7349 [-0.8795-0.9567]
+  [Iter 350/1000] Best: 12545.9374 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=-0.3851±0.7475 [-0.9504-0.9264]
+  [Iter 350/1000] Best: 12588.7856 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=-0.1108±0.5365 [-0.9139-0.9573]
+  [Iter 350/1000] Best: 12523.7569 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=0.0370±0.6678 [-0.6808-0.8666]
+      [Iter 350] Action stats: mean=0.1227±0.7305 [-0.9602-0.9784]
+      [Iter 350] Action stats: mean=-0.2938±0.5876 [-0.9909-0.5804]
+  [Iter 350/1000] Best: 12610.3114 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=0.1696±0.6133 [-0.8382-0.8122]
+  [Iter 350/1000] Best: 12246.7920 | Alpha: 0.1871
+  [Iter 350/1000] Best: 12671.2896 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=-0.0196±0.5171 [-0.8641-0.8864]
+      [Iter 350] Action stats: mean=0.1227±0.7532 [-0.9455-0.9915]
+  [Iter 350/1000] Best: 12485.5597 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=0.1235±0.6172 [-0.7600-0.8862]
+  [Iter 350/1000] Best: 12183.9605 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=0.0736±0.6713 [-0.6647-0.9787]
+      [Iter 350] Action stats: mean=-0.0544±0.6774 [-0.8782-0.9769]
+  [Iter 350/1000] Best: 12459.1820 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=-0.1912±0.4648 [-0.8617-0.5687]
+  [Iter 350/1000] Best: 12671.9881 | Alpha: 0.1871
+  [Iter 350/1000] Best: 12314.2978 | Alpha: 0.1871
+  [Iter 350/1000] Best: 12571.8732 | Alpha: 0.1871
+  [Iter 350/1000] Best: 12326.6461 | Alpha: 0.1871
+      [Iter 350] Action stats: mean=0.1504±0.5673 [-0.7318-0.9204]
+  [Iter 350/1000] Best: 12408.0662 | Alpha: 0.1871
+      [Iter 400] Action stats: mean=0.2432±0.6556 [-0.7715-0.9335]
+      [Iter 400] Fitness: current=12544.8217, best=12544.8217, diversity=3.925414
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12544.8217 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=0.1160±0.5536 [-0.8976-0.8426]
+      [Iter 400] Action stats: mean=-0.1461±0.6776 [-0.9299-0.9727]
+      [Iter 400] Fitness: current=12601.5861, best=12601.5861, diversity=2.631841
+      [Iter 400] Reward: -1.0000
+      [Iter 400] Fitness: current=12540.7032, best=12540.7032, diversity=7.344362
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 12540.7032 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=0.0506±0.4438 [-0.4449-0.7457]
+  [Iter 400/1000] Best: 12601.5861 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=0.3574±0.4342 [-0.2717-0.8283]
+      [Iter 400] Action stats: mean=-0.0119±0.4913 [-0.8506-0.6662]
+      [Iter 400] Fitness: current=12183.1475, best=12183.1475, diversity=5.179610
+      [Iter 400] Reward: -1.0000
+      [Iter 400] Fitness: current=12427.3845, best=12427.3845, diversity=6.405449
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12427.3845 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=-0.1582±0.6566 [-0.9361-0.8734]
+      [Iter 400] Fitness: current=12418.0586, best=12418.0586, diversity=3.606520
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12418.0586 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=0.0580±0.6772 [-0.9810-0.9877]
+      [Iter 400] Action stats: mean=-0.2931±0.6657 [-0.9319-0.8769]
+      [Iter 400] Fitness: current=12404.6783, best=12404.6783, diversity=6.892353
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12404.6783 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=-0.0573±0.5693 [-0.8534-0.8103]
+      [Iter 400] Fitness: current=12657.8988, best=12657.8988, diversity=4.254442
+      [Iter 400] Reward: -1.0000
+      [Iter 400] Action stats: mean=0.6015±0.2705 [0.1985-0.9455]
+      [Iter 400] Action stats: mean=-0.1000±0.7625 [-0.9199-0.9033]
+      [Iter 400] Fitness: current=12234.9900, best=12234.9900, diversity=6.005236
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 12234.9900 | Alpha: 0.1843
+  [Iter 400/1000] Best: 12657.8988 | Alpha: 0.1843
+  [Iter 400/1000] Best: 12183.1475 | Alpha: 0.1843
+      [Iter 400] Fitness: current=12666.3091, best=12666.3091, diversity=4.534649
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12666.3091 | Alpha: 0.1843
+      [Iter 400] Fitness: current=12311.0349, best=12311.0349, diversity=4.251836
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 12311.0349 | Alpha: 0.1843
+      [Iter 400] Fitness: current=12566.7160, best=12566.7160, diversity=3.159866
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 12566.7160 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=-0.0908±0.5936 [-0.9287-0.7710]
+      [Iter 400] Fitness: current=12316.5576, best=12316.5576, diversity=5.042932
+      [Iter 400] Reward: -1.0000
+  [Iter 400/1000] Best: 12316.5576 | Alpha: 0.1843
+      [Iter 400] Action stats: mean=0.0275±0.5509 [-0.7332-0.9652]
+      [Iter 400] Fitness: current=12372.5396, best=12372.5396, diversity=7.978125
+      [Iter 400] Reward: 1.0000
+  [Iter 400/1000] Best: 12372.5396 | Alpha: 0.1843
+      [Iter 450] Action stats: mean=0.0337±0.4583 [-0.6500-0.7895]
+      [Iter 450] Action stats: mean=0.2873±0.6453 [-0.9550-0.9439]
+  [Iter 450/1000] Best: 12541.5155 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=0.0131±0.7407 [-0.9856-0.9289]
+      [Iter 450] Action stats: mean=-0.2044±0.7277 [-0.9714-0.7995]
+      [Iter 450] Action stats: mean=0.1619±0.4410 [-0.3914-0.9927]
+  [Iter 450/1000] Best: 12381.8826 | Alpha: 0.1815
+  [Iter 450/1000] Best: 12517.8584 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=0.3217±0.4858 [-0.4679-0.8143]
+  [Iter 450/1000] Best: 12599.4667 | Alpha: 0.1815
+  [Iter 450/1000] Best: 12397.9704 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=-0.0601±0.5693 [-0.9774-0.6488]
+  [Iter 450/1000] Best: 12224.7808 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=-0.1360±0.4285 [-0.7227-0.5287]
+  [Iter 450/1000] Best: 12337.7115 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=-0.1338±0.5319 [-0.9684-0.7816]
+      [Iter 450] Action stats: mean=0.0908±0.5729 [-0.9119-0.8207]
+  [Iter 450/1000] Best: 12616.7132 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=-0.2199±0.5146 [-0.9634-0.7575]
+  [Iter 450/1000] Best: 12306.7870 | Alpha: 0.1815
+  [Iter 450/1000] Best: 12565.3627 | Alpha: 0.1815
+  [Iter 450/1000] Best: 12178.5459 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=0.3505±0.7478 [-0.8632-0.9632]
+  [Iter 450/1000] Best: 12664.7660 | Alpha: 0.1815
+      [Iter 450] Action stats: mean=0.0942±0.7893 [-0.9143-0.9742]
+      [Iter 450] Action stats: mean=-0.0513±0.4456 [-0.8254-0.6364]
+  [Iter 450/1000] Best: 12363.7611 | Alpha: 0.1815
+  [Iter 450/1000] Best: 12316.2343 | Alpha: 0.1815
+      [Iter 500] Action stats: mean=0.0498±0.7113 [-0.8314-0.9733]
+      [Iter 500] Fitness: current=12386.6587, best=12386.6587, diversity=3.730715
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12386.6587 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=0.0674±0.6142 [-0.8099-0.9297]
+      [Iter 500] Action stats: mean=-0.0908±0.5956 [-0.9682-0.5272]
+      [Iter 500] Fitness: current=12516.4540, best=12516.4540, diversity=4.474302
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12516.4540 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=0.3141±0.6047 [-0.9525-0.9909]
+      [Iter 500] Action stats: mean=-0.0997±0.4135 [-0.6359-0.5031]
+      [Iter 500] Action stats: mean=-0.2527±0.7014 [-0.9415-0.9658]
+      [Iter 500] Action stats: mean=0.1505±0.8167 [-0.9341-0.9916]
+      [Iter 500] Fitness: current=12373.0580, best=12373.0580, diversity=3.761860
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12373.0580 | Alpha: 0.1788
+      [Iter 500] Fitness: current=12331.0369, best=12331.0369, diversity=6.172911
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12331.0369 | Alpha: 0.1788
+      [Iter 500] Fitness: current=12594.8556, best=12594.8556, diversity=1.860105
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12594.8556 | Alpha: 0.1788
+      [Iter 500] Fitness: current=12306.0891, best=12306.0891, diversity=2.763734
+      [Iter 500] Reward: -1.0000
+      [Iter 500] Fitness: current=12564.9291, best=12564.9291, diversity=2.173475
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12564.9291 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=-0.1261±0.5233 [-0.7133-0.8325]
+      [Iter 500] Fitness: current=12224.5709, best=12224.5709, diversity=3.960960
+      [Iter 500] Reward: 1.0000
+      [Iter 500] Action stats: mean=0.2520±0.5500 [-0.3697-0.8891]
+      [Iter 500] Action stats: mean=0.1019±0.6151 [-0.6463-0.9580]
+      [Iter 500] Fitness: current=12388.3862, best=12388.3862, diversity=2.867902
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12306.0891 | Alpha: 0.1788
+  [Iter 500/1000] Best: 12224.5709 | Alpha: 0.1788
+      [Iter 500] Fitness: current=12593.5254, best=12593.5254, diversity=4.353387
+      [Iter 500] Reward: 1.0000
+  [Iter 500/1000] Best: 12593.5254 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=0.0889±0.6561 [-0.9164-0.8754]
+      [Iter 500] Fitness: current=12177.5274, best=12177.5274, diversity=4.574156
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12388.3862 | Alpha: 0.1788
+  [Iter 500/1000] Best: 12177.5274 | Alpha: 0.1789
+      [Iter 500] Action stats: mean=-0.2469±0.6241 [-0.9788-0.9166]
+      [Iter 500] Fitness: current=12662.6024, best=12662.6024, diversity=2.905361
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12662.6024 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=0.1736±0.5172 [-0.6554-0.9620]
+      [Iter 500] Fitness: current=12354.6173, best=12354.6173, diversity=6.085692
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12354.6173 | Alpha: 0.1788
+      [Iter 500] Action stats: mean=-0.3179±0.4258 [-0.8916-0.1789]
+      [Iter 500] Fitness: current=12307.2830, best=12307.2830, diversity=2.131977
+      [Iter 500] Reward: -1.0000
+  [Iter 500/1000] Best: 12307.2830 | Alpha: 0.1788
+      [Iter 550] Action stats: mean=0.0535±0.7512 [-0.9520-0.9038]
+      [Iter 550] Action stats: mean=-0.1627±0.7987 [-0.8760-0.9341]
+  [Iter 550/1000] Best: 12364.2450 | Alpha: 0.1762
+  [Iter 550/1000] Best: 12277.9419 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=0.1364±0.5455 [-0.9716-0.6627]
+      [Iter 550] Action stats: mean=-0.2917±0.6828 [-0.9668-0.7962]
+      [Iter 550] Action stats: mean=0.3429±0.5363 [-0.5466-0.9221]
+  [Iter 550/1000] Best: 12515.5525 | Alpha: 0.1762
+  [Iter 550/1000] Best: 12323.2276 | Alpha: 0.1763
+      [Iter 550] Action stats: mean=-0.0293±0.4144 [-0.6514-0.5875]
+  [Iter 550/1000] Best: 12305.9688 | Alpha: 0.1762
+  [Iter 550/1000] Best: 12564.7653 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=-0.0391±0.4206 [-0.8406-0.4887]
+      [Iter 550] Action stats: mean=0.1219±0.6807 [-0.7259-0.9503]
+  [Iter 550/1000] Best: 12593.3543 | Alpha: 0.1762
+  [Iter 550/1000] Best: 12224.2269 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=0.0002±0.5741 [-0.8711-0.7251]
+      [Iter 550] Action stats: mean=-0.3889±0.5690 [-0.9685-0.9011]
+  [Iter 550/1000] Best: 12592.1727 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=-0.1167±0.5330 [-0.8278-0.6808]
+  [Iter 550/1000] Best: 12385.0354 | Alpha: 0.1762
+  [Iter 550/1000] Best: 12177.3985 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=-0.1557±0.5020 [-0.8390-0.6410]
+  [Iter 550/1000] Best: 12661.9756 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=0.3637±0.4835 [-0.4969-0.9478]
+  [Iter 550/1000] Best: 12347.1409 | Alpha: 0.1762
+      [Iter 550] Action stats: mean=-0.0818±0.6469 [-0.8437-0.9238]
+  [Iter 550/1000] Best: 12299.1554 | Alpha: 0.1762
+      [Iter 600] Action stats: mean=-0.2649±0.6234 [-0.8930-0.6536]
+      [Iter 600] Fitness: current=12246.3006, best=12246.3006, diversity=2.136532
+      [Iter 600] Reward: -1.0000
+      [Iter 600] Action stats: mean=0.0222±0.8863 [-0.9187-0.9769]
+  [Iter 600/1000] Best: 12246.3006 | Alpha: 0.1735
+      [Iter 600] Fitness: current=12355.8238, best=12355.8238, diversity=2.171737
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12355.8238 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=0.2568±0.4731 [-0.7392-0.9705]
+      [Iter 600] Action stats: mean=-0.0269±0.7214 [-0.9567-0.8787]
+      [Iter 600] Fitness: current=12505.6249, best=12505.6249, diversity=3.638959
+      [Iter 600] Reward: -1.0000
+      [Iter 600] Fitness: current=12318.7559, best=12318.7559, diversity=5.038997
+      [Iter 600] Reward: 1.0000
+  [Iter 600/1000] Best: 12318.7559 | Alpha: 0.1736
+      [Iter 600] Action stats: mean=-0.0978±0.6893 [-0.9573-0.9900]
+  [Iter 600/1000] Best: 12505.6249 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=-0.1310±0.6256 [-0.9261-0.8756]
+      [Iter 600] Fitness: current=12592.4313, best=12592.4313, diversity=0.984011
+      [Iter 600] Reward: 1.0000
+  [Iter 600/1000] Best: 12592.4313 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=-0.3373±0.4498 [-0.9610-0.3646]
+      [Iter 600] Fitness: current=12305.5092, best=12305.5092, diversity=1.783279
+      [Iter 600] Reward: -1.0000
+      [Iter 600] Fitness: current=12564.7183, best=12564.7183, diversity=0.950869
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12564.7183 | Alpha: 0.1735
+  [Iter 600/1000] Best: 12305.5092 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=0.1300±0.6578 [-0.9982-0.7661]
+      [Iter 600] Action stats: mean=-0.0969±0.5932 [-0.9516-0.8259]
+      [Iter 600] Fitness: current=12591.7029, best=12591.7029, diversity=3.459372
+      [Iter 600] Reward: -1.0000
+      [Iter 600] Fitness: current=12223.5940, best=12223.5940, diversity=2.806789
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12591.7029 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=0.0983±0.4268 [-0.4484-0.6596]
+      [Iter 600] Fitness: current=12177.2949, best=12177.2949, diversity=3.021539
+      [Iter 600] Reward: 1.0000
+      [Iter 600] Action stats: mean=0.1320±0.5605 [-0.4873-0.9110]
+      [Iter 600] Fitness: current=12384.3943, best=12384.3943, diversity=1.637896
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12384.3943 | Alpha: 0.1735
+  [Iter 600/1000] Best: 12223.5940 | Alpha: 0.1735
+  [Iter 600/1000] Best: 12177.2949 | Alpha: 0.1736
+      [Iter 600] Action stats: mean=-0.2291±0.6780 [-0.9845-0.9828]
+      [Iter 600] Fitness: current=12661.4176, best=12661.4176, diversity=0.757294
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12661.4176 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=0.1015±0.7135 [-0.8771-0.9509]
+      [Iter 600] Fitness: current=12329.2733, best=12329.2733, diversity=4.896573
+      [Iter 600] Reward: 1.0000
+  [Iter 600/1000] Best: 12329.2733 | Alpha: 0.1735
+      [Iter 600] Action stats: mean=0.1150±0.7049 [-0.9797-0.9771]
+      [Iter 600] Fitness: current=12296.5713, best=12296.5713, diversity=2.715429
+      [Iter 600] Reward: -1.0000
+  [Iter 600/1000] Best: 12296.5713 | Alpha: 0.1736
+      [Iter 650] Action stats: mean=0.0031±0.7017 [-0.9235-0.8084]
+  [Iter 650/1000] Best: 12239.6421 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=0.0987±0.6674 [-0.9164-0.9639]
+  [Iter 650/1000] Best: 12354.0746 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=0.2074±0.5937 [-0.9344-0.9091]
+  [Iter 650/1000] Best: 12317.7062 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=-0.1071±0.6860 [-0.9375-0.7198]
+      [Iter 650] Action stats: mean=-0.0333±0.7321 [-0.9606-0.8477]
+      [Iter 650] Action stats: mean=-0.1443±0.5941 [-0.7507-0.9817]
+      [Iter 650] Action stats: mean=-0.3848±0.5733 [-0.9594-0.7315]
+  [Iter 650/1000] Best: 12305.4315 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12564.7004 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12505.0962 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12592.3437 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=-0.0069±0.6614 [-0.7652-0.8483]
+      [Iter 650] Action stats: mean=-0.1245±0.5631 [-0.7928-0.7727]
+      [Iter 650] Action stats: mean=0.0392±0.6338 [-0.9141-0.9275]
+  [Iter 650/1000] Best: 12590.8317 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=-0.1886±0.4419 [-0.9480-0.3340]
+  [Iter 650/1000] Best: 12176.6629 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12384.0459 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12223.5631 | Alpha: 0.1710
+      [Iter 650] Action stats: mean=-0.2197±0.6381 [-0.9885-0.6910]
+      [Iter 650] Action stats: mean=0.1706±0.6909 [-0.9264-0.8989]
+  [Iter 650/1000] Best: 12324.9023 | Alpha: 0.1710
+  [Iter 650/1000] Best: 12656.9751 | Alpha: 0.1709
+      [Iter 650] Action stats: mean=0.2228±0.6384 [-0.9655-0.8618]
+  [Iter 650/1000] Best: 12296.5271 | Alpha: 0.1710
+      [Iter 700] Action stats: mean=-0.2030±0.6523 [-0.9664-0.8006]
+      [Iter 700] Fitness: current=12239.3370, best=12239.3370, diversity=1.751768
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12239.3370 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=0.1549±0.8496 [-0.9377-0.9747]
+      [Iter 700] Fitness: current=12353.9358, best=12353.9358, diversity=1.500637
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12353.9358 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=-0.1904±0.4154 [-0.9525-0.2409]
+      [Iter 700] Fitness: current=12310.4747, best=12310.4747, diversity=3.596788
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12310.4747 | Alpha: 0.1685
+      [Iter 700] Action stats: mean=-0.0631±0.5228 [-0.5575-0.9531]
+      [Iter 700] Fitness: current=12564.6738, best=12564.6738, diversity=0.615627
+      [Iter 700] Reward: -1.0000
+      [Iter 700] Action stats: mean=-0.0420±0.6460 [-0.9523-0.9231]
+  [Iter 700/1000] Best: 12564.6738 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=-0.0547±0.6128 [-0.7503-0.7579]
+      [Iter 700] Action stats: mean=-0.1487±0.6774 [-0.9310-0.8555]
+      [Iter 700] Fitness: current=12305.4274, best=12305.4274, diversity=1.491145
+      [Iter 700] Reward: 1.0000
+      [Iter 700] Fitness: current=12504.7046, best=12504.7046, diversity=2.983429
+      [Iter 700] Reward: 1.0000
+      [Iter 700] Fitness: current=12592.3422, best=12592.3422, diversity=0.667689
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12592.3422 | Alpha: 0.1684
+  [Iter 700/1000] Best: 12305.4274 | Alpha: 0.1685
+  [Iter 700/1000] Best: 12504.7046 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=0.0699±0.5313 [-0.5436-0.9136]
+      [Iter 700] Fitness: current=12382.2773, best=12382.2773, diversity=0.994443
+      [Iter 700] Reward: -1.0000
+  [Iter 700/1000] Best: 12382.2773 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=0.1671±0.6383 [-0.9404-0.9845]
+      [Iter 700] Action stats: mean=-0.3596±0.5048 [-0.9032-0.3653]
+      [Iter 700] Fitness: current=12223.5581, best=12223.5581, diversity=1.879544
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12223.5581 | Alpha: 0.1684
+      [Iter 700] Fitness: current=12585.6635, best=12585.6635, diversity=3.036785
+      [Iter 700] Reward: -1.0000
+  [Iter 700/1000] Best: 12585.6635 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=0.0063±0.4731 [-0.6612-0.9001]
+      [Iter 700] Fitness: current=12176.6471, best=12176.6471, diversity=1.687907
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12176.6471 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=-0.3703±0.5831 [-0.9403-0.7678]
+      [Iter 700] Fitness: current=12656.2795, best=12656.2795, diversity=0.109614
+      [Iter 700] Reward: -1.0000
+  [Iter 700/1000] Best: 12656.2795 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=-0.0536±0.5282 [-0.8462-0.8598]
+      [Iter 700] Fitness: current=12321.9169, best=12321.9169, diversity=3.458663
+      [Iter 700] Reward: 1.0000
+  [Iter 700/1000] Best: 12321.9169 | Alpha: 0.1684
+      [Iter 700] Action stats: mean=0.1309±0.7909 [-0.9701-0.8985]
+      [Iter 700] Fitness: current=12296.5212, best=12296.5212, diversity=2.128354
+      [Iter 700] Reward: -1.0000
+  [Iter 700/1000] Best: 12296.5212 | Alpha: 0.1684
+      [Iter 750] Action stats: mean=-0.2301±0.6769 [-0.9423-0.9754]
+  [Iter 750/1000] Best: 12239.0806 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=0.3200±0.6710 [-0.8831-0.9250]
+  [Iter 750/1000] Best: 12353.2029 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.0857±0.8033 [-0.9057-0.8786]
+      [Iter 750] Action stats: mean=0.1293±0.5111 [-0.9411-0.7581]
+  [Iter 750/1000] Best: 12305.4164 | Alpha: 0.1661
+      [Iter 750] Action stats: mean=-0.3056±0.5872 [-0.9769-0.7772]
+  [Iter 750/1000] Best: 12564.6680 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.0063±0.6507 [-0.9776-0.8324]
+  [Iter 750/1000] Best: 12304.5406 | Alpha: 0.1660
+      [Iter 750] Action stats: mean=-0.1406±0.7825 [-0.9668-0.8952]
+  [Iter 750/1000] Best: 12504.2695 | Alpha: 0.1659
+  [Iter 750/1000] Best: 12592.3422 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.1699±0.6697 [-0.9370-0.8521]
+  [Iter 750/1000] Best: 12381.9734 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.1043±0.5398 [-0.7739-0.6837]
+  [Iter 750/1000] Best: 12581.2569 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.1718±0.5744 [-0.8018-0.7287]
+      [Iter 750] Action stats: mean=-0.0210±0.6857 [-0.9388-0.9356]
+      [Iter 750] Action stats: mean=-0.4658±0.6607 [-0.9421-0.7245]
+  [Iter 750/1000] Best: 12223.5488 | Alpha: 0.1659
+  [Iter 750/1000] Best: 12176.6448 | Alpha: 0.1659
+  [Iter 750/1000] Best: 12656.0062 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.0214±0.6435 [-0.8162-0.9216]
+  [Iter 750/1000] Best: 12319.5890 | Alpha: 0.1659
+      [Iter 750] Action stats: mean=-0.0082±0.6365 [-0.8690-0.8687]
+  [Iter 750/1000] Best: 12296.4655 | Alpha: 0.1659
+      [Iter 800] Action stats: mean=-0.4149±0.4778 [-0.9949-0.2103]
+      [Iter 800] Fitness: current=12233.2710, best=12233.2710, diversity=0.770866
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12233.2710 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=-0.2808±0.6350 [-0.9514-0.8031]
+      [Iter 800] Fitness: current=12352.8420, best=12352.8420, diversity=0.897742
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12352.8420 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=0.0311±0.5270 [-0.8487-0.6421]
+      [Iter 800] Fitness: current=12305.4162, best=12305.4162, diversity=1.114321
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12305.4162 | Alpha: 0.1637
+      [Iter 800] Action stats: mean=-0.2318±0.5770 [-0.7070-0.7392]
+      [Iter 800] Fitness: current=12564.6232, best=12564.6232, diversity=0.544418
+      [Iter 800] Reward: 1.0000
+      [Iter 800] Action stats: mean=0.3109±0.5807 [-0.6197-0.8772]
+      [Iter 800] Fitness: current=12504.1515, best=12504.1515, diversity=3.550966
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12504.1515 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=0.2257±0.6002 [-0.7805-0.8328]
+      [Iter 800] Fitness: current=12303.5554, best=12303.5554, diversity=3.259163
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12303.5554 | Alpha: 0.1635
+  [Iter 800/1000] Best: 12564.6232 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=0.2215±0.6275 [-0.9062-0.9796]
+      [Iter 800] Fitness: current=12381.9519, best=12381.9519, diversity=1.201756
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12381.9519 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=-0.3199±0.5377 [-0.8797-0.5880]
+      [Iter 800] Fitness: current=12592.3420, best=12592.3420, diversity=0.109066
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12592.3420 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=-0.0168±0.6090 [-0.8720-0.8889]
+      [Iter 800] Action stats: mean=-0.1781±0.5079 [-0.8927-0.4925]
+      [Iter 800] Fitness: current=12176.6448, best=12176.6448, diversity=1.419500
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12176.6448 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=0.2030±0.8506 [-0.9723-0.9858]
+      [Iter 800] Action stats: mean=-0.0983±0.6124 [-0.9286-0.8034]
+      [Iter 800] Fitness: current=12578.0275, best=12578.0275, diversity=1.891067
+      [Iter 800] Reward: 1.0000
+  [Iter 800/1000] Best: 12578.0275 | Alpha: 0.1634
+      [Iter 800] Fitness: current=12654.7448, best=12654.7448, diversity=0.137412
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12654.7448 | Alpha: 0.1634
+      [Iter 800] Fitness: current=12223.5487, best=12223.5487, diversity=0.562330
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12223.5487 | Alpha: 0.1635
+      [Iter 800] Action stats: mean=0.0050±0.5135 [-0.6041-0.9090]
+      [Iter 800] Fitness: current=12317.5362, best=12317.5362, diversity=2.537986
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12317.5362 | Alpha: 0.1634
+      [Iter 800] Action stats: mean=0.1586±0.6111 [-0.7834-0.9278]
+      [Iter 800] Fitness: current=12296.3877, best=12296.3877, diversity=1.548872
+      [Iter 800] Reward: -1.0000
+  [Iter 800/1000] Best: 12296.3877 | Alpha: 0.1635
+      [Iter 850] Action stats: mean=-0.2927±0.5424 [-0.9589-0.5184]
+  [Iter 850/1000] Best: 12233.0235 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.2478±0.6373 [-0.4687-0.9978]
+  [Iter 850/1000] Best: 12352.1237 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=-0.3311±0.5054 [-0.9424-0.4931]
+      [Iter 850] Action stats: mean=0.1515±0.6217 [-0.8094-0.9545]
+  [Iter 850/1000] Best: 12504.1425 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.4518±0.3105 [0.0271-0.8654]
+  [Iter 850/1000] Best: 12305.4162 | Alpha: 0.1612
+      [Iter 850] Action stats: mean=-0.3077±0.7622 [-0.9869-0.8952]
+  [Iter 850/1000] Best: 12303.4170 | Alpha: 0.1612
+  [Iter 850/1000] Best: 12564.5704 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=-0.2412±0.6484 [-0.9249-0.6059]
+  [Iter 850/1000] Best: 12381.9074 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.0307±0.7939 [-0.9412-0.8980]
+  [Iter 850/1000] Best: 12592.3420 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.0356±0.4999 [-0.9035-0.6255]
+  [Iter 850/1000] Best: 12576.7416 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=-0.0878±0.3447 [-0.6416-0.3555]
+      [Iter 850] Action stats: mean=0.0832±0.6581 [-0.9247-0.9572]
+      [Iter 850] Action stats: mean=-0.0883±0.5710 [-0.9254-0.5278]
+  [Iter 850/1000] Best: 12176.6448 | Alpha: 0.1610
+  [Iter 850/1000] Best: 12653.9171 | Alpha: 0.1611
+  [Iter 850/1000] Best: 12223.5487 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.4298±0.3456 [-0.0843-0.8183]
+  [Iter 850/1000] Best: 12317.2151 | Alpha: 0.1610
+      [Iter 850] Action stats: mean=0.3517±0.4543 [-0.3028-0.9500]
+  [Iter 850/1000] Best: 12296.3773 | Alpha: 0.1610
+      [Iter 900] Action stats: mean=0.0197±0.6421 [-0.9790-0.9711]
+      [Iter 900] Action stats: mean=-0.3435±0.5993 [-0.9100-0.6823]
+      [Iter 900] Fitness: current=12352.0045, best=12352.0045, diversity=0.928266
+      [Iter 900] Reward: -1.0000
+  [Iter 900/1000] Best: 12352.0045 | Alpha: 0.1586
+      [Iter 900] Fitness: current=12232.6986, best=12232.6986, diversity=1.160367
+      [Iter 900] Reward: 1.0000
+      [Iter 900] Action stats: mean=-0.1306±0.5680 [-0.8267-0.7440]
+  [Iter 900/1000] Best: 12232.6986 | Alpha: 0.1586
+      [Iter 900] Fitness: current=12305.4162, best=12305.4162, diversity=0.619322
+      [Iter 900] Reward: -1.0000
+  [Iter 900/1000] Best: 12305.4162 | Alpha: 0.1590
+      [Iter 900] Action stats: mean=-0.2754±0.5800 [-0.9165-0.5655]
+      [Iter 900] Fitness: current=12564.5688, best=12564.5688, diversity=0.015914
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12564.5688 | Alpha: 0.1586
+      [Iter 900] Action stats: mean=0.0243±0.5629 [-0.8826-0.8365]
+      [Iter 900] Fitness: current=12303.2031, best=12303.2031, diversity=2.251839
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12303.2031 | Alpha: 0.1592
+      [Iter 900] Action stats: mean=0.2292±0.5036 [-0.5538-0.9179]
+      [Iter 900] Action stats: mean=-0.3485±0.6356 [-0.9697-0.8924]
+      [Iter 900] Action stats: mean=-0.1698±0.5265 [-0.7509-0.8296]
+      [Iter 900] Fitness: current=12359.1717, best=12359.1717, diversity=1.255026
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12359.1717 | Alpha: 0.1586
+      [Iter 900] Fitness: current=12504.1408, best=12504.1408, diversity=1.787590
+      [Iter 900] Reward: 1.0000
+      [Iter 900] Fitness: current=12592.3420, best=12592.3420, diversity=0.075313
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12592.3420 | Alpha: 0.1588
+      [Iter 900] Action stats: mean=0.2469±0.5751 [-0.7786-0.8458]
+      [Iter 900] Fitness: current=12576.4407, best=12576.4407, diversity=1.386411
+      [Iter 900] Reward: -1.0000
+  [Iter 900/1000] Best: 12504.1408 | Alpha: 0.1586
+  [Iter 900/1000] Best: 12576.4407 | Alpha: 0.1586
+      [Iter 900] Action stats: mean=-0.0369±0.7000 [-0.9325-0.9647]
+      [Iter 900] Action stats: mean=-0.1403±0.4288 [-0.6460-0.7282]
+      [Iter 900] Action stats: mean=-0.0399±0.5142 [-0.5408-0.9845]
+      [Iter 900] Fitness: current=12652.9355, best=12652.9355, diversity=0.274751
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12652.9355 | Alpha: 0.1590
+      [Iter 900] Fitness: current=12223.5487, best=12223.5487, diversity=0.301053
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12223.5487 | Alpha: 0.1587
+      [Iter 900] Fitness: current=12176.6418, best=12176.6418, diversity=0.593598
+      [Iter 900] Reward: -1.0000
+  [Iter 900/1000] Best: 12176.6418 | Alpha: 0.1586
+      [Iter 900] Action stats: mean=0.0689±0.7836 [-0.9364-0.9764]
+      [Iter 900] Fitness: current=12317.1879, best=12317.1879, diversity=1.980651
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12317.1879 | Alpha: 0.1586
+      [Iter 900] Action stats: mean=-0.0410±0.5254 [-0.9145-0.8734]
+      [Iter 900] Fitness: current=12296.3090, best=12296.3090, diversity=1.142841
+      [Iter 900] Reward: 1.0000
+  [Iter 900/1000] Best: 12296.3090 | Alpha: 0.1586
+      [Iter 950] Action stats: mean=-0.2620±0.8018 [-0.9976-0.9901]
+  [Iter 950/1000] Best: 12232.6829 | Alpha: 0.1562
+      [Iter 950] Action stats: mean=-0.0088±0.6332 [-0.8225-0.9233]
+  [Iter 950/1000] Best: 12351.6501 | Alpha: 0.1562
+      [Iter 950] Action stats: mean=-0.1285±0.7033 [-0.9631-0.9026]
+  [Iter 950/1000] Best: 12305.4162 | Alpha: 0.1568
+      [Iter 950] Action stats: mean=-0.2880±0.6809 [-0.8813-0.8601]
+      [Iter 950] Action stats: mean=-0.2309±0.5201 [-0.8212-0.8057]
+  [Iter 950/1000] Best: 12358.1789 | Alpha: 0.1563
+      [Iter 950] Action stats: mean=-0.0454±0.7167 [-0.9385-0.9760]
+  [Iter 950/1000] Best: 12564.5683 | Alpha: 0.1562
+      [Iter 950] Action stats: mean=0.0637±0.5332 [-0.7050-0.7481]
+  [Iter 950/1000] Best: 12504.1407 | Alpha: 0.1562
+  [Iter 950/1000] Best: 12303.1713 | Alpha: 0.1574
+      [Iter 950] Action stats: mean=-0.0061±0.5849 [-0.9465-0.8601]
+  [Iter 950/1000] Best: 12575.8088 | Alpha: 0.1564
+      [Iter 950] Action stats: mean=0.0918±0.6667 [-0.6926-0.9079]
+      [Iter 950] Action stats: mean=-0.2169±0.7214 [-0.8547-0.9892]
+      [Iter 950] Action stats: mean=0.0492±0.6244 [-0.6981-0.8472]
+      [Iter 950] Action stats: mean=-0.2731±0.6685 [-0.9571-0.7786]
+  [Iter 950/1000] Best: 12592.3420 | Alpha: 0.1567
+  [Iter 950/1000] Best: 12223.5487 | Alpha: 0.1564
+  [Iter 950/1000] Best: 12176.6418 | Alpha: 0.1562
+  [Iter 950/1000] Best: 12652.8639 | Alpha: 0.1568
+      [Iter 950] Action stats: mean=0.2328±0.7078 [-0.7985-0.9679]
+      [Iter 950] Action stats: mean=0.3156±0.6348 [-0.9402-0.9487]
+  [Iter 950/1000] Best: 12317.1862 | Alpha: 0.1565
+  [Iter 950/1000] Best: 12295.8655 | Alpha: 0.1563
+      [Iter 1000] Action stats: mean=0.0164±0.6610 [-0.9197-0.9472]
+      [Iter 1000] Fitness: current=12232.6829, best=12232.6829, diversity=0.641743
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12232.6829 | Alpha: 0.1539
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12232.6829
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 201.5488 seconds
+Path length: 301.4325 units
+Waypoints: 7
+Best fitness: 12232.6829
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Action stats: mean=-0.1290±0.6478 [-0.8967-0.9305]
+      [Iter 1000] Fitness: current=12351.6436, best=12351.6436, diversity=0.813856
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12351.6436 | Alpha: 0.1542
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12351.6436
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.0326 seconds
+Path length: 308.2722 units
+Waypoints: 7
+Best fitness: 12351.6436
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Action stats: mean=0.2549±0.6963 [-0.8651-0.9826]
+      [Iter 1000] Fitness: current=12305.4162, best=12305.4162, diversity=1.309995
+      [Iter 1000] Reward: -1.0000
+  [Iter 1000/1000] Best: 12305.4162 | Alpha: 0.1552
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12305.4162
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.3972 seconds
+Path length: 295.1284 units
+Waypoints: 7
+Best fitness: 12305.4162
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Action stats: mean=-0.6039±0.4219 [-0.9900-0.2863]
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Action stats: mean=-0.0859±0.6659 [-0.9966-0.9127]
+      [Iter 1000] Fitness: current=12302.8229, best=12302.8229, diversity=1.978573
+      [Iter 1000] Reward: 1.0000
+      [Iter 1000] Action stats: mean=-0.2941±0.5944 [-0.9702-0.6751]
+      [Iter 1000] Fitness: current=12564.5683, best=12564.5683, diversity=0.013211
+      [Iter 1000] Reward: 1.0000
+      [Iter 1000] Action stats: mean=-0.0240±0.5291 [-0.9466-0.7357]
+  [Iter 1000/1000] Best: 12302.8229 | Alpha: 0.1556
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12302.8229
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.8380 seconds
+Path length: 289.3573 units
+Waypoints: 7
+Best fitness: 12302.8229
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Fitness: current=12358.1678, best=12358.1678, diversity=0.497880
+      [Iter 1000] Reward: -1.0000
+  [Iter 1000/1000] Best: 12564.5683 | Alpha: 0.1539
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12564.5683
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.6782 seconds
+Path length: 294.3178 units
+Waypoints: 7
+Best fitness: 12564.5683
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+  [Iter 1000/1000] Best: 12358.1678 | Alpha: 0.1540
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12358.1678
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.8344 seconds
+Path length: 294.1041 units
+Waypoints: 7
+Best fitness: 12358.1678
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Action stats: mean=-0.3806±0.6254 [-0.9258-0.9908]
+      [Iter 1000] Fitness: current=12504.1407, best=12504.1407, diversity=1.323041
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12504.1407 | Alpha: 0.1539
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12504.1407
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 202.9569 seconds
+Path length: 305.3116 units
+Waypoints: 7
+Best fitness: 12504.1407
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Action stats: mean=-0.1701±0.5747 [-0.8191-0.8826]
+      [Iter 1000] Fitness: current=12575.4667, best=12575.4667, diversity=0.618795
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12575.4667 | Alpha: 0.1545
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12575.4667
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 203.3556 seconds
+Path length: 292.1604 units
+Waypoints: 7
+Best fitness: 12575.4667
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Fitness: current=12223.5487, best=12223.5487, diversity=0.108542
+      [Iter 1000] Reward: -1.0000
+  [Iter 1000/1000] Best: 12223.5487 | Alpha: 0.1541
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12223.5487
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 203.4568 seconds
+Path length: 303.8187 units
+Waypoints: 7
+Best fitness: 12223.5487
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Action stats: mean=0.1854±0.7716 [-0.8921-0.9750]
+Number of Initial feasible particles: 0/100
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Fitness: current=12175.3766, best=12175.3766, diversity=0.637327
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12175.3766 | Alpha: 0.1540
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12175.3766
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 203.6689 seconds
+Path length: 296.3353 units
+Waypoints: 7
+Best fitness: 12175.3766
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Action stats: mean=-0.0826±0.7711 [-0.9493-0.9021]
+      [Iter 1000] Action stats: mean=-0.0547±0.6248 [-0.8628-0.6249]
+      [Iter 1000] Fitness: current=12592.3420, best=12592.3420, diversity=0.151000
+      [Iter 1000] Reward: -1.0000
+  [Iter 1000/1000] Best: 12592.3420 | Alpha: 0.1545
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12592.3420
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 203.9187 seconds
+Path length: 293.7444 units
+Waypoints: 7
+Best fitness: 12592.3420
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+      [Iter 1000] Fitness: current=12652.8581, best=12652.8581, diversity=0.117462
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12652.8581 | Alpha: 0.1546
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12652.8581
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 203.8851 seconds
+Path length: 290.2098 units
+Waypoints: 7
+Best fitness: 12652.8581
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Action stats: mean=-0.0304±0.5814 [-0.7475-0.7905]
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Fitness: current=12317.1726, best=12317.1726, diversity=1.051526
+      [Iter 1000] Reward: -1.0000
+  [Iter 1000/1000] Best: 12317.1726 | Alpha: 0.1547
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12317.1726
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 204.3072 seconds
+Path length: 292.7382 units
+Waypoints: 7
+Best fitness: 12317.1726
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+      [Iter 1000] Action stats: mean=-0.0021±0.6999 [-0.8328-0.8772]
+Number of Initial feasible particles: 0/100
+Number of Initial feasible particles: 0/100
+      [Iter 1000] Fitness: current=12295.3793, best=12295.3793, diversity=0.654751
+      [Iter 1000] Reward: 1.0000
+  [Iter 1000/1000] Best: 12295.3793 | Alpha: 0.1540
+
+╔════════════════════════════════════════════════════════════╗
+║              RRSACPSO TRAINING COMPLETE                   ║
+╚════════════════════════════════════════════════════════════╝
+  Mode:              online
+  Episodes:          1
+  Iterations/Ep:     1000
+  Population Size:   100
+  Best Fitness:      12295.3793
+  Path Length:       5 waypoints
+
+
+========== Planning Complete ==========
+Algorithm: RRSACPSO
+Execution time: 205.0454 seconds
+Path length: 294.4573 units
+Waypoints: 7
+Best fitness: 12295.3793
+========================================
+
+Number of Initial feasible particles: 0/100
+
+========== Direct Global Planning ==========
+Algorithm: PSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting Traditional PSO path planning with tracking...
+Number of Initial feasible particles: 0/100
+Traditional PSO iteration: 50/1000 - Best fitness: 12442.0739
+Traditional PSO iteration: 50/1000 - Best fitness: 12796.7561
+Traditional PSO iteration: 50/1000 - Best fitness: 13368.0357
+Traditional PSO iteration: 50/1000 - Best fitness: 12741.8069
+Traditional PSO iteration: 50/1000 - Best fitness: 13016.8831
+Traditional PSO iteration: 50/1000 - Best fitness: 13121.9205
+Traditional PSO iteration: 50/1000 - Best fitness: 12780.6596
+Traditional PSO iteration: 50/1000 - Best fitness: 13163.8032
+Traditional PSO iteration: 50/1000 - Best fitness: 12764.5532
+Traditional PSO iteration: 50/1000 - Best fitness: 12799.3962
+Traditional PSO iteration: 50/1000 - Best fitness: 12634.7962
+Traditional PSO iteration: 50/1000 - Best fitness: 13179.6394
+Traditional PSO iteration: 50/1000 - Best fitness: 12659.8742
+Traditional PSO iteration: 50/1000 - Best fitness: 13289.7985
+Traditional PSO iteration: 100/1000 - Best fitness: 12685.0152
+Traditional PSO iteration: 100/1000 - Best fitness: 12547.4433
+Traditional PSO iteration: 100/1000 - Best fitness: 12362.9865
+Traditional PSO iteration: 100/1000 - Best fitness: 12340.4309
+Traditional PSO iteration: 100/1000 - Best fitness: 12557.6766
+Traditional PSO iteration: 100/1000 - Best fitness: 12329.1447
+Traditional PSO iteration: 100/1000 - Best fitness: 13006.4168
+Traditional PSO iteration: 100/1000 - Best fitness: 12703.8462
+Traditional PSO iteration: 100/1000 - Best fitness: 12854.4954
+Traditional PSO iteration: 100/1000 - Best fitness: 12487.5109
+Traditional PSO iteration: 100/1000 - Best fitness: 12444.3072
+Traditional PSO iteration: 100/1000 - Best fitness: 12405.0376
+Traditional PSO iteration: 100/1000 - Best fitness: 12698.5895
+Traditional PSO iteration: 150/1000 - Best fitness: 12574.0837
+Traditional PSO iteration: 100/1000 - Best fitness: 12725.4224
+Traditional PSO iteration: 150/1000 - Best fitness: 12497.1541
+Traditional PSO iteration: 150/1000 - Best fitness: 12291.874
+Traditional PSO iteration: 150/1000 - Best fitness: 12376.4145
+Traditional PSO iteration: 150/1000 - Best fitness: 12263.181
+Traditional PSO iteration: 150/1000 - Best fitness: 12547.4146
+Traditional PSO iteration: 200/1000 - Best fitness: 12552.0025
+Traditional PSO iteration: 150/1000 - Best fitness: 12323.9068
+Traditional PSO iteration: 150/1000 - Best fitness: 12426.4236
+Traditional PSO iteration: 150/1000 - Best fitness: 12297.309
+Traditional PSO iteration: 150/1000 - Best fitness: 12384.2598
+Traditional PSO iteration: 150/1000 - Best fitness: 12993.451
+Traditional PSO iteration: 150/1000 - Best fitness: 12281.9979
+Traditional PSO iteration: 200/1000 - Best fitness: 12451.4716
+Traditional PSO iteration: 250/1000 - Best fitness: 12549.5135
+Traditional PSO iteration: 150/1000 - Best fitness: 12655.971
+Traditional PSO iteration: 150/1000 - Best fitness: 12675.4313
+Traditional PSO iteration: 200/1000 - Best fitness: 12250.2922
+Traditional PSO iteration: 200/1000 - Best fitness: 12322.6034
+Traditional PSO iteration: 200/1000 - Best fitness: 12270.31
+Traditional PSO iteration: 200/1000 - Best fitness: 12400.5897
+Traditional PSO iteration: 200/1000 - Best fitness: 12321.1677
+Traditional PSO iteration: 200/1000 - Best fitness: 12372.7125
+Traditional PSO iteration: 300/1000 - Best fitness: 12548.9373
+Traditional PSO iteration: 200/1000 - Best fitness: 12545.9355
+Traditional PSO iteration: 200/1000 - Best fitness: 12281.7002
+Traditional PSO iteration: 200/1000 - Best fitness: 12271.3588
+Traditional PSO iteration: 200/1000 - Best fitness: 12986.4284
+Traditional PSO iteration: 200/1000 - Best fitness: 12666.567
+Traditional PSO iteration: 250/1000 - Best fitness: 12442.1363
+Traditional PSO iteration: 250/1000 - Best fitness: 12244.3015
+Traditional PSO iteration: 350/1000 - Best fitness: 12548.8362
+Traditional PSO iteration: 250/1000 - Best fitness: 12394.2326
+Traditional PSO iteration: 250/1000 - Best fitness: 12306.9294
+Traditional PSO iteration: 250/1000 - Best fitness: 12258.7561
+Traditional PSO iteration: 250/1000 - Best fitness: 12665.4931
+Traditional PSO iteration: 250/1000 - Best fitness: 12368.034
+Traditional PSO iteration: 200/1000 - Best fitness: 12624.8371
+Traditional PSO iteration: 250/1000 - Best fitness: 12320.9983
+Traditional PSO iteration: 400/1000 - Best fitness: 12548.8176
+Traditional PSO iteration: 300/1000 - Best fitness: 12665.1815
+Traditional PSO iteration: 250/1000 - Best fitness: 12545.6249
+Traditional PSO iteration: 300/1000 - Best fitness: 12243.8907
+Traditional PSO iteration: 250/1000 - Best fitness: 12268.7945
+Traditional PSO iteration: 300/1000 - Best fitness: 12256.119
+Traditional PSO iteration: 250/1000 - Best fitness: 12279.316
+Traditional PSO iteration: 250/1000 - Best fitness: 12981.3349
+Traditional PSO iteration: 300/1000 - Best fitness: 12438.0624
+Traditional PSO iteration: 350/1000 - Best fitness: 12664.9808
+Traditional PSO iteration: 450/1000 - Best fitness: 12548.8144
+Traditional PSO iteration: 300/1000 - Best fitness: 12365.8282
+Traditional PSO iteration: 300/1000 - Best fitness: 12392.5823
+Traditional PSO iteration: 350/1000 - Best fitness: 12255.1427
+Traditional PSO iteration: 400/1000 - Best fitness: 12664.6948
+Traditional PSO iteration: 300/1000 - Best fitness: 12302.1114
+Traditional PSO iteration: 350/1000 - Best fitness: 12243.7284
+Traditional PSO iteration: 300/1000 - Best fitness: 12320.6769
+Traditional PSO iteration: 500/1000 - Best fitness: 12548.8105
+Traditional PSO iteration: 400/1000 - Best fitness: 12254.6011
+Traditional PSO iteration: 450/1000 - Best fitness: 12664.5316
+Traditional PSO iteration: 250/1000 - Best fitness: 12620.4803
+Traditional PSO iteration: 300/1000 - Best fitness: 12267.5396
+Traditional PSO iteration: 300/1000 - Best fitness: 12980.8397
+Traditional PSO iteration: 300/1000 - Best fitness: 12545.5585
+Traditional PSO iteration: 450/1000 - Best fitness: 12254.4187
+Traditional PSO iteration: 350/1000 - Best fitness: 12391.0461
+Traditional PSO iteration: 350/1000 - Best fitness: 12365.0694
+Traditional PSO iteration: 350/1000 - Best fitness: 12437.7234
+Traditional PSO iteration: 500/1000 - Best fitness: 12664.3199
+Traditional PSO iteration: 300/1000 - Best fitness: 12278.4689
+Traditional PSO iteration: 550/1000 - Best fitness: 12548.8103
+Traditional PSO iteration: 400/1000 - Best fitness: 12243.608
+Traditional PSO iteration: 500/1000 - Best fitness: 12254.3752
+Traditional PSO iteration: 550/1000 - Best fitness: 12664.1535
+Traditional PSO iteration: 350/1000 - Best fitness: 12320.6085
+Traditional PSO iteration: 350/1000 - Best fitness: 12299.4699
+Traditional PSO iteration: 550/1000 - Best fitness: 12254.3531
+Traditional PSO iteration: 600/1000 - Best fitness: 12548.5052
+Traditional PSO iteration: 600/1000 - Best fitness: 12663.9028
+Traditional PSO iteration: 400/1000 - Best fitness: 12364.7969
+Traditional PSO iteration: 400/1000 - Best fitness: 12390.738
+Traditional PSO iteration: 450/1000 - Best fitness: 12243.5927
+Traditional PSO iteration: 600/1000 - Best fitness: 12254.2826
+Traditional PSO iteration: 350/1000 - Best fitness: 12267.4235
+Traditional PSO iteration: 350/1000 - Best fitness: 12822.9736
+Traditional PSO iteration: 650/1000 - Best fitness: 12663.5089
+Traditional PSO iteration: 300/1000 - Best fitness: 12619.7108
+Traditional PSO iteration: 650/1000 - Best fitness: 12548.5001
+Traditional PSO iteration: 400/1000 - Best fitness: 12437.5498
+Traditional PSO iteration: 350/1000 - Best fitness: 12545.5492
+Traditional PSO iteration: 650/1000 - Best fitness: 12250.3852
+Traditional PSO iteration: 700/1000 - Best fitness: 12662.8447
+Traditional PSO iteration: 350/1000 - Best fitness: 12278.3483
+Traditional PSO iteration: 450/1000 - Best fitness: 12364.7379
+Traditional PSO iteration: 400/1000 - Best fitness: 12320.5968
+Traditional PSO iteration: 700/1000 - Best fitness: 12249.3626
+Traditional PSO iteration: 700/1000 - Best fitness: 12548.4995
+Traditional PSO iteration: 450/1000 - Best fitness: 12390.4835
+Traditional PSO iteration: 750/1000 - Best fitness: 12661.9523
+Traditional PSO iteration: 500/1000 - Best fitness: 12243.5853
+Traditional PSO iteration: 400/1000 - Best fitness: 12298.6145
+Traditional PSO iteration: 750/1000 - Best fitness: 12249.2125
+Traditional PSO iteration: 800/1000 - Best fitness: 12661.5172
+Traditional PSO iteration: 400/1000 - Best fitness: 12267.1707
+Traditional PSO iteration: 500/1000 - Best fitness: 12364.6297
+Traditional PSO iteration: 750/1000 - Best fitness: 12548.4993
+Traditional PSO iteration: 800/1000 - Best fitness: 12249.1569
+Traditional PSO iteration: 450/1000 - Best fitness: 12437.5356
+Traditional PSO iteration: 850/1000 - Best fitness: 12661.2906
+Traditional PSO iteration: 400/1000 - Best fitness: 12668.4401
+Traditional PSO iteration: 500/1000 - Best fitness: 12390.433
+Traditional PSO iteration: 350/1000 - Best fitness: 12619.177
+Traditional PSO iteration: 400/1000 - Best fitness: 12545.545
+Traditional PSO iteration: 550/1000 - Best fitness: 12242.7095
+Traditional PSO iteration: 850/1000 - Best fitness: 12249.1022
+Traditional PSO iteration: 450/1000 - Best fitness: 12320.593
+Traditional PSO iteration: 900/1000 - Best fitness: 12660.965
+Traditional PSO iteration: 400/1000 - Best fitness: 12278.3081
+Traditional PSO iteration: 800/1000 - Best fitness: 12548.4993
+Traditional PSO iteration: 550/1000 - Best fitness: 12364.6153
+Traditional PSO iteration: 900/1000 - Best fitness: 12249.0328
+Traditional PSO iteration: 950/1000 - Best fitness: 12660.9247
+Traditional PSO iteration: 450/1000 - Best fitness: 12298.3712
+Traditional PSO iteration: 550/1000 - Best fitness: 12390.3344
+Traditional PSO iteration: 950/1000 - Best fitness: 12249.0265
+Traditional PSO iteration: 850/1000 - Best fitness: 12548.4993
+Traditional PSO iteration: 600/1000 - Best fitness: 12241.6876
+Traditional PSO iteration: 1000/1000 - Best fitness: 12660.9121
+Traditional PSO completed with final fitness: 12660.9121
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 302.7142 seconds
+Path length: 291.7891 units
+Waypoints: 7
+Best fitness: 12660.9121
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 39036.1221 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 450/1000 - Best fitness: 12266.6734
+Traditional PSO iteration: 500/1000 - Best fitness: 12437.5294
+Traditional PSO iteration: 1000/1000 - Best fitness: 12249.0245
+Traditional PSO completed with final fitness: 12249.0245
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 311.0449 seconds
+Path length: 299.1765 units
+Waypoints: 7
+Best fitness: 12249.0245
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 35504.6174 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 600/1000 - Best fitness: 12334.2206
+Traditional PSO iteration: 450/1000 - Best fitness: 12654.6799
+Traditional PSO iteration: 500/1000 - Best fitness: 12320.5889
+Traditional PSO iteration: 450/1000 - Best fitness: 12545.5428
+Traditional PSO iteration: 900/1000 - Best fitness: 12548.4991
+Traditional PSO iteration: 400/1000 - Best fitness: 12618.7043
+Traditional PSO iteration: 600/1000 - Best fitness: 12389.4861
+Traditional PSO iteration: 450/1000 - Best fitness: 12278.3022
+Traditional PSO iteration: 650/1000 - Best fitness: 12241.6065
+PSO-LDIW iteration: 50/1000 - Best fitness: 13322.7674 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 12701.5816 - w=0.875, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12548.4991
+Traditional PSO iteration: 500/1000 - Best fitness: 12298.3164
+Traditional PSO iteration: 650/1000 - Best fitness: 12273.7639
+Traditional PSO iteration: 500/1000 - Best fitness: 12266.5792
+Traditional PSO iteration: 550/1000 - Best fitness: 12437.5185
+Traditional PSO iteration: 650/1000 - Best fitness: 12389.4486
+Traditional PSO iteration: 500/1000 - Best fitness: 12651.2303
+Traditional PSO iteration: 700/1000 - Best fitness: 12241.5935
+Traditional PSO iteration: 1000/1000 - Best fitness: 12548.4991
+Traditional PSO completed with final fitness: 12548.4991
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 351.3838 seconds
+Path length: 420.3548 units
+Waypoints: 7
+Best fitness: 12548.4991
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 44772.8624 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 550/1000 - Best fitness: 12320.587
+PSO-LDIW iteration: 100/1000 - Best fitness: 12554.1373 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 13083.883 - w=0.85, c1=1.5, c2=1.5
+Traditional PSO iteration: 500/1000 - Best fitness: 12545.5421
+Traditional PSO iteration: 450/1000 - Best fitness: 12617.8067
+Traditional PSO iteration: 500/1000 - Best fitness: 12278.3018
+Traditional PSO iteration: 700/1000 - Best fitness: 12260.1702
+Traditional PSO iteration: 700/1000 - Best fitness: 12389.4404
+PSO-LDIW iteration: 50/1000 - Best fitness: 13369.2108 - w=0.875, c1=1.5, c2=1.5
+Traditional PSO iteration: 550/1000 - Best fitness: 12650.916
+Traditional PSO iteration: 550/1000 - Best fitness: 12298.3051
+Traditional PSO iteration: 750/1000 - Best fitness: 12241.5645
+PSO-LDIW iteration: 150/1000 - Best fitness: 12475.799 - w=0.825, c1=1.5, c2=1.5
+Traditional PSO iteration: 550/1000 - Best fitness: 12266.5429
+PSO-LDIW iteration: 150/1000 - Best fitness: 12866.6571 - w=0.825, c1=1.5, c2=1.5
+Traditional PSO iteration: 600/1000 - Best fitness: 12437.5171
+Traditional PSO iteration: 600/1000 - Best fitness: 12320.5869
+Traditional PSO iteration: 750/1000 - Best fitness: 12389.4323
+Traditional PSO iteration: 600/1000 - Best fitness: 12629.3642
+PSO-LDIW iteration: 200/1000 - Best fitness: 12456.1222 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 13292.9386 - w=0.85, c1=1.5, c2=1.5
+Traditional PSO iteration: 750/1000 - Best fitness: 12236.5946
+Traditional PSO iteration: 550/1000 - Best fitness: 12545.542
+Traditional PSO iteration: 800/1000 - Best fitness: 12241.5139
+Traditional PSO iteration: 500/1000 - Best fitness: 12617.7489
+Traditional PSO iteration: 650/1000 - Best fitness: 12595.7512
+PSO-LDIW iteration: 200/1000 - Best fitness: 12627.8215 - w=0.8, c1=1.5, c2=1.5
+Traditional PSO iteration: 600/1000 - Best fitness: 12298.3023
+Traditional PSO iteration: 550/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 250/1000 - Best fitness: 12357.057 - w=0.775, c1=1.5, c2=1.5
+Traditional PSO iteration: 800/1000 - Best fitness: 12389.4148
+Traditional PSO iteration: 600/1000 - Best fitness: 12266.4985
+Traditional PSO iteration: 650/1000 - Best fitness: 12320.5868
+Traditional PSO iteration: 650/1000 - Best fitness: 12437.5168
+Traditional PSO iteration: 700/1000 - Best fitness: 12590.5762
+Traditional PSO iteration: 850/1000 - Best fitness: 12241.499
+PSO-LDIW iteration: 150/1000 - Best fitness: 13256.6539 - w=0.825, c1=1.5, c2=1.5
+Traditional PSO iteration: 800/1000 - Best fitness: 12233.0821
+PSO-LDIW iteration: 250/1000 - Best fitness: 12550.932 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12289.4002 - w=0.75, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12389.398
+Traditional PSO iteration: 750/1000 - Best fitness: 12589.8454
+Traditional PSO iteration: 600/1000 - Best fitness: 12545.542
+Traditional PSO iteration: 550/1000 - Best fitness: 12617.6815
+Traditional PSO iteration: 900/1000 - Best fitness: 12241.464
+Traditional PSO iteration: 650/1000 - Best fitness: 12298.3016
+Traditional PSO iteration: 650/1000 - Best fitness: 12264.5485
+Traditional PSO iteration: 700/1000 - Best fitness: 12320.5868
+Traditional PSO iteration: 600/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 200/1000 - Best fitness: 13195.1533 - w=0.8, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12227.3652
+Traditional PSO iteration: 700/1000 - Best fitness: 12437.5167
+Traditional PSO iteration: 800/1000 - Best fitness: 12589.5982
+Traditional PSO iteration: 900/1000 - Best fitness: 12389.3966
+PSO-LDIW iteration: 350/1000 - Best fitness: 12266.105 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12436.5297 - w=0.75, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12241.4228
+Traditional PSO iteration: 850/1000 - Best fitness: 12589.1522
+Traditional PSO iteration: 650/1000 - Best fitness: 12545.542
+Traditional PSO iteration: 700/1000 - Best fitness: 12298.3015
+Traditional PSO iteration: 950/1000 - Best fitness: 12389.3964
+Traditional PSO iteration: 900/1000 - Best fitness: 12212.7845
+PSO-LDIW iteration: 250/1000 - Best fitness: 13108.0271 - w=0.775, c1=1.5, c2=1.5
+Traditional PSO iteration: 700/1000 - Best fitness: 12264.5273
+Traditional PSO iteration: 750/1000 - Best fitness: 12320.5868
+Traditional PSO iteration: 600/1000 - Best fitness: 12617.6627
+PSO-LDIW iteration: 350/1000 - Best fitness: 12409.2482 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12257.4504 - w=0.7, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12241.2708
+Traditional PSO completed with final fitness: 12241.2708
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 493.0447 seconds
+Path length: 288.7961 units
+Waypoints: 7
+Best fitness: 12241.2708
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 31299.6211 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 650/1000 - Best fitness: 12278.3012
+Traditional PSO iteration: 750/1000 - Best fitness: 12423.7393
+Traditional PSO iteration: 900/1000 - Best fitness: 12588.6456
+Traditional PSO iteration: 1000/1000 - Best fitness: 12389.3963
+Traditional PSO completed with final fitness: 12389.3963
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 502.7411 seconds
+Path length: 308.7503 units
+Waypoints: 7
+Best fitness: 12389.3963
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 24906.8244 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 750/1000 - Best fitness: 12298.3015
+Traditional PSO iteration: 950/1000 - Best fitness: 12205.8338
+PSO-LDIW iteration: 300/1000 - Best fitness: 12985.7764 - w=0.75, c1=1.5, c2=1.5
+Traditional PSO iteration: 800/1000 - Best fitness: 12320.5868
+PSO-LDIW iteration: 50/1000 - Best fitness: 13319.7186 - w=0.875, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12588.0856
+Traditional PSO iteration: 750/1000 - Best fitness: 12264.525
+Traditional PSO iteration: 700/1000 - Best fitness: 12545.542
+Traditional PSO iteration: 800/1000 - Best fitness: 12420.1805
+PSO-LDIW iteration: 400/1000 - Best fitness: 12329.9181 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12251.9767 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13264.6212 - w=0.875, c1=1.5, c2=1.5
+Traditional PSO iteration: 650/1000 - Best fitness: 12617.6178
+Traditional PSO iteration: 700/1000 - Best fitness: 12278.3012
+Traditional PSO iteration: 1000/1000 - Best fitness: 12196.5924
+Traditional PSO completed with final fitness: 12196.5924
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 538.3539 seconds
+Path length: 295.1252 units
+Waypoints: 7
+Best fitness: 12196.5924
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+Traditional PSO iteration: 800/1000 - Best fitness: 12298.3015
+PSO-LDIW iteration: 1/1000 - Best fitness: 21577.8221 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12586.234
+Traditional PSO completed with final fitness: 12586.234
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 539.6876 seconds
+Path length: 292.5761 units
+Waypoints: 7
+Best fitness: 12586.2340
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 34133.0906 - w=0.8995, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12883.6835 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12969.3501 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12896.4879 - w=0.725, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12407.6035
+Traditional PSO iteration: 850/1000 - Best fitness: 12320.5868
+Traditional PSO iteration: 800/1000 - Best fitness: 12264.5247
+PSO-LDIW iteration: 450/1000 - Best fitness: 12307.4975 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12245.9875 - w=0.65, c1=1.5, c2=1.5
+Traditional PSO iteration: 750/1000 - Best fitness: 12545.542
+Traditional PSO iteration: 850/1000 - Best fitness: 12298.3015
+PSO-LDIW iteration: 150/1000 - Best fitness: 12778.7815 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13418.47 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13078.9992 - w=0.875, c1=1.5, c2=1.5
+Traditional PSO iteration: 700/1000 - Best fitness: 12617.5849
+PSO-LDIW iteration: 150/1000 - Best fitness: 12721.65 - w=0.825, c1=1.5, c2=1.5
+Traditional PSO iteration: 750/1000 - Best fitness: 12278.3012
+Traditional PSO iteration: 900/1000 - Best fitness: 12403.4948
+Traditional PSO iteration: 900/1000 - Best fitness: 12320.5868
+PSO-LDIW iteration: 400/1000 - Best fitness: 12710.7665 - w=0.7, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12264.5246
+PSO-LDIW iteration: 500/1000 - Best fitness: 12266.7473 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12563.308 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12237.3712 - w=0.625, c1=1.5, c2=1.5
+Traditional PSO iteration: 900/1000 - Best fitness: 12298.3015
+Traditional PSO iteration: 800/1000 - Best fitness: 12504.9609
+PSO-LDIW iteration: 100/1000 - Best fitness: 13293.1454 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12747.8392 - w=0.85, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12320.5868
+PSO-LDIW iteration: 600/1000 - Best fitness: 12222.6413 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12467.2085 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12681.1401 - w=0.8, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12402.4019
+Traditional PSO iteration: 750/1000 - Best fitness: 12617.5303
+Traditional PSO iteration: 900/1000 - Best fitness: 12264.5246
+PSO-LDIW iteration: 550/1000 - Best fitness: 12246.6457 - w=0.625, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12298.3015
+Traditional PSO iteration: 800/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 450/1000 - Best fitness: 12657.4971 - w=0.675, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12476.9934
+PSO-LDIW iteration: 650/1000 - Best fitness: 12221.5928 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 13212.3576 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12587.373 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12244.74 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12439.5017 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12221.2752 - w=0.55, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12298.3015
+Traditional PSO completed with final fitness: 12298.3015
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 645.4808 seconds
+Path length: 298.2376 units
+Waypoints: 7
+Best fitness: 12298.3015
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+Traditional PSO iteration: 1000/1000 - Best fitness: 12320.5868
+Traditional PSO completed with final fitness: 12320.5868
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 646.2031 seconds
+Path length: 306.2709 units
+Waypoints: 7
+Best fitness: 12320.5868
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+PSO-LDIW iteration: 1/1000 - Best fitness: 14525.1534 - w=0.8995, c1=1.5, c2=1.5
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 29034.9459 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12401.2477
+Traditional PSO completed with final fitness: 12401.2477
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 648.9010 seconds
+Path length: 311.4464 units
+Waypoints: 7
+Best fitness: 12401.2477
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 31320.6272 - w=0.8995, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12264.5208
+PSO-LDIW iteration: 250/1000 - Best fitness: 12659.3867 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12220.8355 - w=0.525, c1=1.5, c2=1.5
+Traditional PSO iteration: 900/1000 - Best fitness: 12471.5157
+Traditional PSO iteration: 800/1000 - Best fitness: 12617.5174
+PSO-LDIW iteration: 650/1000 - Best fitness: 12244.0967 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 13155.3077 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12219.9684 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12531.4925 - w=0.8, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 500/1000 - Best fitness: 12645.8814 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 12942.2307 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13238.4753 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12403.7693 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12219.9329 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 12776.3044 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12241.5103 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12219.9259 - w=0.45, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12264.5143
+Traditional PSO completed with final fitness: 12264.5143
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 681.4528 seconds
+Path length: 324.6552 units
+Waypoints: 7
+Best fitness: 12264.5143
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 44132.3854 - w=0.8995, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12219.6956 - w=0.425, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12453.0638
+PSO-LDIW iteration: 250/1000 - Best fitness: 13095.1146 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12637.261 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12669.543 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12841.8529 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12241.1238 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12454.0299 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12219.6892 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 383.4503 seconds
+Path length: 297.1501 units
+Waypoints: 7
+Best fitness: 12219.6892
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 100/1000 - Best fitness: 12715.5684 - w=0.85, c1=1.5, c2=1.5
+Traditional PSO iteration: 850/1000 - Best fitness: 12617.5137
+PSO-LDIW iteration: 400/1000 - Best fitness: 12325.3866 - w=0.7, c1=1.5, c2=1.5
+Traditional PSO iteration: 900/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 550/1000 - Best fitness: 12616.8137 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13367.4589 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12240.559 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12495.4971 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12725.5563 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 13014.9697 - w=0.75, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12452.6541
+Traditional PSO completed with final fitness: 12452.6541
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 725.8877 seconds
+Path length: 286.4960 units
+Waypoints: 7
+Best fitness: 12452.6541
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 25752.6654 - w=0.8995, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12409.6798 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12240.4588 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12612.9328 - w=0.825, c1=1.5, c2=1.5
+FIPS iteration: 50/1000 - Best fitness: 13911.7508
+PSO-LDIW iteration: 350/1000 - Best fitness: 12631.4118 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12249.2579 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12371.9792 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 13089.2914 - w=0.85, c1=1.5, c2=1.5
+Traditional PSO iteration: 900/1000 - Best fitness: 12617.5117
+PSO-LDIW iteration: 50/1000 - Best fitness: 13260.5986 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12658.9881 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12600.4508 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12240.4412 - w=0.45, c1=1.5, c2=1.5
+Traditional PSO iteration: 950/1000 - Best fitness: 12278.3012
+PSO-LDIW iteration: 350/1000 - Best fitness: 12624.0247 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12345.5752 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12588.0986 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12240.4097 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13716.6398
+PSO-LDIW iteration: 100/1000 - Best fitness: 13174.1374 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12341.9704 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12528.4078 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12230.5467 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12586.9444 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12902.8092 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12615.413 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12240.4095 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 473.9729 seconds
+Path length: 287.7162 units
+Waypoints: 7
+Best fitness: 12240.4095
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+Traditional PSO iteration: 950/1000 - Best fitness: 12617.511
+PSO-LDIW iteration: 650/1000 - Best fitness: 12579.1163 - w=0.575, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12278.3012
+Traditional PSO completed with final fitness: 12278.3012
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 787.5201 seconds
+Path length: 295.9460 units
+Waypoints: 7
+Best fitness: 12278.3012
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+PSO-LDIW iteration: 400/1000 - Best fitness: 12314.96 - w=0.7, c1=1.5, c2=1.5
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 34194.2519 - w=0.8995, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12321.7056 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 13009.6 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12573.6181 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12574.2214 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12331.0215 - w=0.75, c1=1.5, c2=1.5
+FIPS iteration: 150/1000 - Best fitness: 13523.6951
+PSO-LDIW iteration: 550/1000 - Best fitness: 12211.9989 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12569.9075 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12743.3981 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12268.0118 - w=0.725, c1=1.5, c2=1.5
+FIPS iteration: 50/1000 - Best fitness: 13855.1819
+PSO-LDIW iteration: 200/1000 - Best fitness: 12745.2856 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12603.754 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12567.4531 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12311.1829 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13147.0466 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12563.667 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12575.1136 - w=0.55, c1=1.5, c2=1.5
+Traditional PSO iteration: 1000/1000 - Best fitness: 12617.511
+Traditional PSO completed with final fitness: 12617.511
+
+========== Planning Complete ==========
+Algorithm: PSO
+Execution time: 827.1169 seconds
+Path length: 309.1512 units
+Waypoints: 7
+Best fitness: 12617.5110
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: PSO_LDIW
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting PSO-LDIW (linearly decreasing inertia weight)...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 1/1000 - Best fitness: 39356.4849 - w=0.8995, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13269.2074
+PSO-LDIW iteration: 350/1000 - Best fitness: 12327.1225 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12566.3526 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12245.4696 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12564.1882 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12638.5357 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12208.7045 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12619.6053 - w=0.775, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13623.8405
+PSO-LDIW iteration: 500/1000 - Best fitness: 12302.7562 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12564.0015 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12243.2582 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 50/1000 - Best fitness: 13265.7847 - w=0.875, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12321.9444 - w=0.7, c1=1.5, c2=1.5
+FIPS iteration: 250/1000 - Best fitness: 13269.2074
+PSO-LDIW iteration: 500/1000 - Best fitness: 12600.2477 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12557.3458 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12701.7503 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12563.3846 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12574.7322 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12239.7709 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12562.8522 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12579.3874 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12496.1818 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12317.5398 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12207.9371 - w=0.575, c1=1.5, c2=1.5
+FIPS iteration: 150/1000 - Best fitness: 13444.3274
+PSO-LDIW iteration: 850/1000 - Best fitness: 12562.4127 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 100/1000 - Best fitness: 12966.4587 - w=0.85, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12299.5242 - w=0.625, c1=1.5, c2=1.5
+FIPS iteration: 300/1000 - Best fitness: 13269.2074
+PSO-LDIW iteration: 550/1000 - Best fitness: 12239.5297 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12561.6397 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12316.7597 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12554.2144 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12553.1291 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 150/1000 - Best fitness: 12521.1998 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12598.6847 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12560.7117 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12451.5383 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12239.5058 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12574.6194 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13103.9172
+FIPS iteration: 350/1000 - Best fitness: 13095.4725
+PSO-LDIW iteration: 150/1000 - Best fitness: 12838.9124 - w=0.825, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12560.5723 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 392.8917 seconds
+Path length: 289.3650 units
+Waypoints: 7
+Best fitness: 12560.5723
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 700/1000 - Best fitness: 12207.7712 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12316.6565 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12298.0273 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12542.9534 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12239.4481 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12404.9107 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12316.6465 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12553.4855 - w=0.675, c1=1.5, c2=1.5
+FIPS iteration: 250/1000 - Best fitness: 13103.9172
+PSO-LDIW iteration: 450/1000 - Best fitness: 12534.6913 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12420.5355 - w=0.7, c1=1.5, c2=1.5
+FIPS iteration: 400/1000 - Best fitness: 13011.4801
+PSO-LDIW iteration: 600/1000 - Best fitness: 12598.1937 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 200/1000 - Best fitness: 12715.9167 - w=0.8, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12239.4449 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12574.613 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 50/1000 - Best fitness: 13980.5465
+PSO-LDIW iteration: 650/1000 - Best fitness: 12295.2182 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12207.7628 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12526.8511 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12316.6395 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12239.4443 - w=0.525, c1=1.5, c2=1.5
+FIPS iteration: 300/1000 - Best fitness: 12994.037
+FIPS iteration: 450/1000 - Best fitness: 12993.6327
+PSO-LDIW iteration: 250/1000 - Best fitness: 12384.3844 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12523.0619 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 250/1000 - Best fitness: 12618.6031 - w=0.775, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12315.4892 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 500/1000 - Best fitness: 12552.1861 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12412.3252 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12295.0522 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12239.4443 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12521.0571 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12598.1524 - w=0.575, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13432.7684
+PSO-LDIW iteration: 800/1000 - Best fitness: 12207.7501 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12574.6078 - w=0.45, c1=1.5, c2=1.5
+FIPS iteration: 500/1000 - Best fitness: 12993.6327
+FIPS iteration: 350/1000 - Best fitness: 12994.037
+PSO-LDIW iteration: 750/1000 - Best fitness: 12309.782 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12519.4705 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12575.2325 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12239.4441 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 300/1000 - Best fitness: 12379.105 - w=0.75, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12295.0449 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12518.6701 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12308.9321 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 550/1000 - Best fitness: 12993.6327
+PSO-LDIW iteration: 500/1000 - Best fitness: 12409.9803 - w=0.65, c1=1.5, c2=1.5
+FIPS iteration: 400/1000 - Best fitness: 12904.5356
+PSO-LDIW iteration: 900/1000 - Best fitness: 12239.3735 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12550.8378 - w=0.625, c1=1.5, c2=1.5
+FIPS iteration: 150/1000 - Best fitness: 13432.7684
+PSO-LDIW iteration: 750/1000 - Best fitness: 12518.4219 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12597.6777 - w=0.55, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12207.7498 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 350/1000 - Best fitness: 12356.2604 - w=0.725, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12574.5963 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12308.8601 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12518.2411 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12239.3735 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12294.851 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 600/1000 - Best fitness: 12875.0186
+PSO-LDIW iteration: 350/1000 - Best fitness: 12370.5159 - w=0.725, c1=1.5, c2=1.5
+FIPS iteration: 450/1000 - Best fitness: 12884.7859
+PSO-LDIW iteration: 850/1000 - Best fitness: 12518.2284 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13387.6244
+PSO-LDIW iteration: 900/1000 - Best fitness: 12308.8574 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12239.3735 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 478.7392 seconds
+Path length: 309.4085 units
+Waypoints: 7
+Best fitness: 12239.3735
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 550/1000 - Best fitness: 12406.4136 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12266.3274 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12518.2279 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 600/1000 - Best fitness: 12550.5406 - w=0.6, c1=1.5, c2=1.5
+FIPS iteration: 650/1000 - Best fitness: 12833.7912
+FIPS iteration: 500/1000 - Best fitness: 12796.4659
+PSO-LDIW iteration: 900/1000 - Best fitness: 12207.7497 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12597.6739 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12293.8081 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12518.2277 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 400/1000 - Best fitness: 12366.3315 - w=0.7, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12308.8571 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12574.2037 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 794.4212 seconds
+Path length: 292.6185 units
+Waypoints: 7
+Best fitness: 12574.2037
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+FIPS iteration: 250/1000 - Best fitness: 13347.0333
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12518.2276 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 435.1907 seconds
+Path length: 287.5672 units
+Waypoints: 7
+Best fitness: 12518.2276
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+FIPS iteration: 700/1000 - Best fitness: 12739.7514
+PSO-LDIW iteration: 450/1000 - Best fitness: 12235.7301 - w=0.675, c1=1.5, c2=1.5
+FIPS iteration: 550/1000 - Best fitness: 12777.3164
+FIPS iteration: 50/1000 - Best fitness: 13990.8912
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12308.8571 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 523.1165 seconds
+Path length: 292.4141 units
+Waypoints: 7
+Best fitness: 12308.8571
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 600/1000 - Best fitness: 12405.8169 - w=0.6, c1=1.5, c2=1.5
+PSO-LDIW iteration: 450/1000 - Best fitness: 12366.1666 - w=0.675, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12293.7955 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12550.0986 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12207.7497 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 50/1000 - Best fitness: 13451.2825
+PSO-LDIW iteration: 500/1000 - Best fitness: 12221.2726 - w=0.65, c1=1.5, c2=1.5
+FIPS iteration: 600/1000 - Best fitness: 12777.3164
+FIPS iteration: 750/1000 - Best fitness: 12620.4166
+PSO-LDIW iteration: 800/1000 - Best fitness: 12597.5335 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 300/1000 - Best fitness: 13294.3036
+FIPS iteration: 50/1000 - Best fitness: 13869.393
+PSO-LDIW iteration: 500/1000 - Best fitness: 12366.0909 - w=0.65, c1=1.5, c2=1.5
+PSO-LDIW iteration: 550/1000 - Best fitness: 12218.696 - w=0.625, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13675.9726
+FIPS iteration: 50/1000 - Best fitness: 14051.5801
+PSO-LDIW iteration: 950/1000 - Best fitness: 12293.794 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 650/1000 - Best fitness: 12777.3164
+FIPS iteration: 800/1000 - Best fitness: 12620.4166
+PSO-LDIW iteration: 600/1000 - Best fitness: 12218.3867 - w=0.6, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13296.0024
+PSO-LDIW iteration: 550/1000 - Best fitness: 12366.0887 - w=0.625, c1=1.5, c2=1.5
+PSO-LDIW iteration: 650/1000 - Best fitness: 12405.6265 - w=0.575, c1=1.5, c2=1.5
+FIPS iteration: 350/1000 - Best fitness: 13171.9754
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12207.7497 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 728.6550 seconds
+Path length: 285.6532 units
+Waypoints: 7
+Best fitness: 12207.7497
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+PSO-LDIW iteration: 700/1000 - Best fitness: 12549.6708 - w=0.55, c1=1.5, c2=1.5
+Number of Initial feasible particles: 0/100
+FIPS iteration: 700/1000 - Best fitness: 12727.9352
+FIPS iteration: 100/1000 - Best fitness: 13476.2603
+FIPS iteration: 850/1000 - Best fitness: 12620.4166
+PSO-LDIW iteration: 650/1000 - Best fitness: 12218.3328 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 850/1000 - Best fitness: 12597.5151 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 150/1000 - Best fitness: 13553.6465
+PSO-LDIW iteration: 600/1000 - Best fitness: 12366.0881 - w=0.6, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13223.7442
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12293.7874 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 714.5603 seconds
+Path length: 296.0817 units
+Waypoints: 7
+Best fitness: 12293.7874
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 700/1000 - Best fitness: 12218.2573 - w=0.55, c1=1.5, c2=1.5
+FIPS iteration: 400/1000 - Best fitness: 13086.2063
+FIPS iteration: 150/1000 - Best fitness: 13126.9742
+FIPS iteration: 750/1000 - Best fitness: 12602.8769
+FIPS iteration: 900/1000 - Best fitness: 12620.4166
+PSO-LDIW iteration: 650/1000 - Best fitness: 12366.0865 - w=0.575, c1=1.5, c2=1.5
+PSO-LDIW iteration: 750/1000 - Best fitness: 12218.2288 - w=0.525, c1=1.5, c2=1.5
+FIPS iteration: 50/1000 - Best fitness: 13663.3556
+PSO-LDIW iteration: 700/1000 - Best fitness: 12405.4301 - w=0.55, c1=1.5, c2=1.5
+FIPS iteration: 150/1000 - Best fitness: 13458.337
+PSO-LDIW iteration: 750/1000 - Best fitness: 12548.5826 - w=0.525, c1=1.5, c2=1.5
+PSO-LDIW iteration: 800/1000 - Best fitness: 12218.2044 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13450.819
+FIPS iteration: 150/1000 - Best fitness: 13223.7442
+FIPS iteration: 800/1000 - Best fitness: 12602.8769
+FIPS iteration: 950/1000 - Best fitness: 12607.5098
+FIPS iteration: 450/1000 - Best fitness: 13067.1892
+FIPS iteration: 50/1000 - Best fitness: 13772.4893
+PSO-LDIW iteration: 900/1000 - Best fitness: 12597.2849 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 700/1000 - Best fitness: 12364.6365 - w=0.55, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13016.0825
+PSO-LDIW iteration: 850/1000 - Best fitness: 12218.2036 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13559.8931
+FIPS iteration: 1000/1000 - Best fitness: 12607.5098
+FIPS completed with final fitness: 12607.5098
+
+========== Planning Complete ==========
+Algorithm: FIPS
+Execution time: 624.0395 seconds
+Path length: 316.4340 units
+Waypoints: 7
+Best fitness: 12607.5098
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: CLPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting CLPSO (Comprehensive Learning PSO) path planning...
+FIPS iteration: 850/1000 - Best fitness: 12602.8769
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 900/1000 - Best fitness: 12218.2034 - w=0.45, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13244.0358
+FIPS iteration: 500/1000 - Best fitness: 13039.8637
+PSO-LDIW iteration: 750/1000 - Best fitness: 12364.396 - w=0.525, c1=1.5, c2=1.5
+FIPS iteration: 200/1000 - Best fitness: 13052.9593
+FIPS iteration: 250/1000 - Best fitness: 13450.819
+PSO-LDIW iteration: 750/1000 - Best fitness: 12398.1513 - w=0.525, c1=1.5, c2=1.5
+FIPS iteration: 100/1000 - Best fitness: 13250.3944
+PSO-LDIW iteration: 800/1000 - Best fitness: 12548.2208 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12218.2034 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 250/1000 - Best fitness: 12935.4975
+FIPS iteration: 900/1000 - Best fitness: 12602.8769
+PSO-LDIW iteration: 800/1000 - Best fitness: 12364.3786 - w=0.5, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12596.6266 - w=0.425, c1=1.5, c2=1.5
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12218.2034 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 529.6388 seconds
+Path length: 296.5982 units
+Waypoints: 7
+Best fitness: 12218.2034
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+CLPSO iteration: 50/1000 - Best fitness: 14557.4959 - w: 0.860
+FIPS iteration: 550/1000 - Best fitness: 12823.4417
+FIPS iteration: 150/1000 - Best fitness: 13462.1827
+FIPS iteration: 250/1000 - Best fitness: 13153.7454
+FIPS iteration: 250/1000 - Best fitness: 12981.2392
+FIPS iteration: 300/1000 - Best fitness: 13336.9773
+FIPS iteration: 950/1000 - Best fitness: 12561.2552
+PSO-LDIW iteration: 850/1000 - Best fitness: 12364.1854 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 300/1000 - Best fitness: 12853.6646
+FIPS iteration: 150/1000 - Best fitness: 13017.6897
+PSO-LDIW iteration: 800/1000 - Best fitness: 12393.3278 - w=0.5, c1=1.5, c2=1.5
+FIPS iteration: 600/1000 - Best fitness: 12823.4417
+PSO-LDIW iteration: 850/1000 - Best fitness: 12547.6808 - w=0.475, c1=1.5, c2=1.5
+PSO-LDIW iteration: 900/1000 - Best fitness: 12362.4505 - w=0.45, c1=1.5, c2=1.5
+FIPS iteration: 1000/1000 - Best fitness: 12561.2552
+FIPS completed with final fitness: 12561.2552
+
+========== Planning Complete ==========
+Algorithm: FIPS
+Execution time: 621.2593 seconds
+Path length: 316.0153 units
+Waypoints: 7
+Best fitness: 12561.2552
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: CLPSO
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting CLPSO (Comprehensive Learning PSO) path planning...
+CLPSO iteration: 100/1000 - Best fitness: 13908.7361 - w: 0.820
+FIPS iteration: 200/1000 - Best fitness: 13236.9793
+FIPS iteration: 50/1000 - Best fitness: 14011.9732
+Number of Initial feasible particles: 0/100
+FIPS iteration: 300/1000 - Best fitness: 12965.3952
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12596.2563 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 912.5238 seconds
+Path length: 288.3855 units
+Waypoints: 7
+Best fitness: 12596.2563
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+FIPS iteration: 300/1000 - Best fitness: 12887.2258
+FIPS iteration: 350/1000 - Best fitness: 13274.4082
+FIPS iteration: 350/1000 - Best fitness: 12777.938
+FIPS iteration: 200/1000 - Best fitness: 13017.6897
+FIPS iteration: 650/1000 - Best fitness: 12823.4417
+PSO-LDIW iteration: 950/1000 - Best fitness: 12362.3314 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 250/1000 - Best fitness: 13229.9128
+CLPSO iteration: 50/1000 - Best fitness: 14369.2031 - w: 0.860
+FIPS iteration: 350/1000 - Best fitness: 12965.3952
+FIPS iteration: 350/1000 - Best fitness: 12779.9785
+CLPSO iteration: 150/1000 - Best fitness: 13846.8954 - w: 0.780
+FIPS iteration: 100/1000 - Best fitness: 13358.0736
+PSO-LDIW iteration: 850/1000 - Best fitness: 12392.1344 - w=0.475, c1=1.5, c2=1.5
+FIPS iteration: 400/1000 - Best fitness: 12777.938
+PSO-LDIW iteration: 1000/1000 - Best fitness: 12362.2002 - w=0.4, c1=1.5, c2=1.5
+
+========== Planning Complete ==========
+Algorithm: PSO_LDIW
+Execution time: 655.2436 seconds
+Path length: 326.7455 units
+Waypoints: 7
+Best fitness: 12362.2002
+========================================
+
+
+========== Direct Global Planning ==========
+Algorithm: FIPS
+Start: [0.0, 0.0, 10.0]
+Goal:  [200.0, 200.0, 10.0]
+============================================
+
+Starting FIPS (Fully Informed PSO) path planning...
+Number of Initial feasible particles: 0/100
+PSO-LDIW iteration: 900/1000 - Best fitness: 12547.1452 - w=0.45, c1=1.5, c2=1.5
+FIPS iteration: 400/1000 - Best fitness: 13274.4082
+FIPS iteration: 700/1000 - Best fitness: 12823.4417
+FIPS iteration: 50/1000 - Best fitness: 14061.7047
+FIPS iteration: 250/1000 - Best fitness: 13017.4206
+FIPS iteration: 300/1000 - Best fitness: 13156.3666
+FIPS iteration: 400/1000 - Best fitness: 12965.3952
+FIPS iteration: 400/1000 - Best fitness: 12779.9785
+FIPS iteration: 450/1000 - Best fitness: 12768.1271
+CLPSO iteration: 100/1000 - Best fitness: 13741.0005 - w: 0.820
+CLPSO iteration: 200/1000 - Best fitness: 13354.2541 - w: 0.740
+FIPS iteration: 750/1000 - Best fitness: 12823.4417
+FIPS iteration: 150/1000 - Best fitness: 13358.0736
+FIPS iteration: 450/1000 - Best fitness: 13244.8836
+FIPS iteration: 300/1000 - Best fitness: 12936.6329
+FIPS iteration: 50/1000 - Best fitness: 13708.9415
+FIPS iteration: 100/1000 - Best fitness: 13773.1768
+PSO-LDIW iteration: 900/1000 - Best fitness: 12390.8209 - w=0.45, c1=1.5, c2=1.5
+PSO-LDIW iteration: 950/1000 - Best fitness: 12547.0911 - w=0.425, c1=1.5, c2=1.5
+FIPS iteration: 350/1000 - Best fitness: 13156.3666
+FIPS iteration: 450/1000 - Best fitness: 12779.9785
+FIPS iteration: 500/1000 - Best fitness: 12745.2198
+FIPS iteration: 450/1000 - Best fitness: 12953.3069
+FIPS iteration: 800/1000 - Best fitness: 12823.4417
+FIPS iteration: 500/1000 - Best fitness: 13244.8836
+FIPS iteration: 350/1000 - Best fitness: 12819.1926
+CLPSO iteration: 150/1000 - Best fitness: 13741.0005 - w: 0.780
+FIPS iteration: 200/1000 - Best fitness: 13280.9356
+CLPSO iteration: 250/1000 - Best fitness: 13354.2541 - w: 0.700

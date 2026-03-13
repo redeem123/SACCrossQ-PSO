@@ -48,12 +48,18 @@ function runDynamicPSOAblationStudy()
                 scenarioIdx, numTrees, numObstacles);
         
         % Environment setup
-        mapSize = [100, 100, 100];
-        startPoint = [0, 100, 10];
-        goalPoint = [100, 0, 10];
+        environment = resolveTerrainEnvironment(struct( ...
+            'mapSize', [100, 100, 100], ...
+            'startPoint', [0, 100, 10], ...
+            'goalPoint', [100, 0, 10], ...
+            'terrainFile', ''));
+        mapSize = environment.mapSize;
+        startPoint = environment.startPoint;
+        goalPoint = environment.goalPoint;
         
         % Generate environment
-        [terrainGrid, terrainX, terrainY] = generateFixedTerrain(mapSize, scenarioIdx);
+        [terrainGrid, terrainX, terrainY] = generateFixedTerrain( ...
+            mapSize, scenarioIdx, environment.terrainFile);
         trees = generateFixedTrees(numTrees, terrainGrid, terrainX, terrainY, mapSize);
         obstacles = generateFixedObstacles(numObstacles, mapSize, terrainGrid, terrainX, terrainY);
         obstacleDynamics = initializeFixedObstacleDynamics(numObstacles, mapSize);

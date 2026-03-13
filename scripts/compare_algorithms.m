@@ -19,36 +19,40 @@ function compare_algorithms(config)
     fprintf('Initialising parallel pool (%s mode)...\n', executionMode);
     initializeParallelPool(executionMode);
 
-    numScenarios = size(scenarios, 1);
+    numScenarios = numel(scenarios);
     allScenarioResults = cell(numScenarios, 1);
 
     for scenarioIdx = 1:numScenarios
-        % Get number of danger zones for this scenario
-        numDangerZones = scenarios(scenarioIdx);
+        [scenarioDefinition, scenarioEnvironment] = resolveScenarioDefinition( ...
+            scenarios, scenarioIdx, environment);
+        numDangerZones = scenarioDefinition.numDangerZones;
 
         fprintf('\n==========================================================\n');
-        fprintf('Scenario %d: %d Danger Zones\n', scenarioIdx, numDangerZones);
+        fprintf('Scenario %d: %s\n', scenarioIdx, scenarioDefinition.label);
+        fprintf('Terrain: %s\n', scenarioDefinition.terrainFile);
+        fprintf('Danger Zones: %d\n', numDangerZones);
         fprintf('==========================================================\n');
 
-        [terrainGrid, terrainX, terrainY] = generateFixedTerrain(environment.mapSize, scenarioIdx);
-        dangerZones = generateDangerZones(numDangerZones, environment.mapSize, terrainGrid, terrainX, terrainY);
+        [terrainGrid, terrainX, terrainY] = generateFixedTerrain( ...
+            scenarioEnvironment.mapSize, scenarioIdx, scenarioEnvironment.terrainFile);
+        dangerZones = generateDangerZones(numDangerZones, scenarioEnvironment.mapSize, terrainGrid, terrainX, terrainY);
 
         terrain_map = defaultTerrainColormap();
 
         commonBefore = { ...
-            environment.startPoint, ...
-            environment.goalPoint, ...
+            scenarioEnvironment.startPoint, ...
+            scenarioEnvironment.goalPoint, ...
             dangerZones, ...
             terrainGrid, terrainX, terrainY, ...
-            environment.mapSize ...
+            scenarioEnvironment.mapSize ...
         };
 
         commonAfter = { ...
-            environment.globalPlanInterval, ...
-            environment.pathDeviationThreshold, ...
-            environment.obstacleChangeThreshold, ...
-            environment.timeStep, ...
-            environment.totalTime, ...
+            scenarioEnvironment.globalPlanInterval, ...
+            scenarioEnvironment.pathDeviationThreshold, ...
+            scenarioEnvironment.obstacleChangeThreshold, ...
+            scenarioEnvironment.timeStep, ...
+            scenarioEnvironment.totalTime, ...
             terrain_map ...
         };
 
@@ -70,9 +74,11 @@ function compare_algorithms(config)
 
         disp('Generating trajectory and convergence figures...');
         createUAVTrajectoryAnimation(bestResults, algorithms, dangerZones, terrainGrid, terrainX, terrainY, ...
-            environment.startPoint, environment.goalPoint, environment.mapSize, terrain_map, scenarioIdx);
+            scenarioEnvironment.startPoint, scenarioEnvironment.goalPoint, scenarioEnvironment.mapSize, terrain_map, scenarioIdx);
         generateConvergencePlot(bestResults, algorithms, scenarioIdx);
         generateParameterTrackingPlot(bestResults, algorithms, scenarioIdx);
+        generateRewardPlot(bestResults, algorithms, scenarioIdx);
+        generateCriticLossPlot(bestResults, algorithms, scenarioIdx);
 
         generateReports(scenarioResults, algorithms, scenarioIdx);
 
@@ -91,7 +97,7 @@ function scenarioResults = executeScenario(algorithms, executionMode, numRuns, s
         fprintf('Executing %d independent runs in SERIAL mode...\n', numRuns);
         for run = 1:numRuns
             seedBase = run * 1000 + seedScenarioOffset;
-            scenarioResults{run} = runAlgorithmBatch(algorithms, seedBase, commonBefore, commonAfter);
+            scenarioResults{run} = runAlgorithmBatch(algorithms, seedBase, commonBefore, commonAfter, scenarioIdx, run);
             fprintf('  Completed Run %d/%d\n', run, numRuns);
         end
         return;
@@ -104,7 +110,7 @@ function scenarioResults = executeScenario(algorithms, executionMode, numRuns, s
         parallelResults = cell(numRuns, 1);
         parfor run = 1:numRuns
             seedBase = run * 1000 + seedScenarioOffset;
-            parallelResults{run} = runAlgorithmBatch(parallelAlgorithms, seedBase, commonBefore, commonAfter);
+            parallelResults{run} = runAlgorithmBatch(parallelAlgorithms, seedBase, commonBefore, commonAfter, scenarioIdx, run);
         end
         scenarioResults = parallelResults;
     else
@@ -116,17 +122,26 @@ function scenarioResults = executeScenario(algorithms, executionMode, numRuns, s
         fprintf('Executing %d runs for %d serial-only algorithms...\n', numRuns, numel(serialAlgorithms));
         for run = 1:numRuns
             seedBase = run * 1000 + seedScenarioOffset;
-            serialResults = runAlgorithmBatch(serialAlgorithms, seedBase, commonBefore, commonAfter);
+            serialResults = runAlgorithmBatch(serialAlgorithms, seedBase, commonBefore, commonAfter, scenarioIdx, run);
             scenarioResults{run} = mergeResults(scenarioResults{run}, serialResults);
         end
     end
 end
 
 % -------------------------------------------------------------------------
-function runResults = runAlgorithmBatch(algorithms, seedBase, commonBefore, commonAfter)
-    runResults = struct();
+function runResults = runAlgorithmBatch(algorithms, seedBase, commonBefore, commonAfter, scenarioIdx, runIdx)
+    checkpointPath = getRunCheckpointPath(scenarioIdx, runIdx);
+    runResults = loadRunCheckpoint(checkpointPath);
+
     for idx = 1:numel(algorithms)
         algorithm = algorithms{idx};
+        if isfield(runResults, algorithm.fieldName) && isfield(runResults, [algorithm.fieldName '_finalPath']) ...
+                && isfield(runResults, [algorithm.fieldName '_globalPath'])
+            fprintf('  Resuming run %d scenario %d: skipping completed %s\n', ...
+                runIdx, scenarioIdx, algorithm.displayName);
+            continue;
+        end
+
         rng(seedBase + algorithm.seedOffset);
 
         allParams = [commonBefore, algorithm.specificParams, commonAfter];
@@ -139,6 +154,7 @@ function runResults = runAlgorithmBatch(algorithms, seedBase, commonBefore, comm
         runResults.(algorithm.fieldName) = metrics;
         runResults.([algorithm.fieldName '_finalPath']) = finalPath;
         runResults.([algorithm.fieldName '_globalPath']) = metrics.finalGlobalPath;
+        saveRunCheckpoint(checkpointPath, runResults);
     end
 end
 
@@ -182,3 +198,78 @@ function cmap = defaultTerrainColormap()
     ];
 end
 
+% -------------------------------------------------------------------------
+function checkpointPath = getRunCheckpointPath(scenarioIdx, runIdx)
+    checkpointDir = fullfile(getResultsDir(), 'resume_checkpoints');
+    if exist(checkpointDir, 'dir') ~= 7
+        mkdir(checkpointDir);
+    end
+    checkpointPath = fullfile(checkpointDir, sprintf('scenario%d_run%d.mat', scenarioIdx, runIdx));
+end
+
+% -------------------------------------------------------------------------
+function runResults = loadRunCheckpoint(checkpointPath)
+    runResults = struct();
+    if exist(checkpointPath, 'file') ~= 2
+        return;
+    end
+
+    loaded = load(checkpointPath, 'runResults');
+    if isfield(loaded, 'runResults') && isstruct(loaded.runResults)
+        runResults = loaded.runResults;
+    end
+end
+
+% -------------------------------------------------------------------------
+function saveRunCheckpoint(checkpointPath, runResults)
+    save(checkpointPath, 'runResults');
+end
+
+% -------------------------------------------------------------------------
+function [scenarioDefinition, scenarioEnvironment] = resolveScenarioDefinition(scenarios, scenarioIdx, baseEnvironment)
+    if isstruct(scenarios)
+        scenarioDefinition = scenarios(scenarioIdx);
+    else
+        scenarioDefinition = struct('numDangerZones', scenarios(scenarioIdx));
+    end
+
+    if ~isfield(scenarioDefinition, 'numDangerZones') || isempty(scenarioDefinition.numDangerZones)
+        error('Scenario %d is missing numDangerZones.', scenarioIdx);
+    end
+
+    scenarioEnvironment = baseEnvironment;
+    if isfield(scenarioDefinition, 'terrainFile') && ~isempty(scenarioDefinition.terrainFile)
+        if shouldResetTerrainAnchors(baseEnvironment, scenarioDefinition.terrainFile)
+            scenarioEnvironment = clearTerrainAnchors(scenarioEnvironment);
+        end
+        scenarioEnvironment.terrainFile = scenarioDefinition.terrainFile;
+    end
+    scenarioEnvironment = resolveTerrainEnvironment(scenarioEnvironment);
+    scenarioEnvironment = applyScenarioPointOverrides(scenarioEnvironment, scenarioDefinition);
+
+    if ~isfield(scenarioDefinition, 'terrainFile') || isempty(scenarioDefinition.terrainFile)
+        scenarioDefinition.terrainFile = scenarioEnvironment.terrainFile;
+    end
+    if ~isfield(scenarioDefinition, 'label') || isempty(scenarioDefinition.label)
+        scenarioDefinition.label = sprintf('Scenario %d', scenarioIdx);
+    end
+end
+
+function tf = shouldResetTerrainAnchors(baseEnvironment, scenarioTerrainFile)
+    tf = true;
+    if isfield(baseEnvironment, 'terrainFile') && ~isempty(baseEnvironment.terrainFile)
+        tf = ~strcmpi(char(string(baseEnvironment.terrainFile)), char(string(scenarioTerrainFile)));
+    end
+end
+
+function environment = clearTerrainAnchors(environment)
+    if isfield(environment, 'mapSize')
+        environment.mapSize = [];
+    end
+    if isfield(environment, 'startPoint')
+        environment.startPoint = [];
+    end
+    if isfield(environment, 'goalPoint')
+        environment.goalPoint = [];
+    end
+end
