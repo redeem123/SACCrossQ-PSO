@@ -207,11 +207,8 @@ function config = RRSACPSO_Config(mode)
 
     config.numWaypoints = 5;
     config.mapSize = [400, 400, 100];
-    % Disabled by default: keep improvements in the SAC layer.
+    % Post-PSO local search disabled by default; enabled in 'online' mode.
     config.useTrajectoryPolish = false;
-    config.polishIterations = 400;
-    config.polishInitialStepRatio = 0.06;
-    config.polishMinStepRatio = 0.004;
 
     % ===== LOGGING =====
 
@@ -244,7 +241,16 @@ function config = RRSACPSO_Config(mode)
             config.trainEveryNIterations = 1;    % Train every iteration
             config.batchSize = 128;              % Earlier online learning onset
             config.bufferSize = 10000;           % Smaller buffer (online episode length <= 1000)
-            config.paramMode = 'rank-residual';
+            config.paramMode = 'attractor-field';
+
+            % Post-PSO waypoint-decomposed Nelder-Mead local search
+            config.useTrajectoryPolish = true;
+            config.polishNumStarts = 30;         % Total multi-start paths
+            config.polishNumSeedPaths = 3;       % Top pbests used as seeds
+            config.polishMaxPasses = 8;          % Max passes through all waypoints
+            config.polishEvalsPerWaypoint = 400; % fminsearch budget per waypoint
+            config.polishStepXY = 100;           % Initial XY simplex step
+            config.polishStepZ = 15;             % Initial Z simplex step
 
         otherwise
             % Default mode: All features enabled
@@ -263,6 +269,10 @@ function config = RRSACPSO_Config(mode)
                 config.usePerParticleActions = true;
                 config.actionSize = config.popSize * config.paramsPerParticle;
             case 'rank-residual'
+                config.usePerParticleActions = false;
+                config.useRankResidualControl = true;
+                config.actionSize = 9;
+            case 'attractor-field'
                 config.usePerParticleActions = false;
                 config.useRankResidualControl = true;
                 config.actionSize = 9;

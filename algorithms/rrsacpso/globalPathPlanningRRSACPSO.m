@@ -253,6 +253,23 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateEncoder, parameterH
     numWaypoints = size(globalBestPath, 2) / 3;
     bestPath = constructPathFromPSO(globalBestPath, startPoint, goalPoint, numWaypoints, config.mapSize);
 
+    % --- Waypoint-Decomposed Nelder-Mead Local Search ---
+    if isfield(config, 'useTrajectoryPolish') && config.useTrajectoryPolish
+        nmTimer = tic;
+        [~, sortIdx] = sort(particles.bestFitness, 'ascend');
+        topK = min(getFieldOrDefault(config, 'polishNumSeedPaths', 3), length(sortIdx));
+        seedPaths = particles.bestPositions(sortIdx(1:topK), :);
+        [nmPath, nmFitness] = waypointDecomposedNM(bestPath, seedPaths, ...
+            startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, ...
+            numWaypoints, config);
+        fprintf('  NM polish: %.1f -> %.1f (%.1f pts improvement, %.1fs)\n', ...
+            bestFitness, nmFitness, bestFitness - nmFitness, toc(nmTimer));
+        if nmFitness < bestFitness
+            bestPath = nmPath;
+            bestFitness = nmFitness;
+        end
+    end
+
     % --- Visualization Injection ---
     % Only visualize if running serially (main thread) to avoid parfor errors
     task = getCurrentTask();
