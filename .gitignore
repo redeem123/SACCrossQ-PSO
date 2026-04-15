@@ -1,1 +1,39 @@
-# Empty - all files tracked
+# macOS
+.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# MATLAB
+*.asv
+
+# Ephemeral run logs
+outputs/logs/
+
+# Stale resume caches
+outputs/results/resume_checkpoints/
+
+# Timestamped duplicate CSVs (keep canonical TTest_Pairwise/Summary/Results only)
+outputs/results/TTest_AlgorithmSummary_*_*-*-*_*-*-*.csv
+outputs/results/TTest_AllRuns_*_*-*-*_*-*-*.csv
+
+# Empty generated figures dir
+outputs/generated_figures/
+
+# Old results staging and logs
+results/staging/
+results/logs/
+
+# LaTeX build artifacts
+paper/main.aux
+paper/main.bbl
+paper/main.blg
+paper/main.log
+paper/main.out
+paper/main.spl
+paper/main.pdf
+
+# Machine-specific font cache
+docs/archive_old_draft/LOCAL_APPDATA_FONTCONFIG_CACHE/

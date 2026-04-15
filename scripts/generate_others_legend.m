@@ -9,7 +9,7 @@ function generate_others_legend()
         1.0, 0.0, 1.0;
         0.8, 0.8, 0.0
     ];
-    legendLabels = {'RRSACPSO', 'PSO-Standard', 'PSO-LDIW', 'FIPS', 'CLPSO', 'SAEPSO [11]', 'SAEPSO* [11]', 'UAPSO [25]'};
+    legendLabels = {'AFSACPSO', 'PSO-Standard', 'PSO-LDIW', 'FIPS', 'CLPSO', 'SAEPSO [11]', 'SAEPSO* [11]', 'UAPSO [25]'};
     fig = figure('Visible', 'off');
     hold on;
     h = gobjects(1, length(legendLabels));

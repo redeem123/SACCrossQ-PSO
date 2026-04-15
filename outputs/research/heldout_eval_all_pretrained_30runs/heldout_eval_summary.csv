@@ -1,0 +1,7 @@
+Variant,Mean,Std,CpuTimeSec,Status
+RLAMPSO,-7.615880892,17.16863421,746.7,completed
+Attractor-field AFSACPSO,-7.12812079,16.22560664,249.41,completed
+Global SAC controller,-7.040505468,15.95369398,201.76,completed
+5-subgroup SAC controller,-7.200240269,16.37589188,199.23,completed
+Per-particle SAC controller,-5.62833648,14.16831127,185.79,completed
+SAC-SAPSO,-5.999369451,15.09472603,201.45,completed

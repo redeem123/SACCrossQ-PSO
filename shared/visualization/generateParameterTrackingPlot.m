@@ -5,10 +5,10 @@ function generateParameterTrackingPlot(results, algorithms, scenarioIdx)
     adaptiveAlgorithms = {
         'RLAMPSO_Online_Global', 'RLAMPSO [36]';
         'DQN_PSO_Online_Global', 'DQN-PSO [34]';
-        'SACSAPSO_Paper', 'SAC-SAPSO [40]';
         'PPO_PSO_Online_Global', 'PPO-PSO';
         'MPSORL', 'MPSORL';
-        'RRSACPSO_Online', 'RRSACPSO';
+        'SACPSO_Global', 'SACPSO-Global';
+        'AFSACPSO_Online', 'AFSACPSO';
         'SAEPSO_ParamsOnly', 'SAEPSO* [11]';
         'UAPSO', 'UAPSO [25]';
     };

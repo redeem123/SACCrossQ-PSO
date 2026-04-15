@@ -1,38 +1,49 @@
 classdef PPOPSO_Agent < handle
-    % PPO agent for PPOPSO discrete subgroup actions.
+    % PPO agent with continuous Gaussian policy for PSO parameter control.
+    % Adapted from Klein et al. 2024 (iSOMA-RL) to PSO.
+    %
+    % Actor outputs 3D mean (w, c1, c2); log_std is a learnable parameter.
+    % Actions are tanh-squashed and mapped to parameter ranges.
 
     properties
         config
         actor
         critic
+        logStd        % Learnable 3x1 log standard deviation
         actorOptimizer
         criticOptimizer
+        logStdOptimizer
+        adamStep = 0  % Cumulative Adam step counter (persists across train() calls)
     end
 
     methods
         function obj = PPOPSO_Agent(config)
             obj.config = config;
-            obj.actor = createPPOActorNetwork(config);
-            obj.critic = createPPOCriticNetwork(config);
-            obj.actorOptimizer = [];
-            obj.criticOptimizer = [];
+            obj.actor = createActorNetwork(config);
+            obj.critic = createCriticNetwork(config);
+            obj.logStd = dlarray(ones(config.actionDim, 1, 'single') * config.initLogStd);
+            obj.actorOptimizer = struct('avg', [], 'avgSq', []);
+            obj.criticOptimizer = struct('avg', [], 'avgSq', []);
+            obj.logStdOptimizer = struct('avg', [], 'avgSq', []);
         end
 
         function [action, logProb, value] = getAction(obj, state)
             stateDL = dlarray(state, 'CB');
-            logits = forward(obj.actor, stateDL);
+            mean_raw = forward(obj.actor, stateDL);
+            mean_raw = extractdata(mean_raw);
 
-            numActions = obj.config.numActionConfigs;
-            numSubgroups = obj.config.numSubgroups;
-            logits = reshape(extractdata(logits), numActions, numSubgroups);
+            std = exp(extractdata(obj.logStd));
 
-            action = zeros(numSubgroups, 1);
-            logProb = 0;
-            for j = 1:numSubgroups
-                probs = softmaxVector(logits(:, j));
-                action(j) = sampleDiscrete(probs);
-                logProb = logProb + log(probs(action(j)) + 1e-8);
-            end
+            % Sample from Gaussian, then tanh squash
+            noise = randn(obj.config.actionDim, 1) .* std;
+            raw = mean_raw + noise;
+            action_squashed = tanh(raw);  % in [-1, 1]
+
+            % Map to parameter ranges
+            action = mapToParams(action_squashed, obj.config);
+
+            % Log probability under squashed Gaussian
+            logProb = gaussianLogProb(raw, mean_raw, std, action_squashed);
 
             value = forward(obj.critic, stateDL);
             value = extractdata(value);
@@ -44,8 +55,9 @@ classdef PPOPSO_Agent < handle
             value = extractdata(value);
         end
 
-        function losses = train(obj, states, actions, oldLogProbs, returns, advantages)
+        function losses = train(obj, states, rawActions, oldLogProbs, returns, advantages)
             statesDL = dlarray(states, 'CB');
+            rawActionsDL = dlarray(rawActions, 'CB');
             oldLogProbsDL = dlarray(oldLogProbs, 'CB');
             returnsDL = dlarray(returns, 'CB');
             advantagesDL = dlarray(advantages, 'CB');
@@ -64,27 +76,41 @@ classdef PPOPSO_Agent < handle
                     endIdx = min(startIdx + minibatchSize - 1, numSamples);
                     batchIdx = idx(startIdx:endIdx);
 
-                    batchStates = statesDL(:, batchIdx);
-                    batchActions = actions(:, batchIdx);
-                    batchOldLogProbs = oldLogProbsDL(:, batchIdx);
-                    batchReturns = returnsDL(:, batchIdx);
-                    batchAdvantages = advantagesDL(:, batchIdx);
+                    bS = statesDL(:, batchIdx);
+                    bA = rawActionsDL(:, batchIdx);
+                    bOLP = oldLogProbsDL(:, batchIdx);
+                    bR = returnsDL(:, batchIdx);
+                    bAdv = advantagesDL(:, batchIdx);
 
-                    [actorLoss, actorGrads] = dlfeval(@ppoActorLoss, obj.actor, batchStates, ...
-                        batchActions, batchOldLogProbs, batchAdvantages, obj.config.clipEpsilon, ...
-                        obj.config.entropyCoef, obj.config.numActionConfigs, obj.config.numSubgroups);
-                    actorGrads = obj.clipGradients(actorGrads, obj.config.maxGradNorm);
-                    [obj.actor.Learnables, obj.actorOptimizer] = sgdmupdate( ...
-                        obj.actor.Learnables, actorGrads, obj.actorOptimizer, obj.config.actorLR);
-                    actorLossSum = actorLossSum + extractdata(actorLoss);
-
-                    [criticLoss, criticGrads] = dlfeval(@ppoCriticLoss, obj.critic, batchStates, ...
-                        batchReturns, obj.config.valueCoef);
-                    criticGrads = obj.clipGradients(criticGrads, obj.config.maxGradNorm);
-                    [obj.critic.Learnables, obj.criticOptimizer] = sgdmupdate( ...
-                        obj.critic.Learnables, criticGrads, obj.criticOptimizer, obj.config.criticLR);
-                    criticLossSum = criticLossSum + extractdata(criticLoss);
                     updateCount = updateCount + 1;
+                    obj.adamStep = obj.adamStep + 1;
+
+                    % Actor + logStd update
+                    [aLoss, aGrads, lsGrads] = dlfeval(@ppoActorLoss, ...
+                        obj.actor, obj.logStd, bS, bA, bOLP, bAdv, ...
+                        obj.config.clipEpsilon, obj.config.entropyCoef);
+                    aGrads = clipLearnablesGradients(aGrads, obj.config.maxGradNorm);
+                    [obj.actor.Learnables, obj.actorOptimizer.avg, obj.actorOptimizer.avgSq] = ...
+                        adamupdate(obj.actor.Learnables, aGrads, ...
+                        obj.actorOptimizer.avg, obj.actorOptimizer.avgSq, ...
+                        obj.adamStep, obj.config.actorLR, 0.9, 0.999, 1e-8);
+                    % Update logStd
+                    lsGrads = thresholdGrad(lsGrads, obj.config.maxGradNorm);
+                    [obj.logStd, obj.logStdOptimizer.avg, obj.logStdOptimizer.avgSq] = ...
+                        adamupdate(obj.logStd, lsGrads, ...
+                        obj.logStdOptimizer.avg, obj.logStdOptimizer.avgSq, ...
+                        obj.adamStep, obj.config.actorLR, 0.9, 0.999, 1e-8);
+
+                    actorLossSum = actorLossSum + extractdata(aLoss);
+
+                    % Critic update
+                    [cLoss, cGrads] = dlfeval(@ppoCriticLoss, obj.critic, bS, bR, obj.config.valueCoef);
+                    cGrads = clipLearnablesGradients(cGrads, obj.config.maxGradNorm);
+                    [obj.critic.Learnables, obj.criticOptimizer.avg, obj.criticOptimizer.avgSq] = ...
+                        adamupdate(obj.critic.Learnables, cGrads, ...
+                        obj.criticOptimizer.avg, obj.criticOptimizer.avgSq, ...
+                        obj.adamStep, obj.config.criticLR, 0.9, 0.999, 1e-8);
+                    criticLossSum = criticLossSum + extractdata(cLoss);
                 end
             end
 
@@ -98,151 +124,101 @@ classdef PPOPSO_Agent < handle
             end
         end
     end
-
-    methods (Access = private)
-        function clippedGrads = clipGradients(obj, gradients, maxNorm)
-            totalNorm = 0;
-            for i = 1:height(gradients)
-                grad = gradients.Value{i};
-                if any(isnan(grad(:))) || any(isinf(grad(:)))
-                    gradients.Value{i} = zeros(size(grad), 'like', grad);
-                    grad = gradients.Value{i};
-                end
-                totalNorm = totalNorm + sum(grad(:).^2);
-            end
-            totalNorm = sqrt(totalNorm);
-            if totalNorm > maxNorm
-                clipCoef = maxNorm / (totalNorm + 1e-6);
-                for i = 1:height(gradients)
-                    gradients.Value{i} = gradients.Value{i} * clipCoef;
-                end
-            end
-            clippedGrads = gradients;
-        end
-    end
 end
 
-function net = createPPOActorNetwork(config)
-    stateSize = config.stateSize;
-    numActions = config.numActionConfigs;
-    numSubgroups = config.numSubgroups;
-    hiddenLayers = config.actorHiddenLayers;
-
+%% Network constructors
+function net = createActorNetwork(config)
     layers = [
-        featureInputLayer(stateSize, 'Name', 'state_input', 'Normalization', 'none')
+        featureInputLayer(config.stateSize, 'Name', 'input', 'Normalization', 'none')
     ];
-
-    for i = 1:length(hiddenLayers)
-        hiddenSize = hiddenLayers(i);
+    for i = 1:length(config.actorHiddenLayers)
+        h = config.actorHiddenLayers(i);
         layers = [layers
-            fullyConnectedLayer(hiddenSize, 'Name', sprintf('fc%d', i))
-            tanhLayer('Name', sprintf('tanh%d', i))];
+            fullyConnectedLayer(h, 'Name', sprintf('fc%d', i))
+            tanhLayer('Name', sprintf('tanh%d', i))]; %#ok<AGROW>
     end
-
     layers = [layers
-        fullyConnectedLayer(numActions * numSubgroups, 'Name', 'logits')];
-
-    lgraph = layerGraph(layers);
-    net = dlnetwork(lgraph);
-    net = initializeWeights(net);
+        fullyConnectedLayer(config.actionDim, 'Name', 'mean_out')];
+    net = dlnetwork(layerGraph(layers));
+    net = initializeNetworkWeights(net);
 end
 
-function net = createPPOCriticNetwork(config)
-    stateSize = config.stateSize;
-    hiddenLayers = config.criticHiddenLayers;
-
+function net = createCriticNetwork(config)
     layers = [
-        featureInputLayer(stateSize, 'Name', 'state_input', 'Normalization', 'none')
+        featureInputLayer(config.stateSize, 'Name', 'input', 'Normalization', 'none')
     ];
-
-    for i = 1:length(hiddenLayers)
-        hiddenSize = hiddenLayers(i);
+    for i = 1:length(config.criticHiddenLayers)
+        h = config.criticHiddenLayers(i);
         layers = [layers
-            fullyConnectedLayer(hiddenSize, 'Name', sprintf('fc%d', i))
-            tanhLayer('Name', sprintf('tanh%d', i))];
+            fullyConnectedLayer(h, 'Name', sprintf('fc%d', i))
+            tanhLayer('Name', sprintf('tanh%d', i))]; %#ok<AGROW>
     end
-
     layers = [layers
         fullyConnectedLayer(1, 'Name', 'value')];
-
-    lgraph = layerGraph(layers);
-    net = dlnetwork(lgraph);
-    net = initializeWeights(net);
+    net = dlnetwork(layerGraph(layers));
+    net = initializeNetworkWeights(net);
 end
 
-function net = initializeWeights(net)
-    learnables = net.Learnables;
-    for i = 1:height(learnables)
-        paramName = learnables.Parameter{i};
-        if strcmp(paramName, 'Weights')
-            weights = learnables.Value{i};
-            [outputSize, inputSize] = size(weights);
-            scale = sqrt(2.0 / inputSize);
-            learnables.Value{i} = dlarray(randn(outputSize, inputSize, 'single') * scale);
-        elseif strcmp(paramName, 'Bias')
-            bias = learnables.Value{i};
-            learnables.Value{i} = dlarray(zeros(size(bias), 'single'));
-        end
-    end
-    net.Learnables = learnables;
-end
 
-function [loss, gradients] = ppoActorLoss(actorNet, states, actions, oldLogProbs, advantages, ...
-    clipEpsilon, entropyCoef, numActions, numSubgroups)
-    actions = max(1, min(numActions, round(actions)));
-    logits = forward(actorNet, states);
-    [logProbs, entropy] = computeCategoricalLogProbs(logits, actions, numActions, numSubgroups);
+%% Loss functions
+function [loss, actorGrads, logStdGrads] = ppoActorLoss(actorNet, logStd, states, rawActions, oldLogProbs, advantages, clipEps, entCoef)
+    means = forward(actorNet, states);
+    std = exp(logStd);
+
+    % Log prob under current policy
+    logProbs = gaussianLogProbDL(rawActions, means, std);
 
     ratio = exp(logProbs - oldLogProbs);
-    clippedRatio = max(min(ratio, 1 + clipEpsilon), 1 - clipEpsilon);
-    surrogate1 = ratio .* advantages;
-    surrogate2 = clippedRatio .* advantages;
-    actorLoss = -mean(min(surrogate1, surrogate2));
+    clipped = max(min(ratio, 1 + clipEps), 1 - clipEps);
+    surr = -mean(min(ratio .* advantages, clipped .* advantages));
 
-    entropyBonus = mean(entropy);
-    loss = actorLoss - entropyCoef * entropyBonus;
+    % Entropy bonus: H = 0.5 * ln(2*pi*e*sigma^2) per dim
+    entropy = mean(sum(0.5 * log(2 * pi * exp(1) * std.^2)));
 
-    gradients = dlgradient(loss, actorNet.Learnables);
+    loss = surr - entCoef * entropy;
+    [actorGrads, logStdGrads] = dlgradient(loss, actorNet.Learnables, logStd);
 end
 
-function [loss, gradients] = ppoCriticLoss(criticNet, states, returns, valueCoef)
+function [loss, grads] = ppoCriticLoss(criticNet, states, returns, valueCoef)
     values = forward(criticNet, states);
-    valueLoss = mean((returns - values).^2);
-    loss = valueCoef * valueLoss;
-    gradients = dlgradient(loss, criticNet.Learnables);
+    loss = valueCoef * mean((returns - values).^2);
+    grads = dlgradient(loss, criticNet.Learnables);
 end
 
-function [logProbs, entropy] = computeCategoricalLogProbs(logits, actions, numActions, numSubgroups)
-    batchSize = size(logits, 2);
-    logits = reshape(logits, [numActions, numSubgroups, batchSize]);
-    logProbs = zeros(1, batchSize, 'like', logits);
-    entropy = zeros(1, batchSize, 'like', logits);
-
-    for b = 1:batchSize
-        for j = 1:numSubgroups
-            logitsJ = logits(:, j, b);
-            logitsJ = logitsJ - max(logitsJ);
-            expLogits = exp(logitsJ);
-            probs = expLogits ./ sum(expLogits);
-
-            actionIdx = actions(j, b);
-            logProbs(1, b) = logProbs(1, b) + log(probs(actionIdx) + 1e-8);
-            entropy(1, b) = entropy(1, b) - sum(probs .* log(probs + 1e-8));
-        end
-    end
+%% Gaussian log probability (squashed)
+function lp = gaussianLogProb(raw, mean_val, std_val, squashed)
+    % Log prob of raw under N(mean, std), minus tanh correction
+    var = std_val.^2 + 1e-8;
+    lp_raw = -0.5 * sum((raw - mean_val).^2 ./ var + log(var) + log(2*pi));
+    % Tanh squash correction: -sum(log(1 - tanh(raw)^2 + eps))
+    lp_correction = sum(log(max(1 - squashed.^2, 1e-6)));
+    lp = lp_raw - lp_correction;
 end
 
-function probs = softmaxVector(logits)
-    logits = logits - max(logits);
-    expLogits = exp(logits);
-    probs = expLogits / sum(expLogits);
+function lp = gaussianLogProbDL(rawActions, means, std)
+    % Batched dlarray version
+    var = std.^2 + 1e-8;
+    lp_raw = -0.5 * sum((rawActions - means).^2 ./ var + log(var) + log(2*pi), 1);
+    squashed = tanh(rawActions);
+    lp_correction = sum(log(max(1 - squashed.^2, 1e-6)), 1);
+    lp = lp_raw - lp_correction;
 end
 
-function idx = sampleDiscrete(probs)
-    cdf = cumsum(probs);
-    r = rand();
-    idx = find(r <= cdf, 1, 'first');
-    if isempty(idx)
-        idx = numel(probs);
+%% Map squashed action [-1,1] to parameter ranges
+function params = mapToParams(action_squashed, config)
+    % action_squashed is 3x1 in [-1, 1]
+    w  = config.wMin  + (action_squashed(1) + 1)/2 * (config.wMax  - config.wMin);
+    c1 = config.c1Min + (action_squashed(2) + 1)/2 * (config.c1Max - config.c1Min);
+    c2 = config.c2Min + (action_squashed(3) + 1)/2 * (config.c2Max - config.c2Min);
+    params = [w; c1; c2];
+end
+
+%% Gradient utilities — uses shared/neural_networks/optimization/clipLearnablesGradients.m
+
+function g = thresholdGrad(g, maxNorm)
+    g(isnan(g) | isinf(g)) = 0;
+    n = sqrt(sum(g(:).^2));
+    if n > maxNorm
+        g = g * (maxNorm / (n + 1e-6));
     end
 end

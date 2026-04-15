@@ -39,26 +39,16 @@ function algorithmSpecificStats = addFitnessComponents(algorithmSpecificStats, g
         % ===== OLD FITNESS FUNCTION (Legacy) =====
         % For backward compatibility with old code
 
-        algorithmSpecificStats.fitnessComponents.pathLength = getFieldOrDefault(actualComponents, 'pathLength', 0);
-        algorithmSpecificStats.fitnessComponents.turningPenalty = getFieldOrDefault(actualComponents, 'turningPenalty', 0);
-        algorithmSpecificStats.fitnessComponents.climbingPenalty = getFieldOrDefault(actualComponents, 'climbingPenalty', 0);
-        algorithmSpecificStats.fitnessComponents.heightPenalty = getFieldOrDefault(actualComponents, 'heightPenalty', 0);
-        algorithmSpecificStats.fitnessComponents.collisionPenalty = getFieldOrDefault(actualComponents, 'collisionPenalty', 0);
-        algorithmSpecificStats.fitnessComponents.terrainPenalty = getFieldOrDefault(actualComponents, 'terrainPenalty', 0);
-        algorithmSpecificStats.fitnessComponents.dangerZonePenalty = getFieldOrDefault(actualComponents, 'dangerZonePenalty', 0);
-        algorithmSpecificStats.fitnessComponents.duplicatePenalty = getFieldOrDefault(actualComponents, 'duplicatePenalty', 0);
+        algorithmSpecificStats.fitnessComponents.pathLength = getFieldValue(actualComponents, 'pathLength', 0);
+        algorithmSpecificStats.fitnessComponents.turningPenalty = getFieldValue(actualComponents, 'turningPenalty', 0);
+        algorithmSpecificStats.fitnessComponents.climbingPenalty = getFieldValue(actualComponents, 'climbingPenalty', 0);
+        algorithmSpecificStats.fitnessComponents.heightPenalty = getFieldValue(actualComponents, 'heightPenalty', 0);
+        algorithmSpecificStats.fitnessComponents.collisionPenalty = getFieldValue(actualComponents, 'collisionPenalty', 0);
+        algorithmSpecificStats.fitnessComponents.terrainPenalty = getFieldValue(actualComponents, 'terrainPenalty', 0);
+        algorithmSpecificStats.fitnessComponents.dangerZonePenalty = getFieldValue(actualComponents, 'dangerZonePenalty', 0);
+        algorithmSpecificStats.fitnessComponents.duplicatePenalty = getFieldValue(actualComponents, 'duplicatePenalty', 0);
     end
 
     % Total fitness (common to both)
     algorithmSpecificStats.fitnessComponents.totalFitness = globalBestFitness;
 end
-
-function value = getFieldOrDefault(structure, fieldName, defaultValue)
-    % Helper function to safely get field or return default
-    if isfield(structure, fieldName)
-        value = structure.(fieldName);
-    else
-        value = defaultValue;
-    end
-end
-

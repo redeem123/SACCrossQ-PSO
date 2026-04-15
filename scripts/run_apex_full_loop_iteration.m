@@ -37,8 +37,8 @@ function result = run_apex_full_loop_iteration()
 
     % Map user terminology:
     % "NoCrossScaleState" in this codebase corresponds to the No-CrossQ ablation model.
-    fullCurrent = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/rrsacpso_perparticle.mat';
-    noCrossScaleState = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/rrsacpso_abl_nocrossq.mat';
+    fullCurrent = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/AFSACPSO/afsacpso_perparticle.mat';
+    noCrossScaleState = '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/AFSACPSO/notlog/afsacpso_abl_nocrossq.mat';
 
     assert(isfile(fullCurrent), 'Missing Full model: %s', fullCurrent);
     assert(isfile(noCrossScaleState), 'Missing NoCrossScaleState model: %s', noCrossScaleState);
@@ -55,8 +55,8 @@ function result = run_apex_full_loop_iteration()
     result.timestamp = char(datetime('now', 'Format', 'yyyy-MM-dd''T''HH:mm:ss'));
     result.settings = settings;
     result.mapping = struct( ...
-        'fullName', 'RRSACPSO Full', ...
-        'noCrossScaleStateName', 'RRSACPSO NoCrossScaleState (No CrossQ ablation model)');
+        'fullName', 'AFSACPSO Full', ...
+        'noCrossScaleStateName', 'AFSACPSO NoCrossScaleState (No CrossQ ablation model)');
     result.baseline = baseline;
     result.iterationRan = false;
     result.iteration = struct();
@@ -151,12 +151,12 @@ function comp = runFullVsNoCross(fullModelPath, nocrossModelPath, settings)
 
             rng(seedBase + settings.seedOffsets.full);
             fullPathLen = quietPathLength(commonBefore, commonAfter, ...
-                'RRSACPSO_Pretrained', fullModelPath, 'per-particle');
+                'AFSACPSO_Pretrained', fullModelPath, 'per-particle');
             fullPathLengths(run) = fullPathLen;
 
             rng(seedBase + settings.seedOffsets.nocross);
             noCrossPathLen = quietPathLength(commonBefore, commonAfter, ...
-                'RRSACPSO_AblationRun', nocrossModelPath, 'ablation_no_crossq');
+                'AFSACPSO_AblationRun', nocrossModelPath, 'ablation_no_crossq');
             noCrossPathLengths(run) = noCrossPathLen;
 
             fprintf('  Run %2d/%2d: Full=%.4f | NoCrossScaleState=%.4f\n', ...
@@ -200,9 +200,9 @@ function iteration = runFocusedIteration(currentFull, nocrossPath, baseline, set
     % Minimal candidate set: only Full checkpoint variant swaps.
     candidates = {
         currentFull;
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/rrsacpso_perparticle_ep250.mat';
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/checkpoints/rrsacpso_perparticle_ep200.mat';
-        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/RRSACPSO/notlog/rrsacpso_perparticle.mat'
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/AFSACPSO/checkpoints/afsacpso_perparticle_ep250.mat';
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/AFSACPSO/checkpoints/afsacpso_perparticle_ep200.mat';
+        '/Users/hust-hwashin621m/Desktop/vietanhpaper-2/models/AFSACPSO/notlog/afsacpso_perparticle.mat'
     };
     candidates = unique(candidates(cellfun(@isfile, candidates)));
 
@@ -323,7 +323,7 @@ function v = runSingleModelScenario(modelPath, scenarioIdx, numDangerZones, numR
         seedBase = run * 1000 + scenarioIdx * 100;
         rng(seedBase + seedOffset);
         pathLen = quietPathLength(commonBefore, commonAfter, ...
-            'RRSACPSO_Pretrained', modelPath, 'per-particle');
+            'AFSACPSO_Pretrained', modelPath, 'per-particle');
         v(run) = pathLen;
     end
 end

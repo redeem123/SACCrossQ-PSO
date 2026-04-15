@@ -24,7 +24,7 @@ Algorithm                 | N       | Mean       | Std        | Median
 ------------------------------------------------------------------------
 RLAMPSO (Global)          |      30 | 12508.8075 |   155.8197 | 12565.5683
 DQN-PSO (Global)          |      30 | 12678.1963 |   321.3196 | 12584.9850
-RRSACPSO                 |      30 | 12420.4609 |   197.9903 | 12361.0422
+AFSACPSO                 |      30 | 12420.4609 |   197.9903 | 12361.0422
 MPSORL (Multi-Strategy RL-PSO) |      30 | 12273.1567 |   160.1144 | 12281.3254
 SAC-SAPSO                 |      30 | 12554.2112 |   200.3456 | 12543.3354
 PPO-PSO (Global)          |      30 | 12305.0088 |   168.3209 | 12269.2466
@@ -40,7 +40,7 @@ UAPSO [25]                |      30 | 12831.7525 |   156.8878 | 12828.8673
 Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
 -------------------------------------------------------------------------------------------
 RLAMPSO (Global)          vs DQN-PSO (Global)          | 30 | -169.3888 | 0.016309 | 0.034129
-RLAMPSO (Global)          vs RRSACPSO                 | 30 |  88.3466 | 0.097095 | 0.067163
+RLAMPSO (Global)          vs AFSACPSO                 | 30 |  88.3466 | 0.097095 | 0.067163
 RLAMPSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) | 30 | 235.6508 | 0.000029 | 0.000251
 RLAMPSO (Global)          vs SAC-SAPSO                 | 30 | -45.4037 | 0.252752 | 0.376459
 RLAMPSO (Global)          vs PPO-PSO (Global)          | 30 | 203.7987 | 0.000054 | 0.000436
@@ -51,7 +51,7 @@ RLAMPSO (Global)          vs CLPSO                     | 30 | -494.7368 | 0.0000
 RLAMPSO (Global)          vs SAEPSO [11]               | 30 | 402.7748 | 0.000000 | 0.000002
 RLAMPSO (Global)          vs SAEPSO* [11]              | 30 | 291.3522 | 0.000000 | 0.000007
 RLAMPSO (Global)          vs UAPSO [25]                | 30 | -322.9450 | 0.000000 | 0.000005
-DQN-PSO (Global)          vs RRSACPSO                 | 30 | 257.7354 | 0.000674 | 0.000862
+DQN-PSO (Global)          vs AFSACPSO                 | 30 | 257.7354 | 0.000674 | 0.000862
 DQN-PSO (Global)          vs MPSORL (Multi-Strategy RL-PSO) | 30 | 405.0396 | 0.000001 | 0.000008
 DQN-PSO (Global)          vs SAC-SAPSO                 | 30 | 123.9851 | 0.101349 | 0.195043
 DQN-PSO (Global)          vs PPO-PSO (Global)          | 30 | 373.1876 | 0.000001 | 0.000017
@@ -62,16 +62,16 @@ DQN-PSO (Global)          vs CLPSO                     | 30 | -325.3480 | 0.0000
 DQN-PSO (Global)          vs SAEPSO [11]               | 30 | 572.1636 | 0.000000 | 0.000002
 DQN-PSO (Global)          vs SAEPSO* [11]              | 30 | 460.7410 | 0.000000 | 0.000003
 DQN-PSO (Global)          vs UAPSO [25]                | 30 | -153.5562 | 0.014103 | 0.014380
-RRSACPSO                 vs MPSORL (Multi-Strategy RL-PSO) | 30 | 147.3042 | 0.005655 | 0.017036
-RRSACPSO                 vs SAC-SAPSO                 | 30 | -133.7503 | 0.016965 | 0.030798
-RRSACPSO                 vs PPO-PSO (Global)          | 30 | 115.4521 | 0.030021 | 0.034129
-RRSACPSO                 vs PSO-Standard              | 30 | -14.9513 | 0.795373 | 0.773380
-RRSACPSO                 vs PSO-LDIW                  | 30 | 103.1718 | 0.047106 | 0.014380
-RRSACPSO                 vs FIPS                      | 30 | -298.8863 | 0.000002 | 0.000033
-RRSACPSO                 vs CLPSO                     | 30 | -583.0834 | 0.000000 | 0.000002
-RRSACPSO                 vs SAEPSO [11]               | 30 | 314.4282 | 0.000000 | 0.000002
-RRSACPSO                 vs SAEPSO* [11]              | 30 | 203.0056 | 0.000037 | 0.000154
-RRSACPSO                 vs UAPSO [25]                | 30 | -411.2916 | 0.000000 | 0.000002
+AFSACPSO                 vs MPSORL (Multi-Strategy RL-PSO) | 30 | 147.3042 | 0.005655 | 0.017036
+AFSACPSO                 vs SAC-SAPSO                 | 30 | -133.7503 | 0.016965 | 0.030798
+AFSACPSO                 vs PPO-PSO (Global)          | 30 | 115.4521 | 0.030021 | 0.034129
+AFSACPSO                 vs PSO-Standard              | 30 | -14.9513 | 0.795373 | 0.773380
+AFSACPSO                 vs PSO-LDIW                  | 30 | 103.1718 | 0.047106 | 0.014380
+AFSACPSO                 vs FIPS                      | 30 | -298.8863 | 0.000002 | 0.000033
+AFSACPSO                 vs CLPSO                     | 30 | -583.0834 | 0.000000 | 0.000002
+AFSACPSO                 vs SAEPSO [11]               | 30 | 314.4282 | 0.000000 | 0.000002
+AFSACPSO                 vs SAEPSO* [11]              | 30 | 203.0056 | 0.000037 | 0.000154
+AFSACPSO                 vs UAPSO [25]                | 30 | -411.2916 | 0.000000 | 0.000002
 MPSORL (Multi-Strategy RL-PSO) vs SAC-SAPSO                 | 30 | -281.0545 | 0.000012 | 0.000047
 MPSORL (Multi-Strategy RL-PSO) vs PPO-PSO (Global)          | 30 | -31.8520 | 0.369282 | 0.410660
 MPSORL (Multi-Strategy RL-PSO) vs PSO-Standard              | 30 | -162.2555 | 0.003325 | 0.008470
@@ -130,7 +130,7 @@ Rank | Algorithm                 | Mean | Holm Wins
 3    | MPSORL (Multi-Strategy RL-PSO) | 12273.1567 |         6
 4    | PPO-PSO (Global)          | 12305.0088 |         6
 5    | PSO-LDIW                  | 12317.2891 |         6
-6    | RRSACPSO                 | 12420.4609 |         4
+6    | AFSACPSO                 | 12420.4609 |         4
 7    | PSO-Standard              | 12435.4122 |         4
 8    | RLAMPSO (Global)          | 12508.8075 |         3
 9    | SAC-SAPSO                 | 12554.2112 |         2

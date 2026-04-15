@@ -2,189 +2,49 @@
 
 This directory contains research papers related to the CQSAC-PSO (Advanced Parameter Exploration CrossQ-SAC for PSO) algorithm and its foundational methodologies.
 
-## Reinforcement Learning Core Algorithms
+## Core Papers in this Collection
 
-### Actor-Critic Methods
-1. **SAC_Original_2018_1801.01290.pdf**
-   - Title: "Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor"
-   - Authors: Haarnoja, T., Zhou, A., Abbeel, P., Levine, S.
-   - Venue: ICML 2018
-   - Key Contribution: Original SAC algorithm with entropy regularization
+The following papers are present as PDF files in this directory:
 
-2. **SAC_Applications_2018_1812.05905.pdf**
-   - Title: "Soft Actor-Critic Algorithms and Applications"
-   - Authors: Haarnoja, T., Zhou, A., Finn, C., Abbeel, P., Levine, S.
-   - Venue: ICML 2018
-   - Key Contribution: Extended SAC with applications and practical improvements
+1. **A Novel Reinforcement Learning-Based Particle Swarm Optimization Algorithm for Better Symmetry between Convergence Speed and Diversity**
+   - **Filename**: `A_Novel_Reinforcement_Learning-Based_Particle_Swarm_Optimization_Algorithm_for_Better_Symmetry.pdf`
+   - **Journal**: *Symmetry*, 2024
+   - **Key Contribution**: Balances exploration and exploitation using RL-based parameter control.
 
-3. **DDPG_2015_1509.02971.pdf**
-   - Title: "Continuous control with deep reinforcement learning"
-   - Authors: Lillicrap, T.P., Hunt, J.J., Pritzel, A., Heess, N., Erez, T., Tassa, Y., Silver, D., Wierstra, D.
-   - Venue: ICLR 2016
-   - Key Contribution: Deep Deterministic Policy Gradient for continuous control
+2. **A Reinforcement Learning Level-Based Particle Swarm Optimization Algorithm for Large-Scale Optimization**
+   - **Filename**: `A_Reinforcement_Learning_Level-Based_Particle_Swarm_Optimization_Algorithm_for_Large-Scale_Optimization.pdf`
+   - **Journal**: *Information Sciences*, 2022
+   - **Key Contribution**: Level-based PSO with reinforcement learning for high-dimensional problems.
 
-4. **A3C_2016_1602.01783.pdf**
-   - Title: "Asynchronous Methods for Deep Reinforcement Learning"
-   - Authors: Mnih, V., Badia, A.P., Mirza, M., Graves, A., Lillicrap, T., Harley, T., Silver, D., Kavukcuoglu, K.
-   - Venue: ICML 2016
-   - Key Contribution: Asynchronous Advantage Actor-Critic algorithm
+3. **An Intelligent Parameter Identification Method of DFIG Systems Using Hybrid Particle Swarm Optimization and Reinforcement Learning**
+   - **Filename**: `An_Intelligent_Parameter_Identification_Method_of_DFIG_Systems_Using_Hybrid_PSO_and_RL.pdf`
+   - **Journal**: *IEEE Access*, 2024
+   - **Key Contribution**: Application of hybrid PSO-RL for parameter identification in DFIG systems.
 
-5. **PolicyGradient_ActorCritic_2111.11232.pdf**
-   - Title: "Policy Gradient and Actor-Critic Learning in Continuous Time and Space"
-   - Authors: Lei et al.
-   - ArXiv: 2111.11232
-   - Key Contribution: Theoretical analysis of policy gradient methods
+4. **Multi-strategy self-learning particle swarm optimization algorithm based on reinforcement learning**
+   - **Filename**: `Multi-Strategy_Self-Learning_Particle_Swarm_Optimization_Algorithm_Based_on_Reinforcement_Learning.pdf`
+   - **Journal**: *Mathematical Biosciences and Engineering* (MBE), 2023
+   - **Key Contribution**: Adaptive strategy selection using Q-learning.
 
-### Policy Optimization Methods
-6. **PPO_2017_1707.06347.pdf**
-   - Title: "Proximal Policy Optimization Algorithms"
-   - Authors: Schulman, J., Wolski, F., Dhariwal, P., Radford, A., Klimov, O.
-   - Venue: ICLR 2017
-   - Key Contribution: Stable policy gradient method with clipped objective
+5. **Optimizing parameters in swarm intelligence using reinforcement learning: An application of Proximal Policy Optimization to the iSOMA algorithm**
+   - **Filename**: `Optimizing_Parameters_in_Swarm_Intelligence_Using_Reinforcement_Learning.pdf`
+   - **Journal**: *Swarm and Evolutionary Computation*, 2024
+   - **Key Contribution**: Uses PPO for online parameter adaptation in swarm algorithms.
 
-### Value-Based Methods
-7. **DQN_Atari_2015_1312.5602.pdf**
-   - Title: "Playing Atari with Deep Reinforcement Learning"
-   - Authors: Mnih, V., Kavukcuoglu, K., Silver, D., Graves, A., Antonoglou, I., Wierstra, D., Riedmüller, M.
-   - Venue: NIPS 2013
-   - Key Contribution: Deep Q-Learning with experience replay and target networks
+6. **RLAM-PSO: A reinforcement learning-based adaptive matching particle swarm optimization**
+   - **Filename**: `Reinforcement-Learning-Based_Parameter_Adaptation_Method_for_Particle_Swarm_Optimization.pdf`
+   - **Journal**: *Complex & Intelligent Systems*, 2023
+   - **Key Contribution**: DDPG-based parameter matching for PSO.
 
-## CQSAC-PSO-Specific
-
-8. **SAC_SAPSO_2024_MDPI.pdf**
-   - Title: "Soft Actor-Critic Approach to Self-Adaptive Particle Swarm Optimisation"
-   - Authors: Von Eschwege, D.H., Engelbrecht, A.P.
-   - Journal: Mathematics, Vol. 12, No. 22, 2024
-   - Publisher: MDPI (Open Access)
-   - Key Contribution: Direct precursor to CQSAC-PSO, combining SAC with PSO parameter adaptation
-
-## Optimization and Training Techniques
-
-### Batch Processing & Normalization
-9. **BatchNormalization_2015_1502.03167.pdf**
-   - Title: "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift"
-   - Authors: Ioffe, S., Szegedy, C.
-   - Venue: ICML 2015
-   - Key Contribution: BatchNorm technique used in CrossQ implementation
-
-10. **Adam_Optimizer_2014_1412.6980.pdf**
-    - Title: "Adam: A Method for Stochastic Optimization"
-    - Authors: Kingma, D.P., Ba, J.
-    - Venue: ICLR 2015
-    - Key Contribution: Adaptive learning rate optimizer
-
-### Experience and Replay
-11. **ExperienceReplay_2710.06574.pdf**
-    - Title: "The Effects of Memory Replay in Reinforcement Learning"
-    - Authors: Novati, G., Koumoutsakos, P.
-    - ArXiv: 1710.06574
-    - Key Contribution: Analysis of experience replay mechanisms
-
-12. **ExperienceReplayFundamentals_2007.06700.pdf**
-    - Title: "Revisiting Fundamentals of Experience Replay"
-    - Authors: Novati, G., Koumoutsakos, P.
-    - ArXiv: 2007.06700
-    - Key Contribution: Comprehensive study of experience replay variants
-
-### Advanced RL Techniques
-13. **CrossQ_2019_1902.05605.pdf**
-    - Title: "CrossQ: Batch Normalization in Deep Reinforcement Learning for Greater Sample Efficiency and Simplicity"
-    - Authors: Bhatt, A., Palenicek, D., Belousov, B., Argus, M., Amiranashvili, A., Brox, T., Peters, J.
-    - Venue: ICLR 2024
-    - Key Contribution: CrossQ optimization with BatchNorm and no target networks (used in CQSAC-PSO)
-
-14. **Entropy_Regularization_1912.01557.pdf**
-    - Title: "Policy Optimization Reinforcement Learning with Entropy Regularization"
-    - Authors: Haarnoja, T., et al.
-    - ArXiv: 1912.01557
-    - Key Contribution: Theoretical analysis of entropy regularization in SAC
-
-## Swarm Intelligence and PSO
-
-15. **PSO_Survey_1804.05319.pdf**
-    - Title: "Particle Swarm Optimization: A survey of historical and recent developments with hybridization perspectives"
-    - Authors: Bonyadi, M.R., Michalewicz, Z.
-    - ArXiv: 1804.05319
-    - Key Contribution: Comprehensive PSO survey covering improvements and variants
-
-## Reward Design and Optimization
-
-## Neural Network Architecture
-
-17. **Transformer_Attention_2017_1706.03762.pdf**
-    - Title: "Attention Is All You Need"
-    - Authors: Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N., Kaiser, Ł., Polosukhin, I.
-    - Venue: NeurIPS 2017
-    - Key Contribution: Transformer architecture with self-attention for sequence modeling in RL
-
-18. **ResNet_2015_1512.03385.pdf**
-    - Title: "Deep Residual Learning for Image Recognition"
-    - Authors: He, K., Zhang, X., Ren, S., Sun, J.
-    - Venue: CVPR 2016
-    - Key Contribution: Residual connections for training deep networks
-
-## Gradient Descent and Optimization
-
-19. **EvolutionStrategies_2017_1703.03864.pdf**
-    - Title: "Evolution Strategies as a Scalable Alternative to Reinforcement Learning"
-    - Authors: Salimans, T., Ho, J., Chen, X., Sidor, S., Sutskever, I.
-    - ArXiv: 1703.03864
-    - Key Contribution: Alternative optimization approach for comparison with RL-based methods
+7. **Soft Actor-Critic Approach to Self-Adaptive Particle Swarm Optimisation** (SAC-SAPSO)
+   - **Filename**: `Soft_Actor-Critic_Approach_to_Self-Adaptive_Particle_Swarm_Optimisation.pdf`
+   - **Journal**: *Mathematics*, 2024
+   - **Key Contribution**: Direct precursor to the current work, using SAC for continuous parameter control.
 
 ## Usage and Citation
 
-These papers provide the theoretical foundation and technical context for understanding CQSAC-PSO:
-
-- **Core Algorithm**: SAC_Original_2018 + CrossQ_2019
-- **State Representation**: Transformer_Attention_2017
-- **Parameter Domain**: PSO_Survey_1804
-- **Reward Design**: MultiObjective_RL_1809 + Entropy_Regularization_1912
-- **Network Architecture**: ResNet_2015 + BatchNormalization_2015
-- **Optimization**: Adam_Optimizer_2014 + DDPG_2015
-- **Practical Foundation**: SAC_SAPSO_2024 (Direct precursor)
-
-## Paper Statistics
-
-- **Total Papers**: 19
-- **Conference Papers**: 10
-- **Journal Papers**: 2
-- **ArXiv Papers**: 7
-- **Publication Year Range**: 2013-2024
-- **Total Size**: ~38 MB
-
-## Download Sources
-
-Papers were downloaded from:
-- **arXiv.org**: 13 papers (free preprints)
-- **MDPI**: 1 paper (open access)
-- **Conference/Journal sites**: 5 papers (peer-reviewed versions)
-
-## Recommendations for Reading
-
-**Essential Foundation** (Start Here):
-1. SAC_Original_2018
-2. CrossQ_2019
-3. Transformer_Attention_2017
-4. SAC_SAPSO_2024
-
-**Core Understanding**:
-5. PSO_Survey_1804
-6. DQN_Atari_2015
-7. DDPG_2015
-8. PPO_2017
-
-**Optimization & Training**:
-9. BatchNormalization_2015
-10. Adam_Optimizer_2014
-11. ExperienceReplayFundamentals_2007
-
-**Advanced Topics**:
-12. A3C_2016
-13. MultiObjective_RL_1809
-14. Entropy_Regularization_1912
-15. EvolutionStrategies_2017
+These papers provide the theoretical foundation and technical context for understanding AFSACPSO. They are used as baselines and inspirations for the state representation, reward design, and attractor-field control interface.
 
 ---
 
-**Last Updated**: November 10, 2025
-**CQSAC-PSO Repository**: C:\Users\PC\Desktop\Copy_of_New Folder - Copy\
+**Last Updated**: March 17, 2026

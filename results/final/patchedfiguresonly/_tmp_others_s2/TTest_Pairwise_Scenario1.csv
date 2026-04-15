@@ -1,11 +1,11 @@
 scenario_id,algorithm_1,algorithm_2,n_pairs,metric_name,mean_1,mean_2,mean_diff,ci95_low,ci95_high,t_stat,p_raw_t,p_holm_t,sig_holm_t,cohen_dz,wilcoxon_W,p_raw_wilcoxon,p_holm_wilcoxon,sig_holm_wilcoxon,rank_biserial_r
-1,RRSACPSO,PSO-Standard,1,global_fitness_total,1580.504476,1536.326489,44.17798712,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
-1,RRSACPSO,PSO-LDIW,1,global_fitness_total,1580.504476,1658.861496,-78.35702012,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
-1,RRSACPSO,FIPS,1,global_fitness_total,1580.504476,1724.080014,-143.5755381,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
-1,RRSACPSO,CLPSO,1,global_fitness_total,1580.504476,2141.33888,-560.834404,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
-1,RRSACPSO,SAEPSO [11],1,global_fitness_total,1580.504476,1607.875134,-27.37065839,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
-1,RRSACPSO,SAEPSO* [11],1,global_fitness_total,1580.504476,1433.224749,147.2797265,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
-1,RRSACPSO,UAPSO [25],1,global_fitness_total,1580.504476,1648.563758,-68.05928172,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,AFSACPSO,PSO-Standard,1,global_fitness_total,1580.504476,1536.326489,44.17798712,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,AFSACPSO,PSO-LDIW,1,global_fitness_total,1580.504476,1658.861496,-78.35702012,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,AFSACPSO,FIPS,1,global_fitness_total,1580.504476,1724.080014,-143.5755381,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,AFSACPSO,CLPSO,1,global_fitness_total,1580.504476,2141.33888,-560.834404,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,AFSACPSO,SAEPSO [11],1,global_fitness_total,1580.504476,1607.875134,-27.37065839,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+1,AFSACPSO,SAEPSO* [11],1,global_fitness_total,1580.504476,1433.224749,147.2797265,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+1,AFSACPSO,UAPSO [25],1,global_fitness_total,1580.504476,1648.563758,-68.05928172,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
 1,PSO-Standard,PSO-LDIW,1,global_fitness_total,1536.326489,1658.861496,-122.5350072,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
 1,PSO-Standard,FIPS,1,global_fitness_total,1536.326489,1724.080014,-187.7535252,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
 1,PSO-Standard,CLPSO,1,global_fitness_total,1536.326489,2141.33888,-605.0123911,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1

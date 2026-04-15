@@ -1,6 +1,6 @@
 # Parrot Anafi USA — GPS Validation
 
-Stream live GPS from the Parrot Anafi USA and overlay the real flight path on the RRSACPSO simulation terrain map.
+Stream live GPS from the Parrot Anafi USA and overlay the real flight path on the AFSACPSO simulation terrain map.
 
 ## Folder Structure
 

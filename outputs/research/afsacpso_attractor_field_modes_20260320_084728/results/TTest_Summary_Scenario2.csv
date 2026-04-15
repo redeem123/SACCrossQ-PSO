@@ -1,0 +1,5 @@
+scenario_id,metric_name,algorithm,n_valid,mean,std,median,min,max,average_rank,significant_wins_holm_t,friedman_chi_square,friedman_df,friedman_p,n_friedman_runs
+2,global_fitness_total,AFSACPSO,1,1783.360225,NaN,1783.360225,1783.360225,1783.360225,4,0,NaN,3,NaN,1
+2,global_fitness_total,SACPSO-Global,1,1654.45131,NaN,1654.45131,1654.45131,1654.45131,2,0,NaN,3,NaN,1
+2,global_fitness_total,SACPSO-5Subgroup,1,1755.942458,NaN,1755.942458,1755.942458,1755.942458,3,0,NaN,3,NaN,1
+2,global_fitness_total,SACPSO-PerParticle,1,1633.709371,NaN,1633.709371,1633.709371,1633.709371,1,0,NaN,3,NaN,1

@@ -1,5 +1,9 @@
 function config = PPOPSO_Config(mode)
-    % PPOPSO configuration aligned to the PPOPSO paper.
+    % PPOPSO configuration adapted from Klein et al. 2024 (iSOMA-RL) to PSO.
+    %
+    % Continuous PPO control of PSO parameters (w, c1, c2).
+    % State: FE completion + history of fitness, fitness diff, and actions.
+    % Online learning (no pretraining), following the paper's protocol.
 
     if nargin < 1
         mode = 'online';
@@ -8,61 +12,56 @@ function config = PPOPSO_Config(mode)
     config = struct();
     config.mode = mode;
     config.algorithm = 'PPO-PSO';
-    config.version = '1.1';
-    config.createdAt = datetime('now');
+    config.version = '2.0';
 
-    % ===== PPOPSO PAPER SETTINGS =====
-    config.numSubgroups = 4;
+
+    % ===== STATE DESIGN (adapted from Klein 2024 Table 5) =====
+    % Paper uses: fitness history, fitness diff history, action history
+    % hl=25 for 50000 FEs; we scale to hl=5 for 1000 iterations
     config.historyLen = 5;
-    config.numActionConfigs = 5;
-    config.stateSize = 1 + config.historyLen * (1 + config.numSubgroups);
+    config.actionDim = 3;  % w, c1, c2
+    % State: [FE_norm, fitness(hl), fitDiff(hl), actions(hl*3)]
+    config.stateSize = 1 + config.historyLen * (1 + 1 + config.actionDim);
 
+    % ===== NETWORK ARCHITECTURE (Klein 2024 Table 4) =====
     config.actorHiddenLayers = [64, 64];
     config.criticHiddenLayers = [64, 64];
 
-    % ===== PPO HYPERPARAMETERS =====
+    % ===== PPO HYPERPARAMETERS (Klein 2024 Table 3) =====
     config.gamma = 0.99;
     config.gaeLambda = 0.95;
     config.clipEpsilon = 0.2;
-    config.entropyCoef = 0.01;
+    config.entropyCoef = 0.0;    % Paper default: 0.0
     config.valueCoef = 0.5;
     config.actorLR = 3e-4;
     config.criticLR = 3e-4;
-    config.maxGradNorm = 1.0;
+    config.maxGradNorm = 0.5;
 
     % ===== TRAINING CONFIGURATION =====
-    config.numEpisodes = 1;
-    config.maxIterations = 600;
-    config.updateInterval = 64;
-    config.updateEpochs = 10;
-    config.minibatchSize = 64;
+    config.numEpisodes = 1;          % Online learning (paper: no pretraining)
+    config.maxIterations = 1000;
+    config.updateInterval = 64;      % PPO rollout buffer size (paper: n_steps=2048, scaled)
+    config.updateEpochs = 10;        % Paper: n_epochs=10
+    config.minibatchSize = 64;       % Paper: batch_size=64
 
     % ===== PSO CONFIGURATION =====
     config.popSize = 100;
     config.numWaypoints = 5;
     config.mapSize = [400, 400, 100];
-    config.paramsPerParticle = 3;
-    config.migrationInterval = 10;
-    config.migrationRate = 0.1;
-    config.velocityClampFactor = 0.5;
 
-    % ===== STATE/REWARD SETTINGS =====
-    config.historyInitValue = 1e9;
-    config.maxFunctionEvals = [];
+    % ===== PARAMETER RANGES =====
+    config.wMin = 0.1;   config.wMax = 0.9;
+    config.c1Min = 0.5;  config.c1Max = 2.5;
+    config.c2Min = 0.5;  config.c2Max = 2.5;
 
-    % ===== ACTION CONFIGURATIONS (TABLE 1) =====
-    config.actionTable = [
-        0.729, 1.49445, 1.49445;  % Standard PSO parameters
-        0.9,   1.8,     1.2;      % Strong exploration
-        0.4,   1.2,     1.8;      % Strong exploitation
-        0.9,   1.5,     1.5;      % Linearly decreasing inertia weight
-        0.6,   2.0,     1.0       % Another parameter variant
-    ];
-    config.linearWActionIndex = 4;
-    config.linearWStart = 0.9;
-    config.linearWEnd = 0.4;
+    % ===== VELOCITY CLAMPING (per-dimension, same as other methods) =====
+    config.velocityClampDelta = 0.5;
+
+    % ===== GAUSSIAN POLICY =====
+    config.initLogStd = -0.5;  % Initial log std for action noise
 
     % ===== LOGGING =====
     config.logInterval = 50;
     config.verbose = false;
+    config.disableVisualization = false;
 end

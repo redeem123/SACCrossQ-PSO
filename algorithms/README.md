@@ -4,30 +4,30 @@ MATLAB implementations of the proposed method and benchmark PSO variants.
 
 ## Current Focus
 
-- `rrsacpso/` is the main research algorithm.
-- The current RRSACPSO repo story centers on rank-residual parameter adaptation, not on legacy CrossQ-first wording.
-- `RLAM-OPENSOURSE/` is third-party reference code, not part of the primary MATLAB pipeline.
+- `afsacpso/` is the main research algorithm.
+- The current AFSACPSO repo story centers on attractor-field parameter adaptation, not on legacy CrossQ-first wording.
+- `rlam_opensource/` is third-party reference code, not part of the primary MATLAB pipeline.
 
 ## Directory Map
 
 | Directory | Role |
 |---|---|
-| `rrsacpso/` | Proposed RRSACPSO method and component tests |
+| `afsacpso/` | Proposed AFSACPSO method and component tests |
 | `baseline_pso/` | Standard PSO baseline |
 | `clpso/`, `dms_pso/`, `fips/`, `hpso_tvac/`, `lips/`, `pso_tvac/`, `uapso/`, `saepso/` | Classical / adaptive PSO baselines |
 | `dqn_pso/`, `mpsorl/`, `ppopso/`, `svpso/`, `rlampso/` | RL-based baselines |
 | `annpso/`, `igpso/`, `neural_guided_pso/`, `rlnnpso/` | Neural / hybrid baselines |
-| `RLAM-OPENSOURSE/` | Vendored external reference implementation |
+| `rlam_opensource/` | Vendored external reference implementation |
 
 ## Calling Convention
 
 Cross-algorithm dispatch goes through:
 - `algorithms/callGlobalPlanningAlgorithm.m`
 
-The most important RRSACPSO entry points are:
-- `algorithms/rrsacpso/globalPathPlanningRRSACPSO.m`
-- `algorithms/rrsacpso/RRSACPSO_Agent.m`
-- `algorithms/rrsacpso/RRSACPSO_Config.m`
+The most important AFSACPSO entry points are:
+- `algorithms/afsacpso/globalPathPlanningAFSACPSO.m`
+- `algorithms/afsacpso/AFSACPSO_Agent.m`
+- `algorithms/afsacpso/AFSACPSO_Config.m`
 
 ## Organization Rule
 

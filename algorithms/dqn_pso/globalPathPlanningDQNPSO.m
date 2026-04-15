@@ -108,13 +108,7 @@ function [globalPath, convergenceHistory, algorithmSpecificStats] = globalPathPl
             startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, ...
             mapSize, numWaypoints, globalBestComponents);
 
-        rawReward = prevBestFitness - globalBestFitness;
-        reward = rawReward;
-        if config.normalizeReward
-            denom = max(abs(prevBestFitness), 1.0);
-            reward = rawReward / denom;
-            reward = max(-1.0, min(1.0, reward));
-        end
+        reward = prevBestFitness - globalBestFitness;
         prevBestFitness = globalBestFitness;
         rewardHistory(iter) = reward;
 
@@ -171,7 +165,7 @@ end
 
 function config = getDQNPSOConfig(w_initial, c1_initial, c2_initial)
     config = struct();
-    config.wMin = 0.1;
+    config.wMin = 0.4;
     config.wMax = 0.9;
     config.w = fallbackValue(w_initial, config.wMax);
     config.c1 = fallbackValue(c1_initial, 2.0);
@@ -191,7 +185,6 @@ function config = getDQNPSOConfig(w_initial, c1_initial, c2_initial)
 
     config.useBaumWelch = true;
     config.hmmUpdateIterations = 1;
-    config.normalizeReward = true;  % Normalize to [-1, 1] for cross-algorithm comparability
 end
 
 function value = fallbackValue(inputValue, defaultValue)

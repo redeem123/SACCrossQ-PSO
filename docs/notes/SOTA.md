@@ -1,4 +1,4 @@
-# RRSACPSO SOTA Gap, Novelty Hypothesis, and Current Direction (2026-03-06)
+# AFSACPSO SOTA Gap, Novelty Hypothesis, and Current Direction (2026-03-06)
 
 ## 1) Recent Related Work (Targeted)
 
@@ -6,7 +6,7 @@
   - Source: https://openreview.net/forum?id=PczQtTsTIX
 - Scaling Off-Policy RL with Batch + Weight Normalization (Palenicek et al., 2025): studies normalization-driven stability in CrossQ-family off-policy RL.
   - Source: https://arxiv.org/abs/2502.07523
-- SAC-based PSO adaptation (Maguire et al., 2024): SAC for PSO parameter control, but not rank-residual particle control with deterministic cross-scale swarm encoding.
+- SAC-based PSO adaptation (Maguire et al., 2024): SAC for PSO parameter control, but not attractor-field particle control with deterministic cross-scale swarm encoding.
   - Source: https://www.mdpi.com/2227-7390/12/22/3481
 - RL-guided MOPSO for UAV (QL-MOPSO, 2025): tabular Q-learning + PSO hybrid for multi-objective UAV path planning.
   - Source: https://www.mdpi.com/2073-8994/17/8/1292
@@ -26,12 +26,12 @@ Observed gap in current benchmark behavior:
   - or RL for planning policy directly rather than PSO parameter residuals.
 
 Technical gap still not covered well by prior hybrids:
-- target-free CrossQ SAC + deterministic cross-scale swarm encoding + rank-residual PSO control in one online loop.
+- target-free CrossQ SAC + deterministic cross-scale swarm encoding + attractor-field PSO control in one online loop.
 
 ## 3) Current Novelty Hypothesis
 
 Hypothesis H6:
-A lean CrossQ-SAC controller for rank-residual PSO updates will outperform heavier RL-PSO hybrids if the controller focuses on three things only:
+A lean CrossQ-SAC controller for attractor-field PSO updates will outperform heavier RL-PSO hybrids if the controller focuses on three things only:
 1. informative swarm state compression,
 2. low-dimensional but expressive residual control over `w, c1, c2`,
 3. critic stabilization through a simple target-free CrossQ training setup instead of auxiliary replay or backup machinery.
@@ -73,12 +73,12 @@ where \(p_t\) is anneal progress.
 Compared with the cited RL-PSO hybrids, this implementation currently combines:
 - CrossQ-style target-free SAC backbone,
 - deterministic cross-scale swarm state encoding,
-- rank-residual mapping from low-dimensional SAC actions to particle-wise PSO control,
+- attractor-field mapping from low-dimensional SAC actions to particle-wise PSO control,
 - simple fitness-improvement reward inside the online PSO loop.
 
 ## 6) Current Status vs Termination Criterion
 
 Not met yet.
 - No edited variant is `#1` on all scenarios simultaneously.
-- The strongest ablation signal is that `RankResidualControl` matters a lot, while most extra SAC add-ons did not explain the remaining performance gap.
+- The strongest ablation signal is that `AttractorFieldControl` matters a lot, while most extra SAC add-ons did not explain the remaining performance gap.
 - The next search should stay focused on state representation, residual control geometry, and critic shaping rather than adding more SAC-side machinery.

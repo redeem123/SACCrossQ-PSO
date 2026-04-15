@@ -1,0 +1,49 @@
+{
+  "paper_slug": "afsacpso_uav",
+  "title": "Soft Actor-Critic with Attractor-Field PSO Parameter Adaptation for UAV Path Planning",
+  "claim": "AFSACPSO is the proposed attractor-field control-interface design; under frozen-policy deployment it remains competitive with the matched global SAC controller, while the global variant is the strongest retained external deployment row in the current benchmark.",
+  "created_at": "2026-04-02T04:15:48Z",
+  "repo_root": "/Users/hust-hwashin621m/Desktop/vietanhpaper-2",
+  "git_commit": "176a22f243ae617712afd78e6032b1e371b6d8ce",
+  "commands": [
+    "VIETANH_ALGO_GROUP=rlbased VIETANH_NUM_RUNS=30 APEXPSO_CONFIG_QUIET=1 /Applications/MATLAB_R2024a.app/bin/matlab -nodisplay -r \"run('run_comparison.m'); exit;\"",
+    "VIETANH_ALGO_GROUP=others VIETANH_NUM_RUNS=30 APEXPSO_CONFIG_QUIET=1 /Applications/MATLAB_R2024a.app/bin/matlab -nodisplay -r \"run('run_comparison.m'); exit;\"",
+    "VIETANH_ALGO_GROUP=afsacpso-modes VIETANH_NUM_RUNS=30 APEXPSO_CONFIG_QUIET=1 /Applications/MATLAB_R2024a.app/bin/matlab -nodisplay -r \"run('run_comparison.m'); exit;\""
+  ],
+  "configs": [
+    "/Users/hust-hwashin621m/Desktop/vietanhpaper-2/run_comparison.m",
+    "/Users/hust-hwashin621m/Desktop/vietanhpaper-2/algorithms/afsacpso/AFSACPSO_Config.m"
+  ],
+  "results_dirs": [
+    "/Users/hust-hwashin621m/Desktop/vietanhpaper-2/outputs/results",
+    "/Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/paper_artifacts/afsacpso_uav"
+  ],
+  "seeds": {
+    "run_seed_rule": "run * 1000 + scenarioIdx * 100 + algorithm.seedOffset",
+    "num_runs_target": 30
+  },
+  "metrics": [
+    "fitnessComponents.totalFitness",
+    "executionTime",
+    "rewardHistory",
+    "parameterHistory",
+    "paired_t_holm",
+    "wilcoxon_holm",
+    "friedman_rank"
+  ],
+  "tables": [
+    "main_results.csv",
+    "ablation.csv",
+    "runtime.csv"
+  ],
+  "figures": [
+    "learning_curves.pdf",
+    "ablation_effects.pdf",
+    "runtime_breakdown.pdf"
+  ],
+  "notes": [
+    "Code path patched on 2026-04-02 so that the external paper comparison groups `rlbased` and `others` now use `SACPSO-Global` rather than attractor-field `AFSACPSO`.",
+    "This manifest defines the reproducibility command path; fresh paper tables and figures still need to be regenerated after the launcher patch.",
+    "Attractor-field `AFSACPSO` remains the proposed method and should be reported through the same-backbone ablation workflow rather than as the external benchmark row."
+  ]
+}

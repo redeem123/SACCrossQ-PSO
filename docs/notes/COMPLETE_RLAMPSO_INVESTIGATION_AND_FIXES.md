@@ -77,7 +77,7 @@ Application: DIFFERENT parameters for different subgroups
 
 ### Evidence
 
-**Python Reference** (`RLAM-OPENSOURSE/test.py:282`):
+**Python Reference** (`rlam_opensource/test.py:282`):
 ```python
 def get_coefficients(actions, coefficients_multi=True, range_process=True):
     action = actions[0:5]  # Takes only FIRST 5 elements!
@@ -632,9 +632,9 @@ rlamNoPretrained = '';  % Empty string = no pretrained agent
 - `algorithms/rlampso/matlabimplementation/neural_networks/dl_toolbox/initializeDLToolboxDDPG.m`
 
 **Python Reference** (for verification):
-- `algorithms/RLAM-OPENSOURSE/test.py`
-- `algorithms/RLAM-OPENSOURSE/rl/DDPG/TF2_DDPG_Basic.py`
-- `algorithms/RLAM-OPENSOURSE/matAgent/baseAgent.py`
+- `algorithms/rlam_opensource/test.py`
+- `algorithms/rlam_opensource/rl/DDPG/TF2_DDPG_Basic.py`
+- `algorithms/rlam_opensource/matAgent/baseAgent.py`
 
 ---
 

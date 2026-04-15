@@ -29,6 +29,14 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
                 config.maxIterations = params.maxIterations;
             end
 
+            if isfield(params, 'configOverrides') && isstruct(params.configOverrides)
+                overrideFields = fieldnames(params.configOverrides);
+                for iField = 1:numel(overrideFields)
+                    fieldName = overrideFields{iField};
+                    config.(fieldName) = params.configOverrides.(fieldName);
+                end
+            end
+
             % Update config based on paramMode (CRITICAL!)
             switch config.paramMode
                 case 'global'
@@ -46,12 +54,6 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.convergenceHistory = convergence;
             algorithmSpecificStats.parameterHistory = paramHist;
             
-        case 'RLAMPGPSO'
-            % Policy Gradient variant of RLAMPSO (located in algorithms/rlampso/)
-            [globalPath, convergence, paramHist, algorithmSpecificStats] = globalPathPlanningRLAMPGPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, params.popSize, params.maxIterations, params.initialW, params.initialC1, params.initialC2);
-            algorithmSpecificStats.convergenceHistory = convergence;
-            algorithmSpecificStats.parameterHistory = paramHist;
-
         case 'PSO'
             [globalPath, convergence, algorithmSpecificStats] = globalPathPlanningPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, params.popSize, params.maxIterations, params.w, params.c1, params.c2);
             algorithmSpecificStats.convergenceHistory = convergence;
@@ -99,9 +101,10 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.convergenceHistory = convergence;
             algorithmSpecificStats.igStats = igStats;
 
-        case {'RRSACPSO', 'RRSACPSO_Online'}
-            % RRSACPSO online-only operation.
-            config = RRSACPSO_Config('online');
+        case {'AFSACPSO', 'AFSACPSO_Online'}
+            % AFSACPSO: pre-trained SAC policy + PSO + NM local search.
+            config = AFSACPSO_Config();
+            config.numEpisodes = 1;  % Single episode for deployment
             config.mapSize = mapSize;
 
             if isfield(params, 'popSize')
@@ -110,14 +113,12 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
 
             if isfield(params, 'maxIterations')
                 config.maxIterations = params.maxIterations;
-                config.warmupPeriod = min(50, floor(config.maxIterations * 0.1));
             end
 
             if isfield(params, 'paramMode')
                 config.paramMode = params.paramMode;
-            else
-                config.paramMode = 'rank-residual';
             end
+            % paramMode defaults from AFSACPSO_Config (no forced override)
 
             if isfield(params, 'configOverrides') && isstruct(params.configOverrides)
                 overrideFields = fieldnames(params.configOverrides);
@@ -126,10 +127,15 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
                     config.(fieldName) = params.configOverrides.(fieldName);
                 end
             end
-            config = applyAPEXPSOParamMode(config);
+            config = applyParamMode(config);
+
+            % Paper state mode uses ns+3 dimensional state (popSize + 3)
+            if isfield(config, 'stateMode') && strcmp(config.stateMode, 'paper')
+                config.stateSize = config.popSize + 3;
+            end
 
             [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory, learningStats] = ...
-                globalPathPlanningRRSACPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
+                globalPathPlanningAFSACPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
 
             intermediateWaypoints = globalPath(2:end-1, :);
             position = reshape(intermediateWaypoints', 1, []);
@@ -146,33 +152,6 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.criticLossHistory = learningStats.criticLossHistory;
             algorithmSpecificStats.agent = agent;
             algorithmSpecificStats.stateEncoder = stateEncoder;
-
-        case 'RLAMPSO_Train'
-            % RLAMPSO Training: Train DDPG/TD3 agent offline, then evaluate in current scenario
-            trainingConfig = RLAMPSO_Config(params.configMode);
-            trainingConfig.paramMode = params.paramMode;
-            trainingConfig.numEpisodes = params.trainingEpisodes;
-            trainingConfig.popSize = params.popSize;
-            trainingConfig.maxIterations = params.maxIterations;
-            trainingConfig.savePath = params.savePath;
-            trainingConfig.mapSize = mapSize;
-
-            [trainedAgent, trainingStats] = trainRLAMPSO_Parallel(trainingConfig, params.savePath);
-
-            evalConfig = trainingConfig;
-            evalConfig.numEpisodes = 1;
-
-            [globalPath, convergence, paramHistory, evalStats] = globalPathPlanningRLAMPSO( ...
-                startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, ...
-                params.popSize, params.maxIterations, params.initialW, params.initialC1, params.initialC2, ...
-                params.savePath, evalConfig, trainedAgent);
-
-            algorithmSpecificStats = evalStats;
-            algorithmSpecificStats.convergenceHistory = convergence;
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.trainingStats = trainingStats;
-            algorithmSpecificStats.modelSavePath = params.savePath;
-            algorithmSpecificStats.trainedAgent = trainedAgent;
 
         % ========================================================================
         % NEW ALGORITHMS FOR TOP-TIER JOURNAL COMPARISON
@@ -257,30 +236,6 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
             algorithmSpecificStats.trainingStats = trainingStats;
             algorithmSpecificStats.modelSavePath = params.savePath;
 
-        case 'SACSAPSO_Paper'
-            config = SACSAPSO_Config('paper');
-            config.popSize = params.popSize;
-            config.maxIterations = params.maxIterations;
-            config.observationInterval = params.observationInterval;
-            config.mapSize = mapSize;
-            config.stateSize = config.popSize + 3;
-
-            [globalPath, bestFitness, fitnessHistory, agent, stateEncoder, paramHistory, learningStats] = ...
-                globalPathPlanningSACSAPSO(startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config);
-
-            [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath, startPoint, goalPoint, ...
-                dangerZones, terrainGrid, terrainX, terrainY, bestFitness);
-
-            algorithmSpecificStats.convergenceHistory = fitnessHistory;
-            algorithmSpecificStats.fitnessComponents = fitnessComponents;
-            algorithmSpecificStats.finalFitness = bestFitness;
-            algorithmSpecificStats.actualBestFitness = bestFitness;
-            algorithmSpecificStats.parameterHistory = paramHistory;
-            algorithmSpecificStats.rewardHistory = learningStats.rewardHistory;
-            algorithmSpecificStats.criticLossHistory = learningStats.criticLossHistory;
-            algorithmSpecificStats.agent = agent;
-            algorithmSpecificStats.stateEncoder = stateEncoder;
-
         case 'PPO_PSO'
             config = PPOPSO_Config('online');
             config.popSize = params.popSize;
@@ -308,30 +263,6 @@ function [globalPath, algorithmSpecificStats] = callGlobalPlanningAlgorithm(algo
     end
 end
 
-function config = applyAPEXPSOParamMode(config)
-    switch config.paramMode
-        case 'global'
-            config.usePerParticleActions = false;
-            config.useRankResidualControl = false;
-            config.actionSize = 3;
-        case '5subgroup'
-            config.usePerParticleActions = false;
-            config.useRankResidualControl = false;
-            config.actionSize = 15;
-        case 'per-particle'
-            config.usePerParticleActions = true;
-            config.useRankResidualControl = false;
-            config.actionSize = config.popSize * config.paramsPerParticle;
-        otherwise
-            config.paramMode = 'rank-residual';
-            config.usePerParticleActions = false;
-            config.useRankResidualControl = true;
-            config.actionSize = 9;
-    end
-
-    config.targetEntropy = -config.actionSize;
-end
-
 function [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath, startPoint, goalPoint, ...
     dangerZones, terrainGrid, terrainX, terrainY, fallbackFitness)
     fitnessComponents = struct();
@@ -351,5 +282,3 @@ function [bestFitness, fitnessComponents] = evaluatePathFromWaypoints(globalPath
         bestFitness = evaluatedFitness;
     end
 end
-
-%% 1.. RLAM-PSO (DDPG-based)

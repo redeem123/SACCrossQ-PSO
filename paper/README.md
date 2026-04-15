@@ -1,24 +1,33 @@
 # paper/
 
-Archived paper assets and submission-side material.
+Active manuscript and submission workspace for the AFSACPSO paper.
 
 ## Current Status
 
-This directory is no longer the active manuscript source.
+- `main.tex` is the active Elsevier submission draft.
+- `main.pdf` is the latest local build of that draft.
+- `COVER_LETTER.md` and `HIGHLIGHTS.md` are the current submission-side documents.
+- `afsacpso_uav/` stores outline and paper-design notes.
+- `results/paper_artifacts/afsacpso_uav/manifest.json` is the reproducibility manifest referenced by the manuscript.
 
-- Active manuscript: `sage_latex_template_4_unzipped/`
-- This directory: archived Elsevier-era files, cover letter, highlights, and old review material
-
-## What Lives Here
+## Supporting Files
 
 | Path | Purpose |
 |---|---|
-| `main.tex` | Older Elsevier-style manuscript snapshot |
-| `main_backup.tex` | Backup of that older manuscript |
-| `Background_RelatedWork.tex` | Supporting text fragment from the older paper |
-| `COVER_LETTER.md` | Submission-side letter draft |
-| `HIGHLIGHTS.md` | Submission highlights |
-| `paper_review.md` | Internal notes |
-| `doc/` | Elsevier template documentation bundle |
+| `main_backup.tex` | Earlier single-author manuscript snapshot |
+| `main_backup2.tex` | Additional manuscript backup |
+| `Background_RelatedWork.tex` | Supporting text fragment |
+| `paper_review.md` | Internal review notes |
+| `data/` | Figures and table-side source assets used by `main.tex` |
 
-If this directory is revived later, it should be treated explicitly as an archive or template port, not as the default paper path.
+## Build
+
+```sh
+cd paper
+pdflatex -interaction=nonstopmode main.tex
+bibtex main
+pdflatex -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
+```
+
+If the bibliography has not changed, the `bibtex` step can be skipped for quick rebuilds.

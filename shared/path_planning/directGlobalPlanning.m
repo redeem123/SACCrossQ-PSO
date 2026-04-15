@@ -32,11 +32,8 @@ function [finalPath, pathLength, executionTime, timeHistory, metrics] = directGl
     [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmName, remainingParams);
 
     displayName = algorithmName;
-    if startsWith(displayName, 'RRSACPSO_')
-        displayName = strrep(displayName, 'RRSACPSO_Online', 'RRSACPSO');
-    end
-    if strcmp(displayName, 'SACSAPSO_Paper')
-        displayName = 'SAC-SAPSO (Paper)';
+    if startsWith(displayName, 'AFSACPSO_')
+        displayName = strrep(displayName, 'AFSACPSO_Online', 'AFSACPSO');
     end
     if strcmp(displayName, 'PPO_PSO')
         displayName = 'PPO-PSO';

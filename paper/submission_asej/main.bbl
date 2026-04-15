@@ -1,0 +1,318 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Delavarpour2021A}
+N.~Delavarpour, C.~Koparan, J.~Nowatzki, S.~Bajwa, X.~Sun, A technical study on
+  uav characteristics for precision agriculture applications and associated
+  practical challenges, Remote Sensing 13~(6) (2021) 1204.
+\newblock \href {https://doi.org/10.3390/rs13061204}
+  {\path{doi:10.3390/rs13061204}}.
+
+\bibitem{Fascista2022Toward}
+A.~Fascista, A.~Coluccia, C.~Ravazzi, E.~Magli, Toward integrated large-scale
+  environmental monitoring using wsn/uav/crowdsensing: A review of
+  applications, signal processing, and future perspectives, Sensors 22~(5)
+  (2022) 1824.
+\newblock \href {https://doi.org/10.3390/s22051824}
+  {\path{doi:10.3390/s22051824}}.
+
+\bibitem{Alotaibi2019LSAR}
+E.~T. Alotaibi, S.~S. Alqefari, A.~Koubaa, Lsar: Multi-uav collaboration for
+  search and rescue missions, IEEE Access 7 (2019) 55817--55832.
+\newblock \href {https://doi.org/10.1109/access.2019.2912306}
+  {\path{doi:10.1109/access.2019.2912306}}.
+
+\bibitem{AitSaadi2022UAV}
+A.~Ait~Saadi, A.~Soukane, Y.~Meraihi, G.~Benmessaoud, S.~Mirjalili, Uav path
+  planning using optimization approaches: A survey, Archives of Computational
+  Methods in Engineering 29 (2022) 4233--4284.
+\newblock \href {https://doi.org/10.1007/s11831-022-09742-7}
+  {\path{doi:10.1007/s11831-022-09742-7}}.
+
+\bibitem{Zhou2025A}
+Y.~Zhou, L.~Yan, Y.~Han, H.~Xie, Y.~Zhao, A survey on the key technologies of
+  uav motion planning, Drones 9~(3) (2025) 194.
+\newblock \href {https://doi.org/10.3390/drones9030194}
+  {\path{doi:10.3390/drones9030194}}.
+
+\bibitem{Meng2025Multiobjective}
+K.~Meng, B.~Wu, B.~Xin, F.~Deng, C.~Chen, Multiobjective multi-uav path
+  planning via evolutionary multitasking optimization with adaptive operator
+  selection and knowledge fusion, Swarm and Evolutionary Computation 99 (2025)
+  102145.
+\newblock \href {https://doi.org/10.1016/j.swevo.2025.102145}
+  {\path{doi:10.1016/j.swevo.2025.102145}}.
+
+\bibitem{Kennedy1995Particle}
+J.~Kennedy, R.~Eberhart, Particle swarm optimization, in: Proceedings of the
+  IEEE International Conference on Neural Networks, Perth, Australia, 1995, pp.
+  1942--1948.
+\newblock \href {https://doi.org/10.1109/ICNN.1995.488968}
+  {\path{doi:10.1109/ICNN.1995.488968}}.
+
+\bibitem{Cheng2024Research}
+Q.~Cheng, Z.~Zhang, Y.~Du, Y.~Li, Research on particle swarm optimization-based
+  uav path planning technology in urban airspace, Drones 8~(12) (2024) 701.
+\newblock \href {https://doi.org/10.3390/drones8120701}
+  {\path{doi:10.3390/drones8120701}}.
+
+\bibitem{Yang2015Lowdiscrepancy}
+C.~Yang, W.~Gao, N.~Liu, C.~Song, Low-discrepancy sequence initialized particle
+  swarm optimization algorithm with high-order nonlinear time-varying inertia
+  weight, Applied Soft Computing 29 (2015) 386--394.
+\newblock \href {https://doi.org/10.1016/j.asoc.2015.01.004}
+  {\path{doi:10.1016/j.asoc.2015.01.004}}.
+
+\bibitem{Bansal2011Inertia}
+J.~C. Bansal, et~al., Inertia weight strategies in particle swarm optimization,
+  in: Proceedings of the 2011 Third World Congress on Nature and Biologically
+  Inspired Computing, 2011, pp. 633--640.
+\newblock \href {https://doi.org/10.1109/nabic.2011.6089659}
+  {\path{doi:10.1109/nabic.2011.6089659}}.
+
+\bibitem{Liu2025A}
+Y.~Liu, H.~Zhang, H.~Zheng, et~al., A spherical vector-based adaptive
+  evolutionary particle swarm optimization for uav path planning under threat
+  conditions, Scientific Reports 15 (2025) 2116.
+\newblock \href {https://doi.org/10.1038/s41598-025-85912-4}
+  {\path{doi:10.1038/s41598-025-85912-4}}.
+
+\bibitem{vonEschwege2024Soft}
+D.~von Eschwege, A.~Engelbrecht, Soft actor-critic approach to self-adaptive
+  particle swarm optimisation, Mathematics 12~(22) (2024) 3481.
+\newblock \href {https://doi.org/10.3390/math12223481}
+  {\path{doi:10.3390/math12223481}}.
+
+\bibitem{Hart1968A}
+P.~E. Hart, N.~J. Nilsson, B.~Raphael, A formal basis for the heuristic
+  determination of minimum cost paths, IEEE Transactions on Systems Science and
+  Cybernetics 4~(2) (1968) 100--107.
+\newblock \href {https://doi.org/10.1109/tssc.1968.300136}
+  {\path{doi:10.1109/tssc.1968.300136}}.
+
+\bibitem{Karur2021A}
+K.~Karur, N.~Sharma, C.~Dharmatti, J.~E. Siegel, A survey of path planning
+  algorithms for mobile robots, Vehicles 3~(3) (2021) 448--468.
+\newblock \href {https://doi.org/10.3390/vehicles3030027}
+  {\path{doi:10.3390/vehicles3030027}}.
+
+\bibitem{Debnath2024An}
+D.~Debnath, F.~Vanegas, S.~Boiteau, F.~Gonzalez, An integrated geometric
+  obstacle avoidance and genetic algorithm tsp model for uav path planning,
+  Drones 8~(7) (2024) 302.
+\newblock \href {https://doi.org/10.3390/drones8070302}
+  {\path{doi:10.3390/drones8070302}}.
+
+\bibitem{Phung2021Safetyenhanced}
+M.~D. Phung, Q.~P. Ha, Safety-enhanced uav path planning with spherical
+  vector-based particle swarm optimization, Applied Soft Computing 109 (2021)
+  107376.
+\newblock \href {https://doi.org/10.1016/j.asoc.2021.107376}
+  {\path{doi:10.1016/j.asoc.2021.107376}}.
+
+\bibitem{Lynn2017Ensemble}
+N.~Lynn, P.~N. Suganthan, Ensemble particle swarm optimizer, Applied Soft
+  Computing 55 (2017) 533--548.
+\newblock \href {https://doi.org/10.1016/j.asoc.2017.02.007}
+  {\path{doi:10.1016/j.asoc.2017.02.007}}.
+
+\bibitem{Eberhart2000Comparing}
+R.~C. Eberhart, Y.~Shi, Comparing inertia weights and constriction factors in
+  particle swarm optimization, in: Proceedings of the IEEE Congress on
+  Evolutionary Computation, Vol.~1, 2000, pp. 84--88.
+\newblock \href {https://doi.org/10.1109/CEC.2000.870279}
+  {\path{doi:10.1109/CEC.2000.870279}}.
+
+\bibitem{Ratnaweera2004Selforganizing}
+A.~Ratnaweera, S.~K. Halgamuge, H.~C. Watson, Self-organizing hierarchical
+  particle swarm optimizer with time-varying acceleration coefficients, IEEE
+  Transactions on Evolutionary Computation 8~(3) (2004) 240--255.
+\newblock \href {https://doi.org/10.1109/tevc.2004.826071}
+  {\path{doi:10.1109/tevc.2004.826071}}.
+
+\bibitem{Nickabadi2011A}
+A.~Nickabadi, M.~M. Ebadzadeh, R.~Safabakhsh, A novel particle swarm
+  optimization algorithm with adaptive inertia weight, Applied Soft Computing
+  11~(8) (2011) 3658--3670.
+\newblock \href {https://doi.org/10.1016/j.asoc.2011.01.037}
+  {\path{doi:10.1016/j.asoc.2011.01.037}}.
+
+\bibitem{Kentzoglanakis2009Particle}
+K.~Kentzoglanakis, M.~Poole, Particle swarm optimization with an oscillating
+  inertia weight, in: Proceedings of GECCO '09, ACM, 2009, pp. 1749--1750.
+\newblock \href {https://doi.org/10.1145/1569901.1570140}
+  {\path{doi:10.1145/1569901.1570140}}.
+
+\bibitem{Chen2018A}
+K.~Chen, F.~Zhou, L.~Yin, S.~Wang, Y.~Wang, F.~Wan, A hybrid particle swarm
+  optimizer with sine cosine acceleration coefficients, Information Sciences
+  422 (2018) 218--241.
+\newblock \href {https://doi.org/10.1016/j.ins.2017.09.015}
+  {\path{doi:10.1016/j.ins.2017.09.015}}.
+
+\bibitem{Isiet2019Selfadapting}
+M.~Isiet, M.~Gadala, Self-adapting control parameters in particle swarm
+  optimization, Applied Soft Computing 83 (2019) 105653.
+\newblock \href {https://doi.org/10.1016/j.asoc.2019.105653}
+  {\path{doi:10.1016/j.asoc.2019.105653}}.
+
+\bibitem{Zhan2009Adaptive}
+Z.-H. Zhan, J.~Zhang, Y.~Li, H.~S.-H. Chung, Adaptive particle swarm
+  optimization, IEEE Transactions on Systems, Man, and Cybernetics, Part B
+  (Cybernetics) 39~(6) (2009) 1362--1381.
+\newblock \href {https://doi.org/10.1109/tsmcb.2009.2015956}
+  {\path{doi:10.1109/tsmcb.2009.2015956}}.
+
+\bibitem{Han2022Improved}
+Z.~Han, J.~Zhang, Y.~Zhai, J.~Lu, Improved particle swarm optimization based on
+  entropy and its application in implicit generalized predictive control,
+  Entropy 24~(1) (2022) 46.
+\newblock \href {https://doi.org/10.3390/e24010048}
+  {\path{doi:10.3390/e24010048}}.
+
+\bibitem{Li2017Particle}
+S.-F. Li, C.-Y. Cheng, Particle swarm optimization with fitness adjustment
+  parameters, Computers \& Industrial Engineering 113 (2017) 831--841.
+\newblock \href {https://doi.org/10.1016/j.cie.2017.06.006}
+  {\path{doi:10.1016/j.cie.2017.06.006}}.
+
+\bibitem{Harrison2018Selfadaptive}
+K.~R. Harrison, A.~P. Engelbrecht, B.~M. Ombuki-Berman,
+  Self-adaptive~particle~swarm optimization: A review and analysis of
+  convergence, Swarm Intelligence 12~(3) (2018) 187--226.
+\newblock \href {https://doi.org/10.1007/s11721-017-0150-9}
+  {\path{doi:10.1007/s11721-017-0150-9}}.
+
+\bibitem{Sutton2018Reinforcement}
+R.~S. Sutton, A.~G. Barto,
+  \href{http://incompleteideas.net/book/the-book-2nd.html}{Reinforcement
+  Learning: An Introduction}, 2nd Edition, MIT Press, 2018.
+\newline\urlprefix\url{http://incompleteideas.net/book/the-book-2nd.html}
+
+\bibitem{Bai2023Evolutionary}
+H.~Bai, R.~Cheng, Y.~Jin, \href{https://arxiv.org/abs/2108.11863}{Evolutionary
+  reinforcement learning: A survey}, arXiv preprint arXiv:2108.11863 (2023).
+\newline\urlprefix\url{https://arxiv.org/abs/2108.11863}
+
+\bibitem{Sun2021Learning}
+J.~Sun, X.~Liu, T.~B{\"a}ck, Z.~Xu,
+  \href{https://ieeexplore.ieee.org/document/9359652}{Learning adaptive
+  differential evolution algorithm from optimization experiences by policy
+  gradient}, IEEE Transactions on Evolutionary Computation 25~(4) (2021)
+  666--680.
+\newline\urlprefix\url{https://ieeexplore.ieee.org/document/9359652}
+
+\bibitem{Klein2024Optimizing}
+L.~Klein, I.~Zelinka, D.~Seidl, Optimizing parameters in swarm intelligence
+  using reinforcement learning: An application of proximal policy optimization
+  to the isoma algorithm, Swarm and Evolutionary Computation 85 (2024) 101487.
+\newblock \href {https://doi.org/10.1016/j.swevo.2024.101487}
+  {\path{doi:10.1016/j.swevo.2024.101487}}.
+
+\bibitem{Meng2023Multistrategy}
+X.~Meng, H.~Li, A.~Chen, Multi-strategy self-learning particle swarm
+  optimization algorithm based on reinforcement learning, Mathematical
+  Biosciences and Engineering 20~(5) (2023) 8498--8530.
+\newblock \href {https://doi.org/10.3934/mbe.2023373}
+  {\path{doi:10.3934/mbe.2023373}}.
+
+\bibitem{Aoun2024Deep}
+O.~Aoun, Deep q-network-enhanced self-tuning control of particle swarm
+  optimization, Modelling 5~(4) (2024) 1709--1728.
+\newblock \href {https://doi.org/10.3390/modelling5040089}
+  {\path{doi:10.3390/modelling5040089}}.
+
+\bibitem{Li2023Reinforcement}
+W.~Li, P.~Liang, B.~Sun, Y.~Sun, Y.~Huang, Reinforcement learning-based
+  particle swarm optimization with neighborhood differential mutation strategy,
+  Swarm and Evolutionary Computation 78 (2023) 101295.
+\newblock \href {https://doi.org/10.1016/j.swevo.2023.101274}
+  {\path{doi:10.1016/j.swevo.2023.101274}}.
+
+\bibitem{Liu2023HRLPSO}
+Y.~Liu, J.~Zhang, W.~Chen, Hybrid reinforcement learning particle swarm
+  optimization with chaotic adaptive weight and adaptive learning factors,
+  Mathematics 11~(19) (2023) 4089.
+\newblock \href {https://doi.org/10.3390/math11194089}
+  {\path{doi:10.3390/math11194089}}.
+
+\bibitem{Yin2023RLAMPSO}
+J.~Yin, N.~Wang, Rlam-pso: A reinforcement learning-based adaptive matching
+  particle swarm optimization, Complex \& Intelligent Systems 9 (2023)
+  5305--5319.
+\newblock \href {https://doi.org/10.1007/s40747-023-01012-8}
+  {\path{doi:10.1007/s40747-023-01012-8}}.
+
+\bibitem{Watkins1992Qlearning}
+C.~J. C.~H. Watkins, P.~Dayan, Q-learning, Machine Learning 8~(3--4) (1992)
+  279--292.
+\newblock \href {https://doi.org/10.1007/bf00992698}
+  {\path{doi:10.1007/bf00992698}}.
+
+\bibitem{Wang2022ARL}
+F.~Wang, X.~Wang, S.~Sun, A reinforcement learning level-based particle swarm
+  optimization algorithm for large-scale optimization, Information Sciences 602
+  (2022) 298--312.
+\newblock \href {https://doi.org/10.1016/j.ins.2022.04.053}
+  {\path{doi:10.1016/j.ins.2022.04.053}}.
+
+\bibitem{Zhang2024ANovel}
+F.~Zhang, Z.~Chen, A novel reinforcement learning-based particle swarm
+  optimization algorithm for better symmetry between convergence speed and
+  diversity, Symmetry 16~(10) (2024) 1290.
+\newblock \href {https://doi.org/10.3390/sym16101290}
+  {\path{doi:10.3390/sym16101290}}.
+
+\bibitem{Diao2024An}
+R.~Diao, et~al., An intelligent parameter identification method of dfig systems
+  using hybrid particle swarm optimization and reinforcement learning, IEEE
+  Access 12 (2024) 149669--149684.
+\newblock \href {https://doi.org/10.1109/ACCESS.2024.3475852}
+  {\path{doi:10.1109/ACCESS.2024.3475852}}.
+
+\bibitem{Lesort2018State}
+T.~Lesort, N.~D{\'\i}az-Rodr{\'\i}guez, J.~F. Goudou, D.~Filliat, State
+  representation learning for control: An overview, Neural Networks 108 (2018)
+  379--392.
+\newblock \href {https://doi.org/10.1016/j.neunet.2018.07.006}
+  {\path{doi:10.1016/j.neunet.2018.07.006}}.
+
+\bibitem{Haarnoja2018Soft}
+T.~Haarnoja, A.~Zhou, P.~Abbeel, S.~Levine,
+  \href{https://proceedings.mlr.press/v80/haarnoja18b.html}{Soft actor-critic:
+  Off-policy maximum entropy deep reinforcement learning with a stochastic
+  actor}, in: Proceedings of the 35th International Conference on Machine
+  Learning, 2018, pp. 1861--1870.
+\newline\urlprefix\url{https://proceedings.mlr.press/v80/haarnoja18b.html}
+
+\bibitem{Clerc2002The}
+M.~Clerc, J.~Kennedy, The particle swarm---explosion, stability, and
+  convergence in a multidimensional complex space, IEEE Transactions on
+  Evolutionary Computation 6~(1) (2002) 58--73.
+\newblock \href {https://doi.org/10.1109/4235.985692}
+  {\path{doi:10.1109/4235.985692}}.
+
+\bibitem{Schulman2017Proximal}
+J.~Schulman, F.~Wolski, P.~Dhariwal, A.~Radford, O.~Klimov,
+  \href{https://arxiv.org/abs/1707.06347}{Proximal policy optimization
+  algorithms}, arXiv preprint arXiv:1707.06347 (2017).
+\newline\urlprefix\url{https://arxiv.org/abs/1707.06347}
+
+\bibitem{DulacArnold2015Deep}
+G.~Dulac-Arnold, R.~Evans, H.~van Hasselt, P.~Sunehag, T.~Lillicrap, J.~Hunt,
+  T.~Mann, T.~Weber, T.~Degris, B.~Coppin, Deep reinforcement learning in large
+  discrete action spaces, arXiv preprint arXiv:1512.07679 (2015).
+
+\bibitem{Zhou2020PLAS}
+W.~Zhou, S.~Bajracharya, D.~Held,
+  \href{https://proceedings.mlr.press/v155/zhou21b.html}{Plas: Latent action
+  space for offline reinforcement learning}, in: J.~Kober, F.~Ramos, C.~Tomlin
+  (Eds.), Proceedings of the 2020 Conference on Robot Learning, Vol. 155 of
+  Proceedings of Machine Learning Research, PMLR, 2021, pp. 1719--1735.
+\newline\urlprefix\url{https://proceedings.mlr.press/v155/zhou21b.html}
+
+\end{thebibliography}

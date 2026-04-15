@@ -1,9 +1,9 @@
-# RRSACPSO Research Log
+# AFSACPSO Research Log
 
 ## Current Retained Stack
 
-The repository now keeps only the reduced RRSACPSO core built around:
-- `RankResidualControl`
+The repository now keeps only the reduced AFSACPSO core built around:
+- `AttractorFieldControl`
 - `CrossScaleState`
 - `CrossQ-SAC`
 

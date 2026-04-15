@@ -1,0 +1,7 @@
+scenario_id,algorithm_1,algorithm_2,n_pairs,metric_name,mean_1,mean_2,mean_diff,ci95_low,ci95_high,t_stat,p_raw_t,p_holm_t,sig_holm_t,cohen_dz,wilcoxon_W,p_raw_wilcoxon,p_holm_wilcoxon,sig_holm_wilcoxon,rank_biserial_r
+2,AFSACPSO,SACPSO-Global,1,global_fitness_total,1783.360225,1654.45131,128.9089151,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+2,AFSACPSO,SACPSO-5Subgroup,1,global_fitness_total,1783.360225,1755.942458,27.41776756,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+2,AFSACPSO,SACPSO-PerParticle,1,global_fitness_total,1783.360225,1633.709371,149.6508545,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+2,SACPSO-Global,SACPSO-5Subgroup,1,global_fitness_total,1654.45131,1755.942458,-101.4911476,NaN,NaN,NaN,1,1,0,NaN,0,1,1,0,-1
+2,SACPSO-Global,SACPSO-PerParticle,1,global_fitness_total,1654.45131,1633.709371,20.74193936,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1
+2,SACPSO-5Subgroup,SACPSO-PerParticle,1,global_fitness_total,1755.942458,1633.709371,122.2330869,NaN,NaN,NaN,1,1,0,NaN,1,1,1,0,1

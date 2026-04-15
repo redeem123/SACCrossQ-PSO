@@ -316,14 +316,14 @@ Best fitness: 1664.6511
 
 
 ========== Direct Global Planning ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Start: [10.0, 95.0, 10.0]
 Goal:  [97.0, 2.0, 10.0]
 ============================================
 
 
 ╔══════════════════════════════════════════════════════════╗
-║              RRSACPSO Global Path Planning              ║
+║              AFSACPSO Global Path Planning              ║
 ╚══════════════════════════════════════════════════════════╝
 
 
@@ -391,7 +391,7 @@ Goal:  [97.0, 2.0, 10.0]
   [Iter 1000/1000] Best: 1575.2968 | Alpha: 0.1545
 
 ╔════════════════════════════════════════════════════════════╗
-║              RRSACPSO TRAINING COMPLETE                   ║
+║              AFSACPSO TRAINING COMPLETE                   ║
 ╚════════════════════════════════════════════════════════════╝
   Mode:              online
   Episodes:          1
@@ -402,7 +402,7 @@ Goal:  [97.0, 2.0, 10.0]
 
 
 ========== Planning Complete ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Execution time: 137.3428 seconds
 Path length: 152.6680 units
 Waypoints: 7
@@ -423,7 +423,7 @@ DQN-PSO [34]              |       1 |  1580.5763 |        NaN |  1580.5763
 SAC-SAPSO [40]            |       1 |  1774.4337 |        NaN |  1774.4337
 PPO-PSO                   |       1 |  1435.8178 |        NaN |  1435.8178
 MPSORL                    |       1 |  1664.6511 |        NaN |  1664.6511
-RRSACPSO                  |       1 |  1575.2968 |        NaN |  1575.2968
+AFSACPSO                  |       1 |  1575.2968 |        NaN |  1575.2968
 
 === PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
 Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
@@ -432,17 +432,17 @@ RLAMPSO [36]              vs DQN-PSO [34]              |  1 | -13.4667 | 1.00000
 RLAMPSO [36]              vs SAC-SAPSO [40]            |  1 | -207.3241 | 1.000000 | 1.000000
 RLAMPSO [36]              vs PPO-PSO                   |  1 | 131.2917 | 1.000000 | 1.000000
 RLAMPSO [36]              vs MPSORL                    |  1 | -97.5416 | 1.000000 | 1.000000
-RLAMPSO [36]              vs RRSACPSO                  |  1 |  -8.1872 | 1.000000 | 1.000000
+RLAMPSO [36]              vs AFSACPSO                  |  1 |  -8.1872 | 1.000000 | 1.000000
 DQN-PSO [34]              vs SAC-SAPSO [40]            |  1 | -193.8574 | 1.000000 | 1.000000
 DQN-PSO [34]              vs PPO-PSO                   |  1 | 144.7584 | 1.000000 | 1.000000
 DQN-PSO [34]              vs MPSORL                    |  1 | -84.0749 | 1.000000 | 1.000000
-DQN-PSO [34]              vs RRSACPSO                  |  1 |   5.2795 | 1.000000 | 1.000000
+DQN-PSO [34]              vs AFSACPSO                  |  1 |   5.2795 | 1.000000 | 1.000000
 SAC-SAPSO [40]            vs PPO-PSO                   |  1 | 338.6159 | 1.000000 | 1.000000
 SAC-SAPSO [40]            vs MPSORL                    |  1 | 109.7826 | 1.000000 | 1.000000
-SAC-SAPSO [40]            vs RRSACPSO                  |  1 | 199.1369 | 1.000000 | 1.000000
+SAC-SAPSO [40]            vs AFSACPSO                  |  1 | 199.1369 | 1.000000 | 1.000000
 PPO-PSO                   vs MPSORL                    |  1 | -228.8333 | 1.000000 | 1.000000
-PPO-PSO                   vs RRSACPSO                  |  1 | -139.4790 | 1.000000 | 1.000000
-MPSORL                    vs RRSACPSO                  |  1 |  89.3543 | 1.000000 | 1.000000
+PPO-PSO                   vs AFSACPSO                  |  1 | -139.4790 | 1.000000 | 1.000000
+MPSORL                    vs AFSACPSO                  |  1 |  89.3543 | 1.000000 | 1.000000
 
 === HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
 Significant pairs (Holm-corrected, paired t-test): 0/15
@@ -453,7 +453,7 @@ Rank | Algorithm                 | Mean | Holm Wins
 ---------------------------------------------------------------
 1    | PPO-PSO                   |  1435.8178 |         0
 2    | RLAMPSO [36]              |  1567.1096 |         0
-3    | RRSACPSO                  |  1575.2968 |         0
+3    | AFSACPSO                  |  1575.2968 |         0
 4    | DQN-PSO [34]              |  1580.5763 |         0
 5    | MPSORL                    |  1664.6511 |         0
 6    | SAC-SAPSO [40]            |  1774.4337 |         0
@@ -521,7 +521,7 @@ Algorithm MPSORL is present
     Range: 7 to 7
   ERROR: obstacleDistances is missing for MPSORL
 -------------------
-Algorithm RRSACPSO is present
+Algorithm AFSACPSO is present
   globalPlanTimes: 1 data points
     Range: 0 to 0
   globalPlanDurations: 1 data points
@@ -530,7 +530,7 @@ Algorithm RRSACPSO is present
     Range: 152.668 to 152.668
   pathWaypoints: 1 data points
     Range: 7 to 7
-  ERROR: obstacleDistances is missing for RRSACPSO
+  ERROR: obstacleDistances is missing for AFSACPSO
 -------------------
 
 === ALGORITHM COMPARISON SUMMARY ===
@@ -539,7 +539,7 @@ DQN-PSO [34]: Path=165.66, Time=163.3068s, Safety=N/A (direct planning)
 SAC-SAPSO [40]: Path=170.40, Time=51.5153s, Safety=N/A (direct planning)
 PPO-PSO: Path=200.49, Time=91.4801s, Safety=N/A (direct planning)
 MPSORL: Path=186.34, Time=54.0176s, Safety=N/A (direct planning)
-RRSACPSO: Path=152.67, Time=137.3423s, Safety=N/A (direct planning)
+AFSACPSO: Path=152.67, Time=137.3423s, Safety=N/A (direct planning)
 PSO comparison figures saved successfully!
 Generating trajectory and convergence figures...
 
@@ -558,7 +558,7 @@ DQN-PSO [34]: 165.66 units
 SAC-SAPSO [40]: 170.40 units
 PPO-PSO: 200.49 units
 MPSORL: 186.34 units
-RRSACPSO: 152.67 units
+AFSACPSO: 152.67 units
 Convergence plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s1/Convergence_Comparison_Scenario1.pdf
 Parameter tracking plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s1/Parameter_Tracking_Scenario1.pdf
 Reward plot saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_rlbased_s1/Reward_Comparison_Scenario1.pdf
@@ -893,14 +893,14 @@ Best fitness: 1463.5383
 
 
 ========== Direct Global Planning ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Start: [10.0, 95.0, 10.0]
 Goal:  [97.0, 2.0, 10.0]
 ============================================
 
 
 ╔══════════════════════════════════════════════════════════╗
-║              RRSACPSO Global Path Planning              ║
+║              AFSACPSO Global Path Planning              ║
 ╚══════════════════════════════════════════════════════════╝
 
 
@@ -968,7 +968,7 @@ Goal:  [97.0, 2.0, 10.0]
   [Iter 1000/1000] Best: 1621.6807 | Alpha: 0.1553
 
 ╔════════════════════════════════════════════════════════════╗
-║              RRSACPSO TRAINING COMPLETE                   ║
+║              AFSACPSO TRAINING COMPLETE                   ║
 ╚════════════════════════════════════════════════════════════╝
   Mode:              online
   Episodes:          1
@@ -979,7 +979,7 @@ Goal:  [97.0, 2.0, 10.0]
 
 
 ========== Planning Complete ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Execution time: 109.4481 seconds
 Path length: 157.3287 units
 Waypoints: 7
@@ -1000,7 +1000,7 @@ DQN-PSO [34]              |       1 |  1602.5502 |        NaN |  1602.5502
 SAC-SAPSO [40]            |       1 |  1689.0854 |        NaN |  1689.0854
 PPO-PSO                   |       1 |  1402.7222 |        NaN |  1402.7222
 MPSORL                    |       1 |  1463.5383 |        NaN |  1463.5383
-RRSACPSO                  |       1 |  1621.6807 |        NaN |  1621.6807
+AFSACPSO                  |       1 |  1621.6807 |        NaN |  1621.6807
 
 === PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
 Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
@@ -1009,17 +1009,17 @@ RLAMPSO [36]              vs DQN-PSO [34]              |  1 | 107.6728 | 1.00000
 RLAMPSO [36]              vs SAC-SAPSO [40]            |  1 |  21.1376 | 1.000000 | 1.000000
 RLAMPSO [36]              vs PPO-PSO                   |  1 | 307.5007 | 1.000000 | 1.000000
 RLAMPSO [36]              vs MPSORL                    |  1 | 246.6847 | 1.000000 | 1.000000
-RLAMPSO [36]              vs RRSACPSO                  |  1 |  88.5423 | 1.000000 | 1.000000
+RLAMPSO [36]              vs AFSACPSO                  |  1 |  88.5423 | 1.000000 | 1.000000
 DQN-PSO [34]              vs SAC-SAPSO [40]            |  1 | -86.5352 | 1.000000 | 1.000000
 DQN-PSO [34]              vs PPO-PSO                   |  1 | 199.8280 | 1.000000 | 1.000000
 DQN-PSO [34]              vs MPSORL                    |  1 | 139.0119 | 1.000000 | 1.000000
-DQN-PSO [34]              vs RRSACPSO                  |  1 | -19.1305 | 1.000000 | 1.000000
+DQN-PSO [34]              vs AFSACPSO                  |  1 | -19.1305 | 1.000000 | 1.000000
 SAC-SAPSO [40]            vs PPO-PSO                   |  1 | 286.3631 | 1.000000 | 1.000000
 SAC-SAPSO [40]            vs MPSORL                    |  1 | 225.5471 | 1.000000 | 1.000000
-SAC-SAPSO [40]            vs RRSACPSO                  |  1 |  67.4047 | 1.000000 | 1.000000
+SAC-SAPSO [40]            vs AFSACPSO                  |  1 |  67.4047 | 1.000000 | 1.000000
 PPO-PSO                   vs MPSORL                    |  1 | -60.8161 | 1.000000 | 1.000000
-PPO-PSO                   vs RRSACPSO                  |  1 | -218.9585 | 1.000000 | 1.000000
-MPSORL                    vs RRSACPSO                  |  1 | -158.1424 | 1.000000 | 1.000000
+PPO-PSO                   vs AFSACPSO                  |  1 | -218.9585 | 1.000000 | 1.000000
+MPSORL                    vs AFSACPSO                  |  1 | -158.1424 | 1.000000 | 1.000000
 
 === HOLM-CORRECTED SIGNIFICANCE SUMMARY ===
 Significant pairs (Holm-corrected, paired t-test): 0/15
@@ -1031,7 +1031,7 @@ Rank | Algorithm                 | Mean | Holm Wins
 1    | PPO-PSO                   |  1402.7222 |         0
 2    | MPSORL                    |  1463.5383 |         0
 3    | DQN-PSO [34]              |  1602.5502 |         0
-4    | RRSACPSO                  |  1621.6807 |         0
+4    | AFSACPSO                  |  1621.6807 |         0
 5    | SAC-SAPSO [40]            |  1689.0854 |         0
 6    | RLAMPSO [36]              |  1710.2229 |         0
 
@@ -1098,7 +1098,7 @@ Algorithm MPSORL is present
     Range: 7 to 7
   ERROR: obstacleDistances is missing for MPSORL
 -------------------
-Algorithm RRSACPSO is present
+Algorithm AFSACPSO is present
   globalPlanTimes: 1 data points
     Range: 0 to 0
   globalPlanDurations: 1 data points
@@ -1107,7 +1107,7 @@ Algorithm RRSACPSO is present
     Range: 157.3287 to 157.3287
   pathWaypoints: 1 data points
     Range: 7 to 7
-  ERROR: obstacleDistances is missing for RRSACPSO
+  ERROR: obstacleDistances is missing for AFSACPSO
 -------------------
 
 === ALGORITHM COMPARISON SUMMARY ===
@@ -1116,7 +1116,7 @@ DQN-PSO [34]: Path=194.42, Time=154.3688s, Safety=N/A (direct planning)
 SAC-SAPSO [40]: Path=157.93, Time=48.0606s, Safety=N/A (direct planning)
 PPO-PSO: Path=198.07, Time=74.7904s, Safety=N/A (direct planning)
 MPSORL: Path=187.66, Time=39.0443s, Safety=N/A (direct planning)
-RRSACPSO: Path=157.33, Time=109.4477s, Safety=N/A (direct planning)
+AFSACPSO: Path=157.33, Time=109.4477s, Safety=N/A (direct planning)
 PSO comparison figures saved successfully!
 Generating trajectory and convergence figures...
 
@@ -1130,7 +1130,7 @@ DQN-PSO [34]: 194.42 units
 SAC-SAPSO [40]: 157.93 units
 PPO-PSO: 198.07 units
 MPSORL: 187.66 units
-RRSACPSO: 157.33 units
+AFSACPSO: 157.33 units
 WARNING: An illegal reflective access operation has occurred
 WARNING: Illegal reflective access by com.mathworks.hg.peer.EventUtilities (file:/Applications/MATLAB_R2024a.app/java/jar/hg.jar) to field java.awt.event.MouseEvent.yAbs
 WARNING: Please consider reporting this to the maintainers of com.mathworks.hg.peer.EventUtilities
@@ -1185,14 +1185,14 @@ Danger Zones: 0
 Executing 1 runs for 8 parallel-safe algorithms...
 
 ========== Direct Global Planning ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Start: [10.0, 95.0, 10.0]
 Goal:  [97.0, 2.0, 10.0]
 ============================================
 
 
 ╔══════════════════════════════════════════════════════════╗
-║              RRSACPSO Global Path Planning              ║
+║              AFSACPSO Global Path Planning              ║
 ╚══════════════════════════════════════════════════════════╝
 
 
@@ -1260,7 +1260,7 @@ Goal:  [97.0, 2.0, 10.0]
   [Iter 1000/1000] Best: 1576.6302 | Alpha: 0.1540
 
 ╔════════════════════════════════════════════════════════════╗
-║              RRSACPSO TRAINING COMPLETE                   ║
+║              AFSACPSO TRAINING COMPLETE                   ║
 ╚════════════════════════════════════════════════════════════╝
   Mode:              online
   Episodes:          1
@@ -1271,7 +1271,7 @@ Goal:  [97.0, 2.0, 10.0]
 
 
 ========== Planning Complete ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Execution time: 103.0593 seconds
 Path length: 191.3081 units
 Waypoints: 7
@@ -1566,7 +1566,7 @@ Runs available: 1
 === DESCRIPTIVE STATISTICS (global_fitness_total) ===
 Algorithm                 | N       | Mean       | Std        | Median    
 ------------------------------------------------------------------------
-RRSACPSO                  |       1 |  1576.6302 |        NaN |  1576.6302
+AFSACPSO                  |       1 |  1576.6302 |        NaN |  1576.6302
 PSO-Standard              |       1 |  1629.9083 |        NaN |  1629.9083
 PSO-LDIW                  |       1 |  1617.7533 |        NaN |  1617.7533
 FIPS                      |       1 |  1729.0775 |        NaN |  1729.0775
@@ -1578,13 +1578,13 @@ UAPSO [25]                |       1 |  1570.2071 |        NaN |  1570.2071
 === PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
 Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
 -------------------------------------------------------------------------------------------
-RRSACPSO                  vs PSO-Standard              |  1 | -53.2781 | 1.000000 | 1.000000
-RRSACPSO                  vs PSO-LDIW                  |  1 | -41.1232 | 1.000000 | 1.000000
-RRSACPSO                  vs FIPS                      |  1 | -152.4474 | 1.000000 | 1.000000
-RRSACPSO                  vs CLPSO                     |  1 | -301.3466 | 1.000000 | 1.000000
-RRSACPSO                  vs SAEPSO [11]               |  1 |  76.2508 | 1.000000 | 1.000000
-RRSACPSO                  vs SAEPSO* [11]              |  1 |   4.3896 | 1.000000 | 1.000000
-RRSACPSO                  vs UAPSO [25]                |  1 |   6.4230 | 1.000000 | 1.000000
+AFSACPSO                  vs PSO-Standard              |  1 | -53.2781 | 1.000000 | 1.000000
+AFSACPSO                  vs PSO-LDIW                  |  1 | -41.1232 | 1.000000 | 1.000000
+AFSACPSO                  vs FIPS                      |  1 | -152.4474 | 1.000000 | 1.000000
+AFSACPSO                  vs CLPSO                     |  1 | -301.3466 | 1.000000 | 1.000000
+AFSACPSO                  vs SAEPSO [11]               |  1 |  76.2508 | 1.000000 | 1.000000
+AFSACPSO                  vs SAEPSO* [11]              |  1 |   4.3896 | 1.000000 | 1.000000
+AFSACPSO                  vs UAPSO [25]                |  1 |   6.4230 | 1.000000 | 1.000000
 PSO-Standard              vs PSO-LDIW                  |  1 |  12.1550 | 1.000000 | 1.000000
 PSO-Standard              vs FIPS                      |  1 | -99.1692 | 1.000000 | 1.000000
 PSO-Standard              vs CLPSO                     |  1 | -248.0684 | 1.000000 | 1.000000
@@ -1617,7 +1617,7 @@ Rank | Algorithm                 | Mean | Holm Wins
 1    | SAEPSO [11]               |  1500.3794 |         0
 2    | UAPSO [25]                |  1570.2071 |         0
 3    | SAEPSO* [11]              |  1572.2406 |         0
-4    | RRSACPSO                  |  1576.6302 |         0
+4    | AFSACPSO                  |  1576.6302 |         0
 5    | PSO-LDIW                  |  1617.7533 |         0
 6    | PSO-Standard              |  1629.9083 |         0
 7    | FIPS                      |  1729.0775 |         0
@@ -1631,7 +1631,7 @@ Statistical artifacts saved for Scenario 1:
   MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s1/TTest_Results_Scenario1.mat
 Generating diagnostic visualisations...
 ==== PSO Debug Information ====
-Algorithm RRSACPSO is present
+Algorithm AFSACPSO is present
   globalPlanTimes: 1 data points
     Range: 0 to 0
   globalPlanDurations: 1 data points
@@ -1640,7 +1640,7 @@ Algorithm RRSACPSO is present
     Range: 191.3081 to 191.3081
   pathWaypoints: 1 data points
     Range: 7 to 7
-  ERROR: obstacleDistances is missing for RRSACPSO
+  ERROR: obstacleDistances is missing for AFSACPSO
 -------------------
 Algorithm PSO-Standard is present
   globalPlanTimes: 1 data points
@@ -1721,7 +1721,7 @@ Algorithm UAPSO [25] is present
 -------------------
 
 === ALGORITHM COMPARISON SUMMARY ===
-RRSACPSO: Path=191.31, Time=103.0565s, Safety=N/A (direct planning)
+AFSACPSO: Path=191.31, Time=103.0565s, Safety=N/A (direct planning)
 PSO-Standard: Path=166.90, Time=34.5817s, Safety=N/A (direct planning)
 PSO-LDIW: Path=149.64, Time=37.0862s, Safety=N/A (direct planning)
 FIPS: Path=211.67, Time=34.3391s, Safety=N/A (direct planning)
@@ -1737,7 +1737,7 @@ Generating trajectory and convergence figures...
 Top view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s1/plot_Algorithm_Comparison_Scenario1_TopView.pdf
 
 === Path Length Comparison ===
-RRSACPSO: 191.31 units
+AFSACPSO: 191.31 units
 PSO-Standard: 166.90 units
 PSO-LDIW: 149.64 units
 FIPS: 211.67 units
@@ -1794,14 +1794,14 @@ Danger Zones: 5
 Executing 1 runs for 8 parallel-safe algorithms...
 
 ========== Direct Global Planning ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Start: [10.0, 95.0, 10.0]
 Goal:  [97.0, 2.0, 10.0]
 ============================================
 
 
 ╔══════════════════════════════════════════════════════════╗
-║              RRSACPSO Global Path Planning              ║
+║              AFSACPSO Global Path Planning              ║
 ╚══════════════════════════════════════════════════════════╝
 
 
@@ -1869,7 +1869,7 @@ Goal:  [97.0, 2.0, 10.0]
   [Iter 1000/1000] Best: 1580.5045 | Alpha: 0.1539
 
 ╔════════════════════════════════════════════════════════════╗
-║              RRSACPSO TRAINING COMPLETE                   ║
+║              AFSACPSO TRAINING COMPLETE                   ║
 ╚════════════════════════════════════════════════════════════╝
   Mode:              online
   Episodes:          1
@@ -1880,7 +1880,7 @@ Goal:  [97.0, 2.0, 10.0]
 
 
 ========== Planning Complete ==========
-Algorithm: RRSACPSO
+Algorithm: AFSACPSO
 Execution time: 98.6552 seconds
 Path length: 152.4788 units
 Waypoints: 7
@@ -2175,7 +2175,7 @@ Runs available: 1
 === DESCRIPTIVE STATISTICS (global_fitness_total) ===
 Algorithm                 | N       | Mean       | Std        | Median    
 ------------------------------------------------------------------------
-RRSACPSO                  |       1 |  1580.5045 |        NaN |  1580.5045
+AFSACPSO                  |       1 |  1580.5045 |        NaN |  1580.5045
 PSO-Standard              |       1 |  1536.3265 |        NaN |  1536.3265
 PSO-LDIW                  |       1 |  1658.8615 |        NaN |  1658.8615
 FIPS                      |       1 |  1724.0800 |        NaN |  1724.0800
@@ -2187,13 +2187,13 @@ UAPSO [25]                |       1 |  1648.5638 |        NaN |  1648.5638
 === PAIRWISE INFERENCE (PAIRED T + WILCOXON) ===
 Algorithm 1               vs Algorithm 2               | N | meanDiff | p_t(raw) | p_w(raw)
 -------------------------------------------------------------------------------------------
-RRSACPSO                  vs PSO-Standard              |  1 |  44.1780 | 1.000000 | 1.000000
-RRSACPSO                  vs PSO-LDIW                  |  1 | -78.3570 | 1.000000 | 1.000000
-RRSACPSO                  vs FIPS                      |  1 | -143.5755 | 1.000000 | 1.000000
-RRSACPSO                  vs CLPSO                     |  1 | -560.8344 | 1.000000 | 1.000000
-RRSACPSO                  vs SAEPSO [11]               |  1 | -27.3707 | 1.000000 | 1.000000
-RRSACPSO                  vs SAEPSO* [11]              |  1 | 147.2797 | 1.000000 | 1.000000
-RRSACPSO                  vs UAPSO [25]                |  1 | -68.0593 | 1.000000 | 1.000000
+AFSACPSO                  vs PSO-Standard              |  1 |  44.1780 | 1.000000 | 1.000000
+AFSACPSO                  vs PSO-LDIW                  |  1 | -78.3570 | 1.000000 | 1.000000
+AFSACPSO                  vs FIPS                      |  1 | -143.5755 | 1.000000 | 1.000000
+AFSACPSO                  vs CLPSO                     |  1 | -560.8344 | 1.000000 | 1.000000
+AFSACPSO                  vs SAEPSO [11]               |  1 | -27.3707 | 1.000000 | 1.000000
+AFSACPSO                  vs SAEPSO* [11]              |  1 | 147.2797 | 1.000000 | 1.000000
+AFSACPSO                  vs UAPSO [25]                |  1 | -68.0593 | 1.000000 | 1.000000
 PSO-Standard              vs PSO-LDIW                  |  1 | -122.5350 | 1.000000 | 1.000000
 PSO-Standard              vs FIPS                      |  1 | -187.7535 | 1.000000 | 1.000000
 PSO-Standard              vs CLPSO                     |  1 | -605.0124 | 1.000000 | 1.000000
@@ -2225,7 +2225,7 @@ Rank | Algorithm                 | Mean | Holm Wins
 ---------------------------------------------------------------
 1    | SAEPSO* [11]              |  1433.2247 |         0
 2    | PSO-Standard              |  1536.3265 |         0
-3    | RRSACPSO                  |  1580.5045 |         0
+3    | AFSACPSO                  |  1580.5045 |         0
 4    | SAEPSO [11]               |  1607.8751 |         0
 5    | UAPSO [25]                |  1648.5638 |         0
 6    | PSO-LDIW                  |  1658.8615 |         0
@@ -2240,7 +2240,7 @@ Statistical artifacts saved for Scenario 1:
   MAT file:     /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/TTest_Results_Scenario1.mat
 Generating diagnostic visualisations...
 ==== PSO Debug Information ====
-Algorithm RRSACPSO is present
+Algorithm AFSACPSO is present
   globalPlanTimes: 1 data points
     Range: 0 to 0
   globalPlanDurations: 1 data points
@@ -2249,7 +2249,7 @@ Algorithm RRSACPSO is present
     Range: 152.4788 to 152.4788
   pathWaypoints: 1 data points
     Range: 7 to 7
-  ERROR: obstacleDistances is missing for RRSACPSO
+  ERROR: obstacleDistances is missing for AFSACPSO
 -------------------
 Algorithm PSO-Standard is present
   globalPlanTimes: 1 data points
@@ -2330,7 +2330,7 @@ Algorithm UAPSO [25] is present
 -------------------
 
 === ALGORITHM COMPARISON SUMMARY ===
-RRSACPSO: Path=152.48, Time=98.6529s, Safety=N/A (direct planning)
+AFSACPSO: Path=152.48, Time=98.6529s, Safety=N/A (direct planning)
 PSO-Standard: Path=161.06, Time=38.7944s, Safety=N/A (direct planning)
 PSO-LDIW: Path=160.86, Time=42.6452s, Safety=N/A (direct planning)
 FIPS: Path=229.52, Time=43.7083s, Safety=N/A (direct planning)
@@ -2346,7 +2346,7 @@ Generating trajectory and convergence figures...
 Top view saved as: /Users/hust-hwashin621m/Desktop/vietanhpaper-2/results/patchedfiguresonly/_tmp_others_s2/plot_Algorithm_Comparison_Scenario1_TopView.pdf
 
 === Path Length Comparison ===
-RRSACPSO: 152.48 units
+AFSACPSO: 152.48 units
 PSO-Standard: 161.06 units
 PSO-LDIW: 160.86 units
 FIPS: 229.52 units

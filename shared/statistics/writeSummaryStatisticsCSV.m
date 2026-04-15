@@ -51,7 +51,7 @@ function writeSummaryStatisticsCSV(allRunResults, algorithms, filename)
                         duplicatePenalties = [duplicatePenalties; 0];
                     end
                 elseif isfield(allRunResults{run}.(algName), 'actualBestFitness')
-                    % For RL algorithms (RRSACPSO, RLAM-PSO) that use actualBestFitness
+                    % For RL algorithms (AFSACPSO, RLAM-PSO) that use actualBestFitness
                     globalFitness = [globalFitness; allRunResults{run}.(algName).actualBestFitness];
                     pathLengths = [pathLengths; allRunResults{run}.(algName).actualBestFitness];
                     turningPenalties = [turningPenalties; 0];

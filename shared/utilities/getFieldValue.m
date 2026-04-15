@@ -5,8 +5,3 @@ function value = getFieldValue(structure, fieldName, defaultValue)
         value = defaultValue;
     end
 end
-
-%% Part 2. ABLATION STUDY
-
-%% ABLATION STUDY FUNCTIONS
-

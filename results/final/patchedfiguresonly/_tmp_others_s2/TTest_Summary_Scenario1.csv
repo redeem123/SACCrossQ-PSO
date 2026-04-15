@@ -1,5 +1,5 @@
 scenario_id,metric_name,algorithm,n_valid,mean,std,median,min,max,average_rank,significant_wins_holm_t,friedman_chi_square,friedman_df,friedman_p,n_friedman_runs
-1,global_fitness_total,RRSACPSO,1,1580.504476,NaN,1580.504476,1580.504476,1580.504476,3,0,NaN,7,NaN,1
+1,global_fitness_total,AFSACPSO,1,1580.504476,NaN,1580.504476,1580.504476,1580.504476,3,0,NaN,7,NaN,1
 1,global_fitness_total,PSO-Standard,1,1536.326489,NaN,1536.326489,1536.326489,1536.326489,2,0,NaN,7,NaN,1
 1,global_fitness_total,PSO-LDIW,1,1658.861496,NaN,1658.861496,1658.861496,1658.861496,6,0,NaN,7,NaN,1
 1,global_fitness_total,FIPS,1,1724.080014,NaN,1724.080014,1724.080014,1724.080014,7,0,NaN,7,NaN,1

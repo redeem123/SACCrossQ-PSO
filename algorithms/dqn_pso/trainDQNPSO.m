@@ -16,7 +16,7 @@ function trainingStats = trainDQNPSO(config)
     arguments
         config.numEpisodes (1,1) double {mustBePositive}
         config.savePath (1,1) string
-        config.paramMode (1,1) string {mustBeMember(config.paramMode, ["global","5subgroup","per-particle"])}
+        config.paramMode (1,1) string {mustBeMember(config.paramMode, ["global"])}
         config.popSize (1,1) double {mustBePositive}
         config.maxIterations (1,1) double {mustBePositive}
         config.w (1,1) double

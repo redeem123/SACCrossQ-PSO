@@ -52,7 +52,7 @@ def main():
     # Define the directory containing the project figures
     # Using absolute path based on the user's workspace structure
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    fig_dir = os.path.join(script_dir, "figures", "RRSACPSO global results")
+    fig_dir = os.path.join(script_dir, "figures", "AFSACPSO global results")
     
     targets = [
         "plot_Algorithm_Comparison_Scenario1_3D.pdf",

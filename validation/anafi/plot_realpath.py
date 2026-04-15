@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-plot_realpath.py — Overlay real Anafi GPS track on RRSACPSO simulation terrain map
+plot_realpath.py — Overlay real Anafi GPS track on AFSACPSO simulation terrain map
 =====================================================================================
 Runs NATIVELY on macOS (does NOT need Docker or Olympe).
 
@@ -241,7 +241,7 @@ def plot_path_on_map(gps_csv: str, origin_lat: float, origin_lon: float,
              ha="left", va="bottom",
              bbox=dict(boxstyle="round,pad=0.4", facecolor="#1c1c2e", edgecolor="#555", alpha=0.9))
 
-    plt.suptitle("Parrot Anafi USA — Real Flight Path on RRSACPSO Terrain Map",
+    plt.suptitle("Parrot Anafi USA — Real Flight Path on AFSACPSO Terrain Map",
                  color="white", fontsize=13, fontweight="bold", y=1.01)
     plt.tight_layout()
 

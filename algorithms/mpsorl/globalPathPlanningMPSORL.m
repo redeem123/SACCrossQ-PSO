@@ -213,7 +213,7 @@ function [globalPath, convergenceHistory, algorithmSpecificStats] = globalPathPl
         if mod(iter, learningPeriod) == 0
             rewards = zeros(numel(pop2Idx), 1);
             for idx = 1:numel(pop2Idx)
-                reward = double(stateIdxPop2(idx) < prevStateIdxPop2(idx));
+                reward = double(stateIdxPop2(idx) > prevStateIdxPop2(idx));
                 rewards(idx) = reward;
                 s = prevStateIdxPop2(idx);
                 a = actionIdxPop2(idx);
@@ -325,17 +325,16 @@ function states = assignStatesNonUniform(fitness)
     end
 
     [~, sortedIdx] = sort(fitness, 'ascend');
-    ratios = [0.1, 0.2, 0.4, 0.2, 0.1];
-    counts = round(popSize * ratios);
-    diffCount = popSize - sum(counts);
-    counts(3) = counts(3) + diffCount;
+    cumulativeCuts = round(popSize * [0.10, 0.25, 0.45, 0.70]);
+    counts = diff([0, cumulativeCuts, popSize]);
 
     if all(counts <= 0)
         counts(3) = popSize;
     end
 
     cursor = 1;
-    for s = 1:5
+    stateLevels = [5, 4, 3, 2, 1];
+    for s = 1:numel(stateLevels)
         if cursor > popSize
             break;
         end
@@ -343,7 +342,7 @@ function states = assignStatesNonUniform(fitness)
         if endIdx < cursor
             continue;
         end
-        states(sortedIdx(cursor:endIdx)) = s;
+        states(sortedIdx(cursor:endIdx)) = stateLevels(s);
         cursor = endIdx + 1;
     end
 

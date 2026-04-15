@@ -52,17 +52,13 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
                 end
             end
 
+            if length(remainingParams) >= paramIdx && isstruct(remainingParams{paramIdx})
+                algorithmParams.configOverrides = remainingParams{paramIdx};
+                paramIdx = paramIdx + 1;
+            end
+
             commonStartIdx = paramIdx;
     
-        case 'RLAMPGPSO'
-            % RLAM-PGPSO: popSize, maxIterations, initialW, initialC1, initialC2, [common params]
-            algorithmParams.popSize = remainingParams{1};
-            algorithmParams.maxIterations = remainingParams{2};
-            algorithmParams.initialW = remainingParams{3};
-            algorithmParams.initialC1 = remainingParams{4};
-            algorithmParams.initialC2 = remainingParams{5};
-            commonStartIdx = 6;
-
         case 'ActorCriticPSO'
             % ActorCriticPSO: popSize, maxIterations, initialW, initialC1, initialC2, [common params]
             algorithmParams.popSize = remainingParams{1};
@@ -177,14 +173,14 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             algorithmParams.hiddenNeurons = remainingParams{4};
             commonStartIdx = 5;
 
-        case 'RRSACPSO'
-            % RRSACPSO: No algorithm-specific params (all in config), [common params]
-            % Configuration handled internally by RRSACPSO_Config (RRSACPSO).
+        case 'AFSACPSO'
+            % AFSACPSO: No algorithm-specific params (all in config), [common params]
+            % Configuration handled internally by AFSACPSO_Config (AFSACPSO).
             algorithmParams = struct();  % Empty struct, no algorithm-specific params
             commonStartIdx = 1;
 
-        case 'RRSACPSO_Online'
-            % RRSACPSO online learning:
+        case 'AFSACPSO_Online'
+            % AFSACPSO online learning:
             %   [popSize], maxIterations, [paramMode], [configOverrides], [common params]
             paramIdx = 1;
             if length(remainingParams) >= 2 && isnumeric(remainingParams{1}) && isscalar(remainingParams{1}) && ...
@@ -197,12 +193,12 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
                 paramIdx = 2;
             end
 
-            algorithmParams.paramMode = 'rank-residual';
             if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx}) && ...
-                    any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle', 'rank-residual'}))
+                    any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle', 'rank-residual', 'attractor-field'}))
                 algorithmParams.paramMode = remainingParams{paramIdx};
                 paramIdx = paramIdx + 1;
             end
+            % If no paramMode specified, let AFSACPSO_Config default stand
 
             if length(remainingParams) >= paramIdx && isstruct(remainingParams{paramIdx})
                 algorithmParams.configOverrides = remainingParams{paramIdx};
@@ -216,40 +212,6 @@ function [algorithmParams, commonParams] = parseAlgorithmParameters(algorithmNam
             algorithmParams.popSize = remainingParams{1};
             algorithmParams.maxIterations = remainingParams{2};
             commonStartIdx = 3;
-
-        case 'RLAMPSO_Train'
-            % RLAMPSO Training: episodes, savePath, [configMode], [paramMode], popSize, maxIterations, w, c1, c2, [common params]
-            algorithmParams.trainingEpisodes = remainingParams{1};
-            algorithmParams.savePath = remainingParams{2};
-
-            paramIdx = 3;
-            algorithmParams.configMode = 'baseline';
-            if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx})
-                algorithmParams.configMode = remainingParams{paramIdx};
-                paramIdx = paramIdx + 1;
-            end
-
-            algorithmParams.paramMode = 'global';
-            if length(remainingParams) >= paramIdx && ischar(remainingParams{paramIdx}) && ...
-                    any(strcmp(remainingParams{paramIdx}, {'global', '5subgroup', 'per-particle'}))
-                algorithmParams.paramMode = remainingParams{paramIdx};
-                paramIdx = paramIdx + 1;
-            end
-
-            algorithmParams.popSize = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
-            algorithmParams.maxIterations = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
-            algorithmParams.initialW = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
-            algorithmParams.initialC1 = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
-            algorithmParams.initialC2 = remainingParams{paramIdx}; paramIdx = paramIdx + 1;
-
-            commonStartIdx = paramIdx;
-
-        case 'SACSAPSO_Paper'
-            % SAC-SAPSO (paper): popSize, maxIterations, observationInterval, [common params]
-            algorithmParams.popSize = remainingParams{1};
-            algorithmParams.maxIterations = remainingParams{2};
-            algorithmParams.observationInterval = remainingParams{3};
-            commonStartIdx = 4;
 
         % ========================================================================
         % NEW ALGORITHMS FOR TOP-TIER JOURNAL COMPARISON

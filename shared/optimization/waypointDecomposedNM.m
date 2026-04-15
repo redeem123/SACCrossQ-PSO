@@ -18,7 +18,7 @@ function [bestPath, bestFitness] = waypointDecomposedNM(psoPath, seedPositions, 
     %   terrainX       - terrain X coordinate grid
     %   terrainY       - terrain Y coordinate grid
     %   numWaypoints   - number of intermediate waypoints
-    %   config         - RRSACPSO config struct with polish* fields
+    %   config         - AFSACPSO config struct with polish* fields
     %
     % Outputs:
     %   bestPath    - (numWaypoints+2) x 3 refined path

@@ -1,0 +1,2 @@
+Run,Algorithm,Success,GlobalPathFitness,PathLength,TurningPenalty,ClimbingPenalty,HeightPenalty,CollisionPenalty,TerrainPenalty,DangerZonePenalty,DuplicatePenalty,TotalGlobalPlanTime,AvgGlobalPlanTime,NumGlobalPlans
+1,AFSACPSO Run: Full (Global),1,1752.9098,176.1994,3.0573,4.3882,209.6966,0.0000,0.0000,0.0000,0.0000,23.0802,23.0802,1

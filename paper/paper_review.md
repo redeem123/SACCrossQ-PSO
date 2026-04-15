@@ -27,11 +27,11 @@ The paper defines numerous symbol macros (`\symStatedim`, `\symWindowsize`, `\sy
 - Number of training episodes $E$
 - Retained reward definition and decision rule
 - Penalty thresholds $\rho_{stag}, \rho_{coll}, \rho_{div}, \theta_{min}$ > [!IMPORTANT]
-> Add a **Hyperparameter Table** listing all values. This is standard for SWEVO papers. --- ## 🟡 Major Concerns ### 5. RRSACPSO Does Not Beat SAEPSO
+> Add a **Hyperparameter Table** listing all values. This is standard for SWEVO papers. --- ## 🟡 Major Concerns ### 5. AFSACPSO Does Not Beat SAEPSO
 The paper's own results show that **SAEPSO wins in all 3 scenarios** for traditional comparisons (Table 3), with lower mean fitness AND lower standard deviation. The narrative tries to redirect attention to inference speed, but:
-- The 2–3× speed advantage only applies to RRSACPSO, not the online variant
+- The 2–3× speed advantage only applies to AFSACPSO, not the online variant
 - For a journal like SWEVO, **optimization quality trumps runtime**
-- The paper should be more honest about this limitation rather than burying it **Recommendation:** Frame the contribution more carefully. RRSACPSO is best-in-class *among RL-based methods*, competitive with (but not superior to) hand-crafted adaptive PSO. The real value is the *learning framework*, not beating SAEPSO. ### 6. Ablation Results Are Inconclusive
+- The paper should be more honest about this limitation rather than burying it **Recommendation:** Frame the contribution more carefully. AFSACPSO is best-in-class *among RL-based methods*, competitive with (but not superior to) hand-crafted adaptive PSO. The real value is the *learning framework*, not beating SAEPSO. ### 6. Ablation Results Are Inconclusive
 Table 4 shows:
 - **"No Attention" wins in Scenarios 2 and 3** on mean fitness
 - Only **2 out of 6 comparisons** show statistical significance ($^{*}$ or $^{**}$)
@@ -44,7 +44,7 @@ The paper has no convergence guarantee or theoretical analysis. While not strict
 - The **Results Summary** (§5.4) largely repeats the Discussion (§6). Merge or eliminate one.
 - The conclusion (§7) also repeats the same key findings for a third time. Trim to 1 paragraph.
 - §5.3 (Training Efficiency) text references `Figure~\ref{fig:training_details}` and `Figure~\ref{fig:train_rewards}` — these are **different figures** but the text blurs them together. Clarify. ### Terminology Consistency
-- The paper alternates between "RRSACPSO" and "RRSACPSO" without always being clear which is meant. Establish this distinction clearly at first mention.
+- The paper alternates between "AFSACPSO" and "AFSACPSO" without always being clear which is meant. Establish this distinction clearly at first mention.
 - "Online learning" vs " inference" — make the distinction sharper. ### Minor Issues
 - Line 30: `\hfuzz=2pt` and `\hbadness=10000` suppress overfull hbox warnings. This is fine for drafting but remove before submission — reviewers will notice.
 - Line 15: Custom `\FloatBarrier` is a no-op (`\par\vskip\z@\noindent\mbox{}`). Use the `placeins` package properly or remove.

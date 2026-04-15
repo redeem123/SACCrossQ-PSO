@@ -1,18 +1,15 @@
 function [bestPath, bestFitness, fitnessHistory, agent, stateTracker, parameterHistory, learningStats] = globalPathPlanningPPOPSO( ...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, config)
-    % PPOPSO global path planning aligned to the PPOPSO paper.
+    % PPO-PSO global path planning.
+    % Adapted from Klein et al. 2024 (iSOMA-RL) to PSO.
+    %
+    % Continuous PPO controls global (w, c1, c2) every iteration.
+    % State: FE completion + history of fitness, fitness diff, actions.
+    % Online learning with GAE and clipped PPO objective.
 
     fprintf('\n============================================\n');
-    fprintf('PPO-PSO Global Path Planning\n');
+    fprintf('PPO-PSO Global Path Planning (Klein 2024)\n');
     fprintf('============================================\n\n');
-
-    if config.numSubgroups > config.popSize
-        config.numSubgroups = config.popSize;
-        config.stateSize = 1 + config.historyLen * (1 + config.numSubgroups);
-    end
-    if isempty(config.maxFunctionEvals)
-        config.maxFunctionEvals = config.popSize * config.maxIterations;
-    end
 
     agent = PPOPSO_Agent(config);
 
@@ -20,97 +17,107 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateTracker, parameterH
     [particles, mapSize, numWaypoints] = initializePSOParticles(config, startPoint, goalPoint, ...
         terrainGrid, terrainX, terrainY);
 
-    % State history (most recent at index 1)
-    historyGlobalBest = ones(config.historyLen, 1) * config.historyInitValue;
-    historyAvgPbest = ones(config.historyLen, config.numSubgroups) * config.historyInitValue;
+    % State history buffers (most recent first)
+    hl = config.historyLen;
+    histFitness = ones(hl, 1) * 1e9;
+    histFitDiff = zeros(hl, 1);
+    histActions = zeros(hl, config.actionDim);  % raw (pre-tanh) actions
 
-    % History trackers
+    % Tracking arrays
     fitnessHistory = zeros(1, config.maxIterations);
     parameterHistory_w = zeros(1, config.maxIterations);
     parameterHistory_c1 = zeros(1, config.maxIterations);
     parameterHistory_c2 = zeros(1, config.maxIterations);
-    parameterHistory_w_samples = zeros(config.maxIterations, config.popSize);
-    parameterHistory_c1_samples = zeros(config.maxIterations, config.popSize);
-    parameterHistory_c2_samples = zeros(config.maxIterations, config.popSize);
+    % Global control: all particles get same params, so samples = scalars
+    parameterHistory_w_samples = zeros(config.maxIterations, 1);
+    parameterHistory_c1_samples = zeros(config.maxIterations, 1);
+    parameterHistory_c2_samples = zeros(config.maxIterations, 1);
     rewardHistory = zeros(1, config.maxIterations);
     criticLossHistory = nan(1, config.maxIterations);
 
-    % Best solution tracking
     globalBestFitness = inf;
     globalBestPosition = [];
-    previousGlobalBest = config.historyInitValue;
+    previousGlobalBest = 1e9;
     functionEvalCount = 0;
 
     % Rollout buffer
-    bufferStates = zeros(config.stateSize, config.updateInterval);
-    bufferActions = zeros(config.numSubgroups, config.updateInterval);
-    bufferLogProbs = zeros(1, config.updateInterval);
-    bufferValues = zeros(1, config.updateInterval);
-    bufferRewards = zeros(1, config.updateInterval);
-    bufferDones = zeros(1, config.updateInterval);
-    bufferCount = 0;
+    bufSize = config.updateInterval;
+    bufStates = zeros(config.stateSize, bufSize);
+    bufRawActions = zeros(config.actionDim, bufSize);  % raw (pre-tanh)
+    bufLogProbs = zeros(1, bufSize);
+    bufValues = zeros(1, bufSize);
+    bufRewards = zeros(1, bufSize);
+    bufDones = zeros(1, bufSize);
+    bufCount = 0;
     lastNextState = [];
 
     for iter = 1:config.maxIterations
-        % Build state from history
-        feNorm = min(functionEvalCount / config.maxFunctionEvals, 1.0);
-        state = buildStateVector(feNorm, historyGlobalBest, historyAvgPbest, config);
+        % Build state
+        feNorm = min(functionEvalCount / (config.popSize * config.maxIterations), 1.0);
+        state = buildState(feNorm, histFitness, histFitDiff, histActions, config);
 
-        % PPO action (per subgroup)
-        [actionIdx, logProb, value] = agent.getAction(state);
-        paramsPerSubgroup = mapActionsToParams(actionIdx, iter, config);
-        particleParams = expandParamsToParticles(paramsPerSubgroup, particles.subgroupIds);
+        % Get continuous action from PPO
+        [params, logProb, value] = agent.getAction(state);
+        w = params(1); c1 = params(2); c2 = params(3);
+
+        % Recover raw action for storage (inverse tanh of squashed)
+        squashed = [2*(w - config.wMin)/(config.wMax - config.wMin) - 1; ...
+                    2*(c1 - config.c1Min)/(config.c1Max - config.c1Min) - 1; ...
+                    2*(c2 - config.c2Min)/(config.c2Max - config.c2Min) - 1];
+        squashed = max(-0.999, min(0.999, squashed));
+        rawAction = atanh(squashed);
+
+        % All particles get same params (global control, like the paper)
+        particleParams = repmat([w, c1, c2], config.popSize, 1);
 
         % Update PSO
         [particles, iterBestFitness, iterBestPosition] = updatePSOParticles( ...
-            particles, particleParams, startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, ...
-            mapSize, numWaypoints, config);
+            particles, particleParams, startPoint, goalPoint, dangerZones, ...
+            terrainGrid, terrainX, terrainY, mapSize, numWaypoints, config);
 
-        % Global best tracking
+        % Track global best
         if iterBestFitness < globalBestFitness
             globalBestFitness = iterBestFitness;
             globalBestPosition = iterBestPosition;
         end
 
-        % Reward from global best improvement
-        if previousGlobalBest - globalBestFitness > 0
-            reward = 1.0;
-        else
-            reward = -0.1;
-        end
+        % Reward: relative fitness improvement (same formula as AFSACPSO)
+        reward = 2 * (previousGlobalBest - globalBestFitness) / ...
+            (abs(previousGlobalBest) + abs(globalBestFitness) + 1e-8);
         rewardHistory(iter) = reward;
-        previousGlobalBest = globalBestFitness;
 
-        % Update state history for next step
-        avgPbest = computeAveragePbest(particles, config.numSubgroups);
-        [historyGlobalBest, historyAvgPbest] = pushHistory( ...
-            historyGlobalBest, historyAvgPbest, globalBestFitness, avgPbest);
+        % Update history
+        fitDiff = previousGlobalBest - globalBestFitness;
+        previousGlobalBest = globalBestFitness;
+        histFitness = [globalBestFitness; histFitness(1:end-1)];
+        histFitDiff = [fitDiff; histFitDiff(1:end-1)];
+        histActions = [rawAction'; histActions(1:end-1, :)];
 
         % Next state
-        nextFeNorm = min((functionEvalCount + config.popSize) / config.maxFunctionEvals, 1.0);
-        nextState = buildStateVector(nextFeNorm, historyGlobalBest, historyAvgPbest, config);
+        nextFeNorm = min((functionEvalCount + config.popSize) / (config.popSize * config.maxIterations), 1.0);
+        nextState = buildState(nextFeNorm, histFitness, histFitDiff, histActions, config);
 
-        % Buffer transition
-        bufferCount = bufferCount + 1;
-        bufferStates(:, bufferCount) = state;
-        bufferActions(:, bufferCount) = actionIdx;
-        bufferLogProbs(bufferCount) = logProb;
-        bufferValues(bufferCount) = value;
-        bufferRewards(bufferCount) = reward;
-        bufferDones(bufferCount) = double(iter == config.maxIterations);
+        % Store in rollout buffer
+        bufCount = bufCount + 1;
+        bufStates(:, bufCount) = state;
+        bufRawActions(:, bufCount) = rawAction;
+        bufLogProbs(bufCount) = logProb;
+        bufValues(bufCount) = value;
+        bufRewards(bufCount) = reward;
+        bufDones(bufCount) = double(iter == config.maxIterations);
         lastNextState = nextState;
 
-        % PPO update
-        if bufferCount == config.updateInterval || iter == config.maxIterations
-            updateCriticLoss = NaN;
-            if bufferCount > 0
-                if bufferDones(bufferCount) == 1
+        % PPO update when buffer full
+        updateCriticLoss = NaN;
+        if bufCount == bufSize || iter == config.maxIterations
+            if bufCount > 0
+                if bufDones(bufCount) == 1
                     lastValue = 0;
                 else
                     lastValue = agent.getValue(lastNextState);
                 end
-                [returns, advantages] = computeGAE(bufferRewards(1:bufferCount), ...
-                    bufferValues(1:bufferCount), lastValue, bufferDones(1:bufferCount), ...
+                [returns, advantages] = computeGAE(bufRewards(1:bufCount), ...
+                    bufValues(1:bufCount), lastValue, bufDones(1:bufCount), ...
                     config.gamma, config.gaeLambda);
 
                 advantages = advantages - mean(advantages);
@@ -119,32 +126,28 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateTracker, parameterH
                     advantages = advantages / advStd;
                 end
 
-                losses = agent.train(bufferStates(:, 1:bufferCount), bufferActions(:, 1:bufferCount), ...
-                    bufferLogProbs(1:bufferCount), returns, advantages);
+                losses = agent.train(bufStates(:, 1:bufCount), bufRawActions(:, 1:bufCount), ...
+                    bufLogProbs(1:bufCount), returns, advantages);
                 updateCriticLoss = losses.critic;
             end
             criticLossHistory(iter) = updateCriticLoss;
-            bufferCount = 0;
-        end
-
-        % Migration (ring topology)
-        if mod(iter, config.migrationInterval) == 0 && config.numSubgroups > 1
-            particles = performMigration(particles, config, mapSize);
+            bufCount = 0;
         end
 
         functionEvalCount = functionEvalCount + config.popSize;
 
         % Store histories
         fitnessHistory(iter) = globalBestFitness;
-        parameterHistory_w(iter) = mean(particleParams(:, 1));
-        parameterHistory_c1(iter) = mean(particleParams(:, 2));
-        parameterHistory_c2(iter) = mean(particleParams(:, 3));
-        parameterHistory_w_samples(iter, :) = particleParams(:, 1)';
-        parameterHistory_c1_samples(iter, :) = particleParams(:, 2)';
-        parameterHistory_c2_samples(iter, :) = particleParams(:, 3)';
+        parameterHistory_w(iter) = w;
+        parameterHistory_c1(iter) = c1;
+        parameterHistory_c2(iter) = c2;
+        parameterHistory_w_samples(iter, :) = w;
+        parameterHistory_c1_samples(iter, :) = c1;
+        parameterHistory_c2_samples(iter, :) = c2;
 
         if mod(iter, config.logInterval) == 0 || iter == config.maxIterations
-            fprintf('  [Iter %3d/%d] Best: %.4f\n', iter, config.maxIterations, globalBestFitness);
+            fprintf('  [Iter %3d/%d] Best: %.4f  w=%.3f c1=%.3f c2=%.3f\n', ...
+                iter, config.maxIterations, globalBestFitness, w, c1, c2);
         end
     end
 
@@ -164,65 +167,26 @@ function [bestPath, bestFitness, fitnessHistory, agent, stateTracker, parameterH
     learningStats.criticLossHistory = criticLossHistory;
 
     stateTracker = struct();
-    stateTracker.historyGlobalBest = historyGlobalBest;
-    stateTracker.historyAvgPbest = historyAvgPbest;
     stateTracker.stateSize = config.stateSize;
 end
 
-function state = buildStateVector(feNorm, historyGlobalBest, historyAvgPbest, config)
+%% State builder (adapted from Klein 2024 Table 5)
+function state = buildState(feNorm, histFitness, histFitDiff, histActions, config)
+    % Normalize fitness values to prevent explosion
+    fNorm = histFitness / (abs(histFitness(1)) + 1e-8);
+    dNorm = histFitDiff / (abs(histFitness(1)) + 1e-8);
+
     state = zeros(config.stateSize, 1);
     state(1) = feNorm;
     idx = 2;
     for k = 1:config.historyLen
-        state(idx) = historyGlobalBest(k);
-        idx = idx + 1;
-        state(idx:idx+config.numSubgroups-1) = historyAvgPbest(k, :)';
-        idx = idx + config.numSubgroups;
+        state(idx) = fNorm(k);                          idx = idx + 1;
+        state(idx) = dNorm(k);                          idx = idx + 1;
+        state(idx:idx+config.actionDim-1) = histActions(k,:)'; idx = idx + config.actionDim;
     end
 end
 
-function [historyGlobalBest, historyAvgPbest] = pushHistory(historyGlobalBest, historyAvgPbest, ...
-    globalBest, avgPbest)
-    historyGlobalBest = [globalBest; historyGlobalBest(1:end-1)];
-    historyAvgPbest = [avgPbest; historyAvgPbest(1:end-1, :)];
-end
-
-function avgPbest = computeAveragePbest(particles, numSubgroups)
-    avgPbest = zeros(1, numSubgroups);
-    for j = 1:numSubgroups
-        idx = particles.subgroups{j};
-        avgPbest(j) = mean(particles.bestFitness(idx));
-    end
-end
-
-function paramsPerSubgroup = mapActionsToParams(actionIdx, iter, config)
-    numSubgroups = config.numSubgroups;
-    paramsPerSubgroup = zeros(numSubgroups, 3);
-
-    for j = 1:numSubgroups
-        action = actionIdx(j);
-        params = config.actionTable(action, :);
-        w = params(1);
-        c1 = params(2);
-        c2 = params(3);
-
-        if action == config.linearWActionIndex
-            if config.maxIterations > 1
-                ratio = (iter - 1) / (config.maxIterations - 1);
-            else
-                ratio = 1;
-            end
-            w = config.linearWStart + (config.linearWEnd - config.linearWStart) * ratio;
-        end
-
-        paramsPerSubgroup(j, :) = [w, c1, c2];
-    end
-end
-
-function particleParams = expandParamsToParticles(paramsPerSubgroup, subgroupIds)
-    particleParams = paramsPerSubgroup(subgroupIds, :);
-end
-
+%% GAE computation
 function [returns, advantages] = computeGAE(rewards, values, lastValue, dones, gamma, lambda)
     T = numel(rewards);
     advantages = zeros(1, T);
@@ -241,6 +205,7 @@ function [returns, advantages] = computeGAE(rewards, values, lastValue, dones, g
     end
 end
 
+%% PSO initialization
 function [particles, mapSize, numWaypoints] = initializePSOParticles(config, startPoint, goalPoint, ...
     terrainGrid, terrainX, terrainY)
     numWaypoints = config.numWaypoints;
@@ -249,61 +214,34 @@ function [particles, mapSize, numWaypoints] = initializePSOParticles(config, sta
     dims = numWaypoints * 3;
 
     particles = struct();
-    particles.cartesianPositions = zeros(popSize, dims);
+    particles.cartesianPositions = generateRandomPSOPositions( ...
+        popSize, numWaypoints, mapSize, terrainGrid, terrainX, terrainY);
     particles.velocities = zeros(popSize, dims);
     particles.fitness = ones(popSize, 1) * 1e9;
-    particles.bestPositions = zeros(popSize, dims);
+    particles.bestPositions = particles.cartesianPositions;
     particles.bestFitness = ones(popSize, 1) * 1e9;
-
-    [subgroupIds, subgroups] = assignSubgroups(popSize, config.numSubgroups);
-    particles.subgroupIds = subgroupIds;
-    particles.subgroups = subgroups;
-
-    maxVelPerDim = config.velocityClampFactor * mapSize;
-
-    for i = 1:popSize
-        for j = 1:numWaypoints
-            idx = (j-1) * 3 + 1;
-            x = rand() * mapSize(1);
-            y = rand() * mapSize(2);
-            [~, xIndex] = min(abs(terrainX(1,:) - x));
-            [~, yIndex] = min(abs(terrainY(:,1) - y));
-            terrainHeight = terrainGrid(yIndex, xIndex);
-            z = terrainHeight + 10 + rand() * 20;
-
-            particles.cartesianPositions(i, idx:idx+2) = [x, y, z];
-            particles.velocities(i, idx:idx+2) = (rand(1, 3) * 2 - 1) .* maxVelPerDim;
-        end
-        particles.bestPositions(i, :) = particles.cartesianPositions(i, :);
-    end
 end
 
-function [subgroupIds, subgroups] = assignSubgroups(popSize, numSubgroups)
-    subgroupIds = zeros(popSize, 1);
-    subgroups = cell(1, numSubgroups);
-    counts = floor(popSize / numSubgroups) * ones(1, numSubgroups);
-    remainder = popSize - sum(counts);
-    for j = 1:remainder
-        counts(j) = counts(j) + 1;
-    end
-    current = 1;
-    for j = 1:numSubgroups
-        idx = current:(current + counts(j) - 1);
-        subgroupIds(idx) = j;
-        subgroups{j} = idx;
-        current = current + counts(j);
-    end
-end
-
+%% PSO update (global topology, per-dimension velocity clamping)
 function [particles, bestFitness, bestPosition] = updatePSOParticles(particles, particleParams, ...
     startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, mapSize, numWaypoints, config)
     [popSize, dims] = size(particles.cartesianPositions);
 
-    [subgroupBestPositions, subgroupBestFitness] = computeSubgroupBest(particles, config.numSubgroups);
-    bestFitness = min(subgroupBestFitness);
-    bestPosition = subgroupBestPositions(find(subgroupBestFitness == bestFitness, 1, 'first'), :);
+    [bestFitness, gbestIdx] = min(particles.bestFitness);
+    gbestPos = particles.bestPositions(gbestIdx, :);
+    bestPosition = gbestPos;
 
-    maxVelPerDim = config.velocityClampFactor * mapSize;
+    vMaxDim = config.velocityClampDelta * (mapSize - 1);
+
+    % Precompute terrain grid spacing for O(1) index lookup
+    txVec = terrainX(1,:);
+    tyVec = terrainY(:,1);
+    txMin = txVec(1); txStep = txVec(2) - txVec(1); txN = numel(txVec);
+    tyMin = tyVec(1); tyStep = tyVec(2) - tyVec(1); tyN = numel(tyVec);
+
+    % Pre-tile velocity limits for vectorized clamping
+    vMaxLo = repmat(-vMaxDim, 1, numWaypoints);
+    vMaxHi = repmat( vMaxDim, 1, numWaypoints);
 
     for i = 1:popSize
         w = particleParams(i, 1);
@@ -313,38 +251,36 @@ function [particles, bestFitness, bestPosition] = updatePSOParticles(particles, 
         r1 = rand(1, dims);
         r2 = rand(1, dims);
 
-        cognitiveComponent = c1 * r1 .* (particles.bestPositions(i,:) - particles.cartesianPositions(i,:));
-        subgroupId = particles.subgroupIds(i);
-        socialTarget = subgroupBestPositions(subgroupId, :);
-        socialComponent = c2 * r2 .* (socialTarget - particles.cartesianPositions(i,:));
+        particles.velocities(i,:) = w * particles.velocities(i,:) ...
+            + c1 * r1 .* (particles.bestPositions(i,:) - particles.cartesianPositions(i,:)) ...
+            + c2 * r2 .* (gbestPos - particles.cartesianPositions(i,:));
 
-        particles.velocities(i,:) = w * particles.velocities(i,:) + cognitiveComponent + socialComponent;
-
-        for j = 1:numWaypoints
-            idx = (j-1) * 3 + 1;
-            segmentVel = particles.velocities(i, idx:idx+2);
-            segmentVel = max(min(segmentVel, maxVelPerDim), -maxVelPerDim);
-            particles.velocities(i, idx:idx+2) = segmentVel;
+        % Per-dimension velocity clamping (vectorized)
+        vi = particles.velocities(i,:);
+        badMask = isnan(vi) | isinf(vi);
+        if any(badMask)
+            vi(badMask) = (rand(1, sum(badMask))-0.5) .* vMaxHi(badMask) * 0.1;
         end
+        vi = max(vMaxLo, min(vMaxHi, vi));
+        particles.velocities(i,:) = vi;
 
         particles.cartesianPositions(i,:) = particles.cartesianPositions(i,:) + particles.velocities(i,:);
 
+        % Boundary + terrain constraints
         for j = 1:numWaypoints
-            idx = (j-1) * 3 + 1;
+            idx = (j-1)*3 + 1;
             waypoint = particles.cartesianPositions(i, idx:idx+2);
             waypoint = max([1, 1, 1], min(waypoint, mapSize));
-
-            [~, xIndex] = min(abs(terrainX(1,:) - waypoint(1)));
-            [~, yIndex] = min(abs(terrainY(:,1) - waypoint(2)));
+            % O(1) terrain index lookup (regular grid)
+            xIndex = max(1, min(txN, round((waypoint(1) - txMin) / txStep) + 1));
+            yIndex = max(1, min(tyN, round((waypoint(2) - tyMin) / tyStep) + 1));
             terrainHeight = terrainGrid(yIndex, xIndex);
             waypoint(3) = max(waypoint(3), terrainHeight + 10);
-
             particles.cartesianPositions(i, idx:idx+2) = waypoint;
         end
 
         particles.fitness(i) = evaluatePathFitness(particles.cartesianPositions(i,:), ...
             startPoint, goalPoint, dangerZones, terrainGrid, terrainX, terrainY, numWaypoints);
-
         if isinf(particles.fitness(i))
             particles.fitness(i) = 1e9;
         end
@@ -352,55 +288,9 @@ function [particles, bestFitness, bestPosition] = updatePSOParticles(particles, 
         if particles.fitness(i) < particles.bestFitness(i)
             particles.bestFitness(i) = particles.fitness(i);
             particles.bestPositions(i,:) = particles.cartesianPositions(i,:);
-        end
-    end
-
-    [subgroupBestPositions, subgroupBestFitness] = computeSubgroupBest(particles, config.numSubgroups);
-    bestFitness = min(subgroupBestFitness);
-    bestPosition = subgroupBestPositions(find(subgroupBestFitness == bestFitness, 1, 'first'), :);
-end
-
-function [subgroupBestPositions, subgroupBestFitness] = computeSubgroupBest(particles, numSubgroups)
-    dims = size(particles.bestPositions, 2);
-    subgroupBestPositions = zeros(numSubgroups, dims);
-    subgroupBestFitness = zeros(numSubgroups, 1);
-    for j = 1:numSubgroups
-        idx = particles.subgroups{j};
-        [subBest, localIdx] = min(particles.bestFitness(idx));
-        subgroupBestFitness(j) = subBest;
-        subgroupBestPositions(j, :) = particles.bestPositions(idx(localIdx), :);
-    end
-end
-
-function particles = performMigration(particles, config, mapSize)
-    numSubgroups = config.numSubgroups;
-    maxVelPerDim = config.velocityClampFactor * mapSize;
-
-    for j = 1:numSubgroups
-        sourceIdx = particles.subgroups{j};
-        targetGroup = mod(j, numSubgroups) + 1;
-        targetIdx = particles.subgroups{targetGroup};
-
-        numMigrants = max(1, floor(config.migrationRate * numel(sourceIdx)));
-        numMigrants = min(numMigrants, numel(targetIdx));
-
-        [~, sourceOrder] = sort(particles.bestFitness(sourceIdx), 'ascend');
-        [~, targetOrder] = sort(particles.bestFitness(targetIdx), 'descend');
-
-        sourceElite = sourceIdx(sourceOrder(1:numMigrants));
-        targetWorst = targetIdx(targetOrder(1:numMigrants));
-
-        for k = 1:numMigrants
-            sIdx = sourceElite(k);
-            tIdx = targetWorst(k);
-            particles.cartesianPositions(tIdx, :) = particles.bestPositions(sIdx, :);
-            particles.bestPositions(tIdx, :) = particles.bestPositions(sIdx, :);
-            particles.bestFitness(tIdx) = particles.bestFitness(sIdx);
-            particles.fitness(tIdx) = particles.bestFitness(sIdx);
-
-            for wpt = 1:config.numWaypoints
-                idx = (wpt-1) * 3 + 1;
-                particles.velocities(tIdx, idx:idx+2) = (rand(1, 3) * 2 - 1) .* maxVelPerDim;
+            if particles.fitness(i) < bestFitness
+                bestFitness = particles.fitness(i);
+                bestPosition = particles.cartesianPositions(i,:);
             end
         end
     end

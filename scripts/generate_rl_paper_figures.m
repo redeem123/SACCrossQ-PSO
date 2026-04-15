@@ -38,13 +38,13 @@ function generate_rl_paper_figures(sourceDir)
             else
                 shortNames{i} = 'DQN-PP';
             end
-        elseif contains(name, 'RRSACPSO')
+        elseif contains(name, 'AFSACPSO')
             if contains(name, 'Global')
-                shortNames{i} = 'RRSACPSO-G';
+                shortNames{i} = 'AFSACPSO-G';
             elseif contains(name, '5-Subgroup')
-                shortNames{i} = 'RRSACPSO-5S';
+                shortNames{i} = 'AFSACPSO-5S';
             else
-                shortNames{i} = 'RRSACPSO-PP';
+                shortNames{i} = 'AFSACPSO-PP';
             end
         else
             shortNames{i} = name;

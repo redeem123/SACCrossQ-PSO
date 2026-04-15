@@ -110,10 +110,10 @@ function algResults = resolveAlgorithmResults(results, fieldName)
     algResults = [];
     candidateFields = {fieldName};
 
-    if strcmp(fieldName, 'RRSACPSO')
-        candidateFields{end + 1} = 'RRSACPSO_Online'; %#ok<AGROW>
-    elseif strcmp(fieldName, 'RRSACPSO_Online')
-        candidateFields{end + 1} = 'RRSACPSO'; %#ok<AGROW>
+    if strcmp(fieldName, 'AFSACPSO')
+        candidateFields{end + 1} = 'AFSACPSO_Online'; %#ok<AGROW>
+    elseif strcmp(fieldName, 'AFSACPSO_Online')
+        candidateFields{end + 1} = 'AFSACPSO'; %#ok<AGROW>
     end
 
     for idx = 1:numel(candidateFields)
